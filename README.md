@@ -1,59 +1,79 @@
-# PlataformaAcademica
+# Plataforma Académica 🎓
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.10.
+¡Bienvenido al repositorio de la Plataforma Académica! Este es el frontend de una aplicación moderna diseñada para la gestión de actividades académicas, cursos y comunicación entre los miembros de una institución educativa.
 
-## Development server
+---
 
-To start a local development server, run:
+## ✨ Características Actuales
 
-```bash
-ng serve
-```
+*   **Autenticación de Usuarios:** Sistema de inicio de sesión seguro.
+*   **Diseño Responsivo:** Interfaz adaptable a diferentes tamaños de pantalla.
+*   **Base de UI Moderna:** Construido con las últimas versiones de Angular y Tailwind CSS.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🛠️ Stack Tecnológico
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Este proyecto está construido con un stack de tecnologías moderno y escalable:
 
-```bash
-ng generate component component-name
-```
+*   **Frontend:**
+    *   [**Angular**](https://angular.dev/): Un framework de desarrollo de aplicaciones web líder en la industria.
+    *   [**TypeScript**](https://www.typescriptlang.org/): Un superconjunto de JavaScript que añade tipado estático.
+    *   [**Tailwind CSS**](https://tailwindcss.com/): Un framework de CSS "utility-first" para un diseño rápido y personalizado.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+*   **Backend:**
+    *   [**ASP.NET Core**](https://dotnet.microsoft.com/en-us/apps/aspnet): Para la construcción de servicios de alto rendimiento.
+    *   **Arquitectura de Microservicios:** Para una mayor escalabilidad, flexibilidad y mantenimiento.
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 🚀 Hoja de Ruta (Próximas Actualizaciones)
 
-To build the project run:
+Este proyecto está en desarrollo activo. Las siguientes características son las próximas en nuestra lista de implementación para el frontend:
 
-```bash
-ng build
-```
+*   **Dashboard de Administrador:**
+    *   Gestión de usuarios (crear, editar, eliminar).
+    *   Analíticas y reportes generales.
+*   **Dashboard de Profesional/Profesor:**
+    *   Gestión de cursos y materiales.
+    *   Gestión y calificación de evaluaciones.
+*   **Dashboard de Estudiante:**
+    *   Visualización de cursos y materiales.
+    *   Envío de tareas y visualización de calificaciones.
+*   **Componentes Compartidos:**
+    *   Implementación de la barra lateral de navegación (`Sidebar`).
+    *   Implementación de la cabecera principal (`Header`).
+*   **Gestión de Cursos:**
+    *   Listado y detalle de cursos.
+    *   Inscripción a cursos.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## 🏁 Cómo Empezar
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno de desarrollo local.
 
-```bash
-ng test
-```
+1.  **Clonar el Repositorio**
+    ```bash
+    git clone https://github.com/tu-usuario/plataforma-academica.git
+    cd plataforma-academica
+    ```
 
-## Running end-to-end tests
+2.  **Instalar Dependencias**
+    Este proyecto utiliza `pnpm` para la gestión de paquetes.
+    ```bash
+    pnpm install
+    ```
+    *Si no tienes pnpm, puedes instalarlo con `npm install -g pnpm`.*
 
-For end-to-end (e2e) testing, run:
+3.  **Ejecutar el Servidor de Desarrollo**
+    ```bash
+    ng serve
+    ```
 
-```bash
-ng e2e
-```
+4.  **Abrir en el Navegador**
+    Navega a `http://localhost:4200/`. La aplicación se recargará automáticamente si cambias alguno de los archivos de origen.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+¡Gracias por tu interés en el proyecto!
