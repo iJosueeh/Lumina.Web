@@ -1,0 +1,150 @@
+<section class="relative h-[500px] bg-gradient-to-r from-gray-900 to-gray-800 overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjhjFdobbMtmdYKnL01s__ny-U--PE-3aNMQ&s"
+            alt="AcademiaPro Team" class="w-full h-full object-cover opacity-40" />
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/60"></div>
+    </div>
+
+    <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div class="text-center text-white space-y-6 animate-fadeInUp">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Transformando la Educación para el Futuro
+            </h1>
+            <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
+                Descubre nuestro compromiso con la excelencia académica, la innovación y la formación de los líderes del
+                mañana.
+            </p>
+        </div>
+    </div>
+
+    <div class="absolute bottom-0 left-0 right-0">
+        <svg class="w-full h-16 fill-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path
+                d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z">
+            </path>
+        </svg>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Nuestros Cimientos
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                AcademiaPro se fundó con la visión de crear un entorno de aprendizaje accesible y dinámico. Nos
+                dedicamos a nutrir a la próxima generación de líderes, pensadores e innovadores a través de un plan de
+                estudios riguroso y relevante para el mundo actual.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Misión, Visión y Valores
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Nuestros principios guían cada decisión que tomamos y cada acción que emprendemos, asegurando que nos
+                mantengamos fieles a nuestro propósito fundamental.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @for (valor of valores; track valor.titulo) {
+            <div
+                class="bg-white rounded-xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group">
+                <div
+                    class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                    @if (valor.icono === 'target') {
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    }
+                    @if (valor.icono === 'eye') {
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    }
+                    @if (valor.icono === 'star') {
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                    }
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                    {{ valor.titulo }}
+                </h3>
+
+                <p class="text-gray-600 leading-relaxed">
+                    {{ valor.descripcion }}
+                </p>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Conoce a Nuestro Equipo
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                El equipo de educadores y profesionales dedicados que impulsan a AcademiaPro.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            @for (member of teamMembers; track member.id) {
+            <div class="text-center group">
+                <div
+                    class="relative mx-auto mb-4 w-40 h-40 overflow-hidden rounded-full ring-4 ring-gray-100 group-hover:ring-blue-500 transition-all duration-300">
+                    <img [src]="member.imagen" [alt]="member.nombre"
+                        class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
+                        (error)="$event.target.src='assets/images/team/default-avatar.jpg'" />
+                    <div
+                        class="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300">
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mb-1">
+                    {{ member.nombre }}
+                </h3>
+                <p class="text-sm text-blue-600 font-medium">
+                    {{ member.cargo }}
+                </p>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-20 bg-gradient-to-r from-blue-50 to-blue-100">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            ¿Listo para Empezar tu Viaje?
+        </h2>
+        <p class="text-lg text-gray-600 mb-8">
+            Explora nuestra amplia gama de programas y encuentra el camino perfecto hacia tu futuro éxito. Tu próximo
+            capítulo comienza en AcademiaPro.
+        </p>
+        <button routerLink="/programas"
+            class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+            Explorar Programas
+            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+        </button>
+    </div>
+</section>

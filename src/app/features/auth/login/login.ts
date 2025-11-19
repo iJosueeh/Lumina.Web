@@ -37,6 +37,7 @@ export class Login implements OnInit {
   }
 
   ngOnInit(): void {
+    window.scrollTo(0, 0);
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
     this.sessionExpired = this.route.snapshot.queryParams['sessionExpired'] === 'true';
 

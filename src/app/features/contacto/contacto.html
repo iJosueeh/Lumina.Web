@@ -1,0 +1,264 @@
+<section class="bg-gradient-to-r from-blue-600 to-blue-800 py-16 md:py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+            ¿Hablamos?
+        </h1>
+        <p class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto">
+            Estamos aquí para ayudarte. Completa el formulario o utiliza una de nuestras otras vías de contacto y te
+            responderemos lo antes posible.
+        </p>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+            <div class="bg-white rounded-2xl shadow-lg p-8 md:p-10">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
+                    Envíanos un mensaje
+                </h2>
+
+                <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="nombreCompleto" class="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre Completo
+                            </label>
+                            <input id="nombreCompleto" type="text" formControlName="nombreCompleto"
+                                placeholder="Escribe tu nombre completo"
+                                [class.border-red-500]="nombreCompleto?.invalid && (nombreCompleto?.touched || submitted)"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150" />
+                            @if (nombreCompleto?.invalid && (nombreCompleto?.touched || submitted)) {
+                            <p class="mt-1 text-sm text-red-600">
+                                @if (nombreCompleto?.errors?.['required']) {
+                                <span>El nombre es requerido</span>
+                                }
+                                @if (nombreCompleto?.errors?.['minlength']) {
+                                <span>El nombre debe tener al menos 3 caracteres</span>
+                                }
+                            </p>
+                            }
+                        </div>
+
+                        <div>
+                            <label for="correoElectronico" class="block text-sm font-medium text-gray-700 mb-2">
+                                Correo Electrónico
+                            </label>
+                            <input id="correoElectronico" type="email" formControlName="correoElectronico"
+                                placeholder="tu.email@ejemplo.com"
+                                [class.border-red-500]="correoElectronico?.invalid && (correoElectronico?.touched || submitted)"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150" />
+                            @if (correoElectronico?.invalid && (correoElectronico?.touched || submitted)) {
+                            <p class="mt-1 text-sm text-red-600">
+                                @if (correoElectronico?.errors?.['required']) {
+                                <span>El correo es requerido</span>
+                                }
+                                @if (correoElectronico?.errors?.['email']) {
+                                <span>Por favor ingresa un correo válido</span>
+                                }
+                            </p>
+                            }
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="asunto" class="block text-sm font-medium text-gray-700 mb-2">
+                            Asunto
+                        </label>
+                        <input id="asunto" type="text" formControlName="asunto"
+                            placeholder="Ej: Información sobre cursos"
+                            [class.border-red-500]="asunto?.invalid && (asunto?.touched || submitted)"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150" />
+                        @if (asunto?.invalid && (asunto?.touched || submitted)) {
+                        <p class="mt-1 text-sm text-red-600">
+                            @if (asunto?.errors?.['required']) {
+                            <span>El asunto es requerido</span>
+                            }
+                            @if (asunto?.errors?.['minlength']) {
+                            <span>El asunto debe tener al menos 5 caracteres</span>
+                            }
+                        </p>
+                        }
+                    </div>
+
+                    <div>
+                        <label for="mensaje" class="block text-sm font-medium text-gray-700 mb-2">
+                            Mensaje
+                        </label>
+                        <textarea id="mensaje" formControlName="mensaje" rows="6"
+                            placeholder="Escribe tu consulta aquí..."
+                            [class.border-red-500]="mensaje?.invalid && (mensaje?.touched || submitted)"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 resize-none"></textarea>
+                        @if (mensaje?.invalid && (mensaje?.touched || submitted)) {
+                        <p class="mt-1 text-sm text-red-600">
+                            @if (mensaje?.errors?.['required']) {
+                            <span>El mensaje es requerido</span>
+                            }
+                            @if (mensaje?.errors?.['minlength']) {
+                            <span>El mensaje debe tener al menos 10 caracteres</span>
+                            }
+                        </p>
+                        }
+                    </div>
+
+                    @if (successMessage) {
+                    <div class="rounded-lg bg-green-50 border border-green-200 p-4 animate-fadeIn">
+                        <div class="flex">
+                            <svg class="h-5 w-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <p class="text-sm text-green-600">{{ successMessage }}</p>
+                        </div>
+                    </div>
+                    }
+
+                    @if (errorMessage) {
+                    <div class="rounded-lg bg-red-50 border border-red-200 p-4 animate-fadeIn">
+                        <div class="flex">
+                            <svg class="h-5 w-5 text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <p class="text-sm text-red-600">{{ errorMessage }}</p>
+                        </div>
+                    </div>
+                    }
+
+                    <button type="submit" [disabled]="loading"
+                        class="w-full flex justify-center items-center py-4 px-6 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02]">
+                        @if (loading) {
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        <span>Enviando...</span>
+                        } @else {
+                        <span>Enviar Mensaje</span>
+                        }
+                    </button>
+                </form>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white rounded-2xl shadow-lg p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                        Otras formas de contactar
+                    </h2>
+
+                    <div class="space-y-6">
+                        @for (info of contactInfo; track info.titulo) {
+                        <div class="flex items-start space-x-4">
+                            <div
+                                class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                @if (info.icono === 'email') {
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                }
+                                @if (info.icono === 'phone') {
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                                }
+                                @if (info.icono === 'location') {
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                                }
+                            </div>
+
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-900 mb-1">{{ info.titulo }}</h3>
+                                @if (info.link) {
+                                <a [href]="info.link"
+                                    class="text-blue-600 hover:text-blue-700 transition-colors duration-200">
+                                    {{ info.valor }}
+                                </a>
+                                } @else {
+                                <p class="text-gray-600 whitespace-pre-line">{{ info.valor }}</p>
+                                }
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-lg p-2 overflow-hidden">
+                    <div class="w-full h-80 bg-gray-200 rounded-lg overflow-hidden">
+                        <div
+                            class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 relative">
+                            <svg class="w-full h-full opacity-20" viewBox="0 0 400 400"
+                                preserveAspectRatio="xMidYMid slice">
+                                <defs>
+                                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#cbd5e1" stroke-width="1" />
+                                    </pattern>
+                                </defs>
+                                <rect width="400" height="400" fill="url(#grid)" />
+                                <circle cx="200" cy="200" r="8" fill="#3b82f6" />
+                                <circle cx="200" cy="200" r="20" fill="none" stroke="#3b82f6" stroke-width="2"
+                                    opacity="0.5" />
+                            </svg>
+
+                            <div class="absolute">
+                                <div class="relative">
+                                    <svg class="w-16 h-16 text-blue-600 drop-shadow-lg" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                                    </svg>
+                                    <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-600 rounded-full animate-ping">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            ¿Prefieres hablar directamente con nosotros?
+        </h2>
+        <p class="text-lg text-gray-600 mb-8">
+            Nuestro equipo está disponible de lunes a viernes de 9:00 a 18:00 (hora Perú)
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="tel:+34912345678"
+                class="inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                Llamar ahora
+            </a>
+            <a href="mailto:contacto@academiapro.com"
+                class="inline-flex items-center justify-center px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg border-2 border-blue-600 hover:bg-blue-50 transition-colors duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Enviar email
+            </a>
+        </div>
+    </div>
+</section>

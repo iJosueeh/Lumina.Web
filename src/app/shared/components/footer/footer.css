@@ -1,0 +1,17 @@
+:host {
+    display: block;
+}
+
+a {
+    transition: all 0.2s ease-in-out;
+}
+
+.social-icon {
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+.arrow-transition {
+    transition: all 0.3s ease;
+}

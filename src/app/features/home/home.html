@@ -1,0 +1,263 @@
+<section class="relative h-[600px] overflow-hidden">
+    <div class="absolute inset-0">
+        <img src="https://tekla.io/wp-content/uploads/2022/03/Recurso1.png" alt="Desarrollo Web"
+            class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50"></div>
+    </div>
+
+    <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+        <div class="max-w-2xl text-white space-y-6 animate-fadeInUp">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                Domina el Desarrollo Web
+            </h1>
+            <p class="text-lg md:text-xl text-gray-200 leading-relaxed">
+                Aprende a crear aplicaciones y sitios web modernos con nuestros cursos impartidos por expertos de la
+                industria. Da el primer paso hacia tu nueva carrera en tecnología.
+            </p>
+            <button routerLink="/programas"
+                class="inline-flex items-center px-8 py-4 bg-purple-600 text-white text-lg font-semibold rounded-lg hover:bg-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                Explorar Cursos
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Nuestros Cursos de Desarrollo Web
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Desde los fundamentos hasta las tecnologías más avanzadas, tenemos el curso perfecto para ti.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-3 mb-12">
+            @for (filter of filters; track filter) {
+            <button (click)="selectFilter(filter)" [class]="selectedFilter === filter 
+            ? 'bg-purple-600 text-white' 
+            : 'bg-white text-gray-700 hover:bg-gray-100'"
+                class="px-6 py-2 rounded-full font-medium border border-gray-300 transition-all duration-200">
+                {{ filter }}
+            </button>
+            }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (course of filteredCourses; track course.id) {
+            <div
+                class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 group">
+                <div
+                    [class]="getColorClass(course.color) + ' h-48 flex items-center justify-center relative overflow-hidden'">
+                    @if (course.icono === 'html') {
+                    <div class="text-white text-6xl font-bold">
+                        &lt;/&gt;
+                    </div>
+                    }
+                    @if (course.icono === 'javascript') {
+                    <div class="text-gray-900 text-7xl font-bold">
+                        JS
+                    </div>
+                    }
+                    @if (course.icono === 'react') {
+                    <svg class="w-24 h-24 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="2" />
+                        <path
+                            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4Z" />
+                    </svg>
+                    }
+                    @if (course.icono === 'nodejs') {
+                    <div class="text-white text-5xl font-bold">
+                        node.js
+                    </div>
+                    }
+                    @if (course.icono === 'database') {
+                    <svg class="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    }
+                    @if (course.icono === 'cloud') {
+                    <svg class="w-24 h-24 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                    </svg>
+                    }
+                    <div
+                        class="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300">
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                        {{ course.titulo }}
+                    </h3>
+                    <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ course.nivel }}
+                        </span>
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {{ course.duracion }}
+                        </span>
+                    </div>
+                    <button [routerLink]="['/cursos', course.id]"
+                        class="w-full py-3 bg-gray-100 text-gray-800 font-semibold rounded-lg hover:bg-purple-600 hover:text-white transition-colors duration-200">
+                        Ver Detalles
+                    </button>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                ¿Por qué elegir AcademiaPro?
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Te ofrecemos las herramientas y el apoyo que necesitas para triunfar en el mundo tech.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @for (benefit of benefits; track benefit.titulo) {
+            <div class="text-center group">
+                <div
+                    class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-purple-100 text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-all duration-300 transform group-hover:scale-110">
+                    @if (benefit.icono === 'instructor') {
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                    }
+                    @if (benefit.icono === 'projects') {
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    }
+                    @if (benefit.icono === 'community') {
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    }
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                    {{ benefit.titulo }}
+                </h3>
+                <p class="text-gray-600 leading-relaxed">
+                    {{ benefit.descripcion }}
+                </p>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Historias de Éxito
+            </h2>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Nuestros estudiantes son nuestra mayor carta de presentación.
+            </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+            @for (testimonial of testimonials; track testimonial.id) {
+            <div class="bg-gray-50 rounded-2xl p-8 md:p-12 shadow-sm">
+                <div class="flex justify-center mb-6">
+                    <div class="w-20 h-20 rounded-full overflow-hidden ring-4 ring-purple-100">
+                        <img [src]="testimonial.avatar" [alt]="testimonial.nombre" class="w-full h-full object-cover"
+                            (error)="$event.target.src='assets/images/testimonials/default-avatar.jpg'" />
+                    </div>
+                </div>
+
+                <blockquote class="text-center mb-6">
+                    <p class="text-lg md:text-xl text-gray-700 italic leading-relaxed">
+                        "{{ testimonial.testimonio }}"
+                    </p>
+                </blockquote>
+
+                <div class="text-center">
+                    <p class="font-bold text-gray-900">{{ testimonial.nombre }}</p>
+                    <p class="text-sm text-gray-600">
+                        {{ testimonial.cargo }} en {{ testimonial.empresa }}
+                    </p>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-24 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Preguntas Frecuentes
+            </h2>
+        </div>
+
+        <div class="space-y-4">
+            @for (faq of faqs; track faq.pregunta) {
+            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                <button (click)="toggleFAQ(faq)"
+                    class="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200">
+                    <span class="font-semibold text-gray-900 pr-4">{{ faq.pregunta }}</span>
+                    <svg [class.rotate-180]="faq.isOpen"
+                        class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+
+                @if (faq.isOpen) {
+                <div class="px-6 pb-5 text-gray-600 animate-fadeIn">
+                    {{ faq.respuesta }}
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-16 md:py-20 bg-gradient-to-r from-purple-600 to-purple-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            ¿Listo para empezar tu viaje en el Desarrollo Web?
+        </h2>
+        <p class="text-lg text-purple-100 mb-8">
+            Únete a miles de estudiantes y transforma tu futuro hoy mismo. Explora nuestros cursos y encuentra el camino
+            perfecto para ti.
+        </p>
+        <button routerLink="/programas"
+            class="inline-flex items-center px-8 py-4 bg-white text-purple-600 text-lg font-semibold rounded-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+            Ver Todos los Cursos
+            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+        </button>
+    </div>
+</section>
