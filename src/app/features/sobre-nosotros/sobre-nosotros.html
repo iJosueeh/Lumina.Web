@@ -1,127 +1,253 @@
-<section class="relative h-[500px] bg-gradient-to-r from-gray-900 to-gray-800 overflow-hidden">
+<!-- Hero Section -->
+<section class="relative h-[500px] bg-slate-800 overflow-hidden">
     <div class="absolute inset-0">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjhjFdobbMtmdYKnL01s__ny-U--PE-3aNMQ&s"
-            alt="AcademiaPro Team" class="w-full h-full object-cover opacity-40" />
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/60"></div>
+        <img src="https://www.udep.edu.pe/wp-content/uploads/2020/07/udep_piura-scaled.jpg" alt="Lumina.Core Campus"
+            class="w-full h-full object-cover opacity-50" />
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/60 to-slate-900/80"></div>
     </div>
 
     <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-        <div class="text-center text-white space-y-6 animate-fadeInUp">
+        <div class="text-center text-white space-y-6">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                Transformando la Educación para el Futuro
+                Transformando el futuro de la tecnología, un estudiante a la vez
             </h1>
-            <p class="text-lg md:text-xl text-gray-200 max-w-3xl mx-auto">
-                Descubre nuestro compromiso con la excelencia académica, la innovación y la formación de los líderes del
-                mañana.
-            </p>
-        </div>
-    </div>
-
-    <div class="absolute bottom-0 left-0 right-0">
-        <svg class="w-full h-16 fill-white" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path
-                d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z">
-            </path>
-        </svg>
-    </div>
-</section>
-
-<section class="py-16 md:py-24 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Nuestros Cimientos
-            </h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                AcademiaPro se fundó con la visión de crear un entorno de aprendizaje accesible y dinámico. Nos
-                dedicamos a nutrir a la próxima generación de líderes, pensadores e innovadores a través de un plan de
-                estudios riguroso y relevante para el mundo actual.
+            <p class="text-base md:text-lg text-gray-200 max-w-3xl mx-auto">
+                Descubre nuestra historia, misión y el equipo dedicado a impulsar la próxima generación de innovadores
+                tecnológicos.
             </p>
         </div>
     </div>
 </section>
 
-<section class="py-16 md:py-24 bg-gray-50">
+<!-- Tabs Navigation -->
+<section class="bg-white border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Misión, Visión y Valores
-            </h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                Nuestros principios guían cada decisión que tomamos y cada acción que emprendemos, asegurando que nos
-                mantengamos fieles a nuestro propósito fundamental.
-            </p>
-        </div>
+        <nav class="flex space-x-8 overflow-x-auto">
+            <button (click)="activeTab = 'historia'" [class.border-blue-600]="activeTab === 'historia'"
+                [class.text-blue-600]="activeTab === 'historia'" [class.border-transparent]="activeTab !== 'historia'"
+                [class.text-gray-600]="activeTab !== 'historia'"
+                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
+                Historia
+            </button>
+            <button (click)="activeTab = 'mision'" [class.border-blue-600]="activeTab === 'mision'"
+                [class.text-blue-600]="activeTab === 'mision'" [class.border-transparent]="activeTab !== 'mision'"
+                [class.text-gray-600]="activeTab !== 'mision'"
+                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
+                Misión y Visión
+            </button>
+            <button (click)="activeTab = 'equipo'" [class.border-blue-600]="activeTab === 'equipo'"
+                [class.text-blue-600]="activeTab === 'equipo'" [class.border-transparent]="activeTab !== 'equipo'"
+                [class.text-gray-600]="activeTab !== 'equipo'"
+                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
+                Nuestro Equipo
+            </button>
+            <button (click)="activeTab = 'infraestructura'" [class.border-blue-600]="activeTab === 'infraestructura'"
+                [class.text-blue-600]="activeTab === 'infraestructura'"
+                [class.border-transparent]="activeTab !== 'infraestructura'"
+                [class.text-gray-600]="activeTab !== 'infraestructura'"
+                class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
+                Infraestructura
+            </button>
+        </nav>
+    </div>
+</section>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @for (valor of valores; track valor.titulo) {
-            <div
-                class="bg-white rounded-xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group">
-                <div
-                    class="mb-6 inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                    @if (valor.icono === 'target') {
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                    </svg>
-                    }
-                    @if (valor.icono === 'eye') {
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    }
-                    @if (valor.icono === 'star') {
-                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                    }
+<!-- Tab Content: Historia -->
+<section *ngIf="activeTab === 'historia'" class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-16 text-center">
+            Nuestra Historia
+        </h2>
+
+        <!-- Timeline Horizontal -->
+        <div class="relative">
+            <!-- Línea horizontal -->
+            <div class="absolute top-6 left-0 right-0 h-0.5 bg-gray-200 hidden md:block"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-4">
+                <!-- Item 1: 2018 -->
+                <div class="relative">
+                    <div class="flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 relative z-10">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Fundación de la Institución</h3>
+                        <p class="text-sm font-semibold text-blue-600 mb-2">2018</p>
+                        <p class="text-sm text-gray-600">Inicio de operaciones con la visión de democratizar la
+                            educación tecnológica.</p>
+                    </div>
                 </div>
 
-                <h3 class="text-xl font-bold text-gray-900 mb-3">
-                    {{ valor.titulo }}
-                </h3>
+                <!-- Item 2: 2019 -->
+                <div class="relative">
+                    <div class="flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 relative z-10">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Lanzamiento de la Plataforma Online</h3>
+                        <p class="text-sm font-semibold text-blue-600 mb-2">2019</p>
+                        <p class="text-sm text-gray-600">Apertura de nuestra plataforma de aprendizaje en línea.</p>
+                    </div>
+                </div>
 
-                <p class="text-gray-600 leading-relaxed">
-                    {{ valor.descripcion }}
-                </p>
+                <!-- Item 3: 2021 -->
+                <div class="relative">
+                    <div class="flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 relative z-10">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                    d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Alcanzamos 10,000 Estudiantes</h3>
+                        <p class="text-sm font-semibold text-blue-600 mb-2">2021</p>
+                        <p class="text-sm text-gray-600">Hito importante con estudiantes de más de 30 países.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4: 2023 -->
+                <div class="relative">
+                    <div class="flex flex-col items-center text-center">
+                        <div
+                            class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4 relative z-10">
+                            <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                                    clip-rule="evenodd" />
+                                <path
+                                    d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">Expansión a Nuevos Cursos de IA</h3>
+                        <p class="text-sm font-semibold text-blue-600 mb-2">2023</p>
+                        <p class="text-sm text-gray-600">Programas especializados en IA y Machine Learning.</p>
+                    </div>
+                </div>
             </div>
-            }
         </div>
     </div>
 </section>
 
-<section class="py-16 md:py-24 bg-white">
+<!-- Tab Content: Misión y Visión -->
+<section *ngIf="activeTab === 'mision'" class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Contenido de Texto con Typography -->
+            <article class="prose prose-slate lg:prose-lg max-w-none">
+                <h2>Misión y Visión</h2>
+
+                <p class="lead">
+                    Nuestra misión es democratizar el acceso a la educación tecnológica de alta calidad,
+                    capacitando a individuos para que prosperen en la economía digital.
+                </p>
+
+                <p>
+                    Aspiramos a ser líderes globales en la formación de talento tecnológico, reconocidos
+                    por nuestra innovación, excelencia académica y el impacto positivo de nuestros graduados
+                    en la sociedad.
+                </p>
+
+                <h3>Nuestros Valores Fundamentales</h3>
+
+                <!-- Valores con Iconos -->
+                <div class="not-prose space-y-6 mt-6">
+                    <!-- Innovación -->
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M11 3a1 1 0 10-2 0v1a1 1 0 102 0V3zM15.657 5.757a1 1 0 00-1.414-1.414l-.707.707a1 1 0 001.414 1.414l.707-.707zM18 10a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zM5 10a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zM8 16v-1h4v1a2 2 0 11-4 0zM12 14c.015-.34.208-.646.477-.859a4 4 0 10-4.954 0c.27.213.462.519.476.859h4.002z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900 mb-1">Innovación</h4>
+                            <p class="text-gray-600 text-sm">Fomentamos la creatividad y la búsqueda de soluciones
+                                vanguardistas.</p>
+                        </div>
+                    </div>
+
+                    <!-- Excelencia -->
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900 mb-1">Excelencia</h4>
+                            <p class="text-gray-600 text-sm">Comprometidos con los más altos estándares educativos y
+                                profesionales.</p>
+                        </div>
+                    </div>
+
+                    <!-- Comunidad -->
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path
+                                        d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-900 mb-1">Comunidad</h4>
+                            <p class="text-gray-600 text-sm">Construimos una red de apoyo global para el aprendizaje
+                                colaborativo.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Imagen -->
+            <div class="relative">
+                <div class="rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800"
+                        alt="Equipo trabajando" class="w-full h-full object-cover" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tab Content: Nuestro Equipo -->
+<section *ngIf="activeTab === 'equipo'" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Conoce a Nuestro Equipo
+                Nuestro Equipo Directivo
             </h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-                El equipo de educadores y profesionales dedicados que impulsan a AcademiaPro.
+            <p class="text-base text-gray-600 max-w-2xl mx-auto">
+                Conoce a los líderes que guían nuestra visión y compromiso con la excelencia educativa.
             </p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             @for (member of teamMembers; track member.id) {
-            <div class="text-center group">
-                <div
-                    class="relative mx-auto mb-4 w-40 h-40 overflow-hidden rounded-full ring-4 ring-gray-100 group-hover:ring-blue-500 transition-all duration-300">
-                    <img [src]="member.imagen" [alt]="member.nombre"
-                        class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
-                        (error)="$event.target.src='assets/images/team/default-avatar.jpg'" />
-                    <div
-                        class="absolute inset-0 bg-blue-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300">
-                    </div>
+            <div class="text-center">
+                <div class="relative mx-auto mb-4 w-48 h-48 overflow-hidden rounded-full">
+                    <img [src]="member.imagen" [alt]="member.nombre" class="w-full h-full object-cover"
+                        (error)="$event.target.src='https://ui-avatars.com/api/?name=' + member.nombre + '&size=200&background=3b82f6&color=fff'" />
                 </div>
 
                 <h3 class="text-lg font-bold text-gray-900 mb-1">
                     {{ member.nombre }}
                 </h3>
-                <p class="text-sm text-blue-600 font-medium">
+                <p class="text-sm text-gray-600">
                     {{ member.cargo }}
                 </p>
             </div>
@@ -130,21 +256,61 @@
     </div>
 </section>
 
-<section class="py-16 md:py-20 bg-gradient-to-r from-blue-50 to-blue-100">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            ¿Listo para Empezar tu Viaje?
-        </h2>
-        <p class="text-lg text-gray-600 mb-8">
-            Explora nuestra amplia gama de programas y encuentra el camino perfecto hacia tu futuro éxito. Tu próximo
-            capítulo comienza en AcademiaPro.
-        </p>
-        <button routerLink="/programas"
-            class="inline-flex items-center px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
-            Explorar Programas
-            <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-        </button>
+<!-- Tab Content: Infraestructura -->
+<section *ngIf="activeTab === 'infraestructura'" class="py-24 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Imagen -->
+            <div class="relative order-2 lg:order-1">
+                <div class="rounded-3xl overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800"
+                        alt="Infraestructura Virtual" class="w-full h-full object-cover" />
+                </div>
+            </div>
+
+            <!-- Contenido de Texto con Typography -->
+            <article class="prose prose-slate lg:prose-lg max-w-none order-1 lg:order-2">
+                <h2>Infraestructura Virtual de Vanguardia</h2>
+
+                <p class="lead">
+                    Nuestra plataforma de aprendizaje está diseñada para ofrecer una experiencia
+                    educativa inmersiva y eficaz.
+                </p>
+
+                <p>
+                    Contamos con <strong>laboratorios virtuales de última generación</strong>,
+                    acceso a software especializado y una comunidad en línea vibrante que fomenta
+                    la colaboración y el networking entre estudiantes y profesionales de la industria
+                    a nivel mundial.
+                </p>
+
+                <h3>Características Principales</h3>
+                <ul>
+                    <li>Entornos de desarrollo configurados y listos para usar</li>
+                    <li>Acceso 24/7 desde cualquier dispositivo</li>
+                    <li>Herramientas profesionales de la industria</li>
+                    <li>Soporte técnico en tiempo real</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Final -->
+<section class="py-24 bg-gray-50">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-slate-900 rounded-3xl px-8 py-16 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                ¿Listo para dar el siguiente paso?
+            </h2>
+            <p class="text-base text-gray-300 mb-8 max-w-2xl mx-auto">
+                Únete a miles de estudiantes y profesionales que están construyendo el futuro de la tecnología con
+                nosotros.
+            </p>
+            <button routerLink="/programas"
+                class="inline-flex items-center px-8 py-3 bg-teal-500 text-white text-base font-semibold rounded-lg hover:bg-teal-600 transition-all duration-200">
+                Explora Nuestros Cursos
+            </button>
+        </div>
     </div>
 </section>

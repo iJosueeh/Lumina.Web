@@ -40,6 +40,10 @@ export class CarritoService {
     );
   }
 
+  vaciarCarrito(estudianteId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${estudianteId}/items`);
+  }
+
   updateCartItemCount(count: number) {
     this.cartItemCount.next(count);
   }

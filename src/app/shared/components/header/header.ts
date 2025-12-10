@@ -19,12 +19,15 @@ export class Header implements OnInit {
   isAuthenticated = false;
   currentUser: any = null;
   mobileMenuOpen = false;
+  dropdownOpen = false;
   cartCount = 0;
 
   navItems: NavItem[] = [
-    { label: 'Inicio', route: '/home' },
-    { label: 'Cursos', route: '/cursos' },
-    { label: 'Sobre Nosotros', route: '/sobre-nosotros' },
+    { label: 'Carreras', route: '/carreras' },
+    { label: 'Admisión', route: '/admision' },
+    { label: 'Vida Lumina', route: '/vida-lumina' },
+    { label: 'Nosotros', route: '/sobre-nosotros' },
+    { label: 'Noticias y Eventos', route: '/noticias-eventos' },
     { label: 'Contacto', route: '/contacto' }
   ];
 
@@ -59,28 +62,19 @@ export class Header implements OnInit {
     this.mobileMenuOpen = false;
   }
 
+  toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  closeDropdown(): void {
+    this.dropdownOpen = false;
+  }
+
   onLogin(): void {
     this.router.navigate(['/login']);
   }
 
   onLogout(): void {
     this.authService.logout();
-  }
-
-  goToDashboard(): void {
-    const role = this.authService.getUserRole();
-    switch (role) {
-      case 'ADMIN':
-        this.router.navigate(['/admin/dashboard']);
-        break;
-      case 'PROFESIONAL':
-        this.router.navigate(['/profesional/dashboard']);
-        break;
-      case 'ESTUDIANTE':
-        this.router.navigate(['/estudiante/dashboard']);
-        break;
-      default:
-        this.router.navigate(['/dashboard']);
-    }
   }
 }

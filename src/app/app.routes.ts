@@ -22,95 +22,57 @@ export const routes: Routes = [
         path: 'home',
         loadComponent: () =>
             import('./features/home/home').then(m => m.Home),
-        title: 'Inicio - AcademiaPro'
+        title: 'Inicio - Lumina'
     },
     {
         path: 'cursos',
         loadComponent: () =>
             import('./features/cursos/course-list/course-list').then(m => m.CourseList),
-        title: 'Cursos - AcademiaPro'
+        title: 'Cursos - Lumina'
     },
     {
         path: 'cursos/:id',
         loadComponent: () =>
             import('./features/cursos/course-detail/course-detail').then(m => m.CourseDetail),
-        title: 'Detalle del Curso - AcademiaPro'
+        title: 'Detalle del Curso - Lumina'
     },
     {
         path: 'carrito',
         loadComponent: () => import('./features/carrito/carrito').then(m => m.CarritoComponent),
-        title: 'Carrito de Compras - AcademiaPro'
+        title: 'Carrito de Compras - Lumina'
     },
     {
         path: 'checkout',
         loadComponent: () => import('./features/checkout/checkout').then(m => m.Checkout),
-        title: 'Checkout - AcademiaPro'
+        title: 'Checkout - Lumina'
     },
     {
         path: 'sobre-nosotros',
         loadComponent: () =>
             import('./features/sobre-nosotros/sobre-nosotros').then(m => m.SobreNosotros),
-        title: 'Sobre Nosotros - AcademiaPro'
+        title: 'Sobre Nosotros - Lumina'
     },
     {
         path: 'contacto',
         loadComponent: () =>
             import('./features/contacto/contacto').then(m => m.Contacto),
-        title: 'Contacto - AcademiaPro'
-    },
-    {
-        path: 'admin',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['ADMIN'] },
-        children: [
-            {
-                path: 'dashboard',
-                loadComponent: () =>
-                    import('./features/admin/dashboard/dashboard').then(m => m.Dashboard)
-            },
-            {
-                path: 'user-management',
-                loadComponent: () =>
-                    import('./features/admin/user-management/user-management').then(m => m.UserManagement)
-            }
-        ]
-    },
-    {
-        path: 'profesional',
-        canActivate: [authGuard, roleGuard],
-        data: { roles: ['PROFESSIONAL'] },
-        children: [
-            {
-                path: 'dashboard',
-                loadComponent: () =>
-                    import('./features/profesional/dashboard/dashboard').then(m => m.Dashboard)
-            },
-            {
-                path: 'material-management',
-                loadComponent: () =>
-                    import('./features/profesional/course-management/course-management').then(m => m.CourseManagement)
-            },
-            {
-                path: 'perfil',
-                loadComponent: () =>
-                    import('./features/profesional/profesional').then(m => m.Profesional)
-            },
-        ]
+        title: 'Contacto - Lumina'
     },
     {
         path: 'estudiante',
         canActivate: [authGuard, roleGuard],
-        data: { roles: ['ESTUDIANTE'] },
+        data: { roles: ['STUDENT'] },
         children: [
             {
-                path: 'dashboard',
-                loadComponent: () =>
-                    import('./features/estudiante/dashboard/dashboard').then(m => m.Dashboard)
+                path: '',
+                redirectTo: 'cursos',
+                pathMatch: 'full'
             },
             {
-                path: 'my-courses',
+                path: 'cursos',
                 loadComponent: () =>
-                    import('./features/estudiante/my-courses/my-courses').then(m => m.MyCourses)
+                    import('./features/estudiante/my-courses/my-courses').then(m => m.MyCourses),
+                title: 'Mis Cursos - Estudiante'
             }
         ]
     },

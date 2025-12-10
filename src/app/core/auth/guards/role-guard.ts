@@ -7,7 +7,7 @@ export const roleGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const allowedRoles = route.data['roles'] as string[];
-  const userRole = authService.getUserRole();
+  const userRole = authService.getUserRole()?.toUpperCase();
 
   if (userRole && allowedRoles.includes(userRole)) {
     return true;
@@ -22,10 +22,10 @@ export const roleGuard: CanActivateFn = (route, state) => {
       case 'ADMIN':
         router.navigate(['/admin/dashboard']);
         break;
-      case 'PROFESIONAL':
+      case 'TEACHER':
         router.navigate(['/profesional/dashboard']);
         break;
-      case 'ESTUDIANTE':
+      case 'STUDENT':
         router.navigate(['/estudiante/dashboard']);
         break;
       default:

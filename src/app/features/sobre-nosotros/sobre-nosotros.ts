@@ -60,9 +60,11 @@ export class SobreNosotros implements OnInit {
       descripcion: 'Mantenemos los más altos estándares de integridad, fomentamos una cultura de excelencia académica, promovemos la innovación y el progreso, y crear oportunidades.'
     }
   ];
+  activeTab: any;
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
+    this.activeTab = 'historia';
   }
 
   getIconPath(iconName: string): string {

@@ -1,298 +1,194 @@
-<!-- Hero Section con Gradiente Mesh Animado -->
-<section class="relative h-[700px] overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900">
-    <!-- Fondo con patrón de grid -->
-    <div class="absolute inset-0 grid-pattern opacity-20"></div>
+<!-- Hero Section -->
+<section class="py-24 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+            class="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-slate-700 via-blue-900 to-purple-900 rounded-3xl">
+            <!-- Fondo con patrón sutil -->
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute inset-0"
+                    style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;">
+                </div>
+            </div>
 
-    <!-- Gradiente mesh animado -->
-    <div class="absolute inset-0 bg-gradient-mesh opacity-50"></div>
+            <!-- Contenido centrado -->
+            <div class="relative h-full flex items-center justify-center py-24 md:py-32 px-4">
+                <div class="text-center text-white space-y-6 w-full max-w-3xl">
+                    <!-- Título principal -->
+                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+                        Lumina.Core
+                    </h1>
 
-    <!-- Imagen de fondo con overlay -->
-    <div class="absolute inset-0">
-        <img src="https://tekla.io/wp-content/uploads/2022/03/Recurso1.png" alt="Desarrollo Web"
-            class="w-full h-full object-cover opacity-20" />
-        <div class="absolute inset-0 bg-gradient-to-r from-tech-blue-900/80 via-tech-purple-900/70 to-tech-cyan-900/60">
-        </div>
-    </div>
+                    <!-- Subtítulo -->
+                    <p class="text-xs md:text-sm text-gray-200 tracking-[0.4em] uppercase font-light">
+                        UNLEASH YOUR CODE
+                    </p>
 
-    <!-- Elementos flotantes decorativos -->
-    <div class="absolute top-20 left-10 w-72 h-72 bg-tech-blue-500/10 rounded-full blur-3xl animate-float"></div>
-    <div class="absolute bottom-20 right-10 w-96 h-96 bg-tech-purple-500/10 rounded-full blur-3xl animate-float"
-        style="animation-delay: 1s;"></div>
-
-    <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-        <div class="max-w-3xl text-white space-y-8 animate-fade-in-up">
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
-                Domina el
-                <span class="text-gradient">Desarrollo Web</span>
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-200 leading-relaxed">
-                Aprende a crear aplicaciones y sitios web modernos con nuestros cursos impartidos por expertos de la
-                industria. Da el primer paso hacia tu nueva carrera en tecnología.
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <button routerLink="/programas"
-                    class="group relative px-8 py-4 bg-gradient-to-r from-tech-blue-600 to-tech-purple-600 text-white text-lg font-semibold rounded-xl overflow-hidden transform hover:scale-105 transition-all duration-300 shadow-glow-blue-lg hover:shadow-glow-purple-lg shine-effect">
-                    <span class="relative z-10 flex items-center">
-                        Explorar Cursos
-                        <svg class="ml-2 w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
-                    </span>
-                </button>
-                <button routerLink="/sobre-nosotros"
-                    class="px-8 py-4 glass text-white text-lg font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300">
-                    Conocer Más
-                </button>
+                    <!-- Botones de acción -->
+                    <div class="flex flex-wrap gap-3 justify-center pt-8">
+                        <button routerLink="/carreras"
+                            class="px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg">
+                            Explora Carreras
+                        </button>
+                        <button routerLink="/admision"
+                            class="px-6 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-md hover:bg-gray-50 transition-all duration-200 shadow-md hover:shadow-lg">
+                            Proceso de Admisión
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Sección de Cursos -->
-<section class="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
+<!-- Sección de Misión -->
+<section class="py-24 bg-slate-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p class="text-center text-gray-600 text-base md:text-lg leading-relaxed">
+            En Lumina.Core, estamos dedicados a forjar la próxima generación de líderes en tecnología. Nuestra misión es
+            proporcionar una educación de vanguardia, combinando teoría rigurosa con proyectos prácticos del mundo real
+            para que puedas desatar todo tu potencial y transformar el futuro digital.
+        </p>
+    </div>
+</section>
+
+<!-- Sección de Programas Destacados -->
+<section class="py-24 bg-slate-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 animate-scale-in">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-                Nuestros Cursos de <span class="text-gradient">Desarrollo Web</span>
+        <!-- Título -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900">
+                Programas Destacados
             </h2>
-            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                Desde los fundamentos hasta las tecnologías más avanzadas, tenemos el curso perfecto para ti.
-            </p>
         </div>
 
-        <!-- Filtros mejorados -->
-        <div class="flex flex-wrap justify-center gap-3 mb-12">
-            @for (filter of filters; track filter) {
-            <button (click)="selectFilter(filter)"
-                [class]="selectedFilter === filter 
-                ? 'bg-gradient-to-r from-tech-blue-600 to-tech-purple-600 text-white shadow-glow-blue' 
-                : 'bg-white text-gray-700 hover:bg-gradient-to-r hover:from-tech-blue-50 hover:to-tech-purple-50 hover:text-tech-blue-700'"
-                class="px-6 py-2.5 rounded-full font-semibold border border-gray-200 transition-all duration-300 transform hover:scale-105">
-                {{ filter }}
-            </button>
-            }
-        </div>
-
-        <!-- Grid de cursos con efectos modernos -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @for (course of visibleCourses; track course.id) {
-            <div
-                class="group relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-glow-blue transition-all duration-500 transform hover:-translate-y-3 hover:scale-[1.02] border border-gray-100">
-                <!-- Course Image -->
-                <div
-                    class="relative h-52 overflow-hidden bg-gradient-to-br from-tech-blue-400 via-tech-purple-500 to-tech-cyan-500">
-                    <img [src]="course.imagen" [alt]="course.titulo"
-                        class="w-full h-full object-cover group-hover:scale-125 group-hover:rotate-2 transition-all duration-500"
-                        (error)="$event.target.src='assets/images/courses/default-course.jpg'" />
-                    <!-- Overlay con gradiente -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300">
-                    </div>
-                    <!-- Efecto de brillo -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    </div>
+        <!-- Grid de programas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1: Desarrollo de Software -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="h-48 overflow-hidden bg-slate-800">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_JDXfYGuB3CwQocuCAzaoHp-K8FkgEbqxPw&s"
+                        alt="Desarrollo de Software" class="w-full h-full object-cover" />
                 </div>
-
-                <!-- Course Content -->
-                <div class="p-6 relative">
-                    <!-- Badges con gradiente -->
-                    <div class="flex flex-wrap gap-2 mb-4">
-                        <span
-                            [class]="getColorClass(course.colorBadge1) + ' text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide shadow-sm'">
-                            {{ course.badge1 }}
-                        </span>
-                        <span
-                            [class]="getColorClass(course.colorBadge2) + ' text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide shadow-sm'">
-                            {{ course.badge2 }}
-                        </span>
-                    </div>
-
-                    <!-- Title -->
-                    <h3
-                        class="text-xl font-bold text-gray-900 mb-3 group-hover:text-tech-blue-600 transition-colors line-clamp-2 font-display">
-                        {{ course.titulo }}
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">
+                        Desarrollo de Software
                     </h3>
-
-                    <!-- Description -->
-                    <p class="text-gray-600 mb-5 line-clamp-2 text-sm leading-relaxed">
-                        {{ course.descripcion }}
+                    <p class="text-gray-600 text-sm mb-6">
+                        Construye el futuro de las aplicaciones web y móviles.
                     </p>
-
-                    <!-- CTA Button con gradiente -->
-                    <button [routerLink]="['/cursos', course.id]"
-                        class="w-full py-3 bg-gradient-to-r from-tech-blue-600 to-tech-purple-600 text-white font-semibold rounded-xl hover:shadow-glow-blue transition-all duration-300 flex items-center justify-center group/btn transform hover:scale-[1.02]">
-                        <span class="flex items-center">
-                            Ver Detalles
-                            <svg class="w-5 h-5 ml-2 transform group-hover/btn:translate-x-1 transition-transform"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
-                        </span>
+                    <button
+                        class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
+                        Aprende Más
                     </button>
                 </div>
             </div>
-            }
+
+            <!-- Card 2: Ciencia de Datos -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="h-48 overflow-hidden bg-blue-900">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMmdkrvmxJjCMFXUG-k22buKceN02KoivqZA&s"
+                        alt="Ciencia de Datos" class="w-full h-full object-cover" />
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">
+                        Ciencia de Datos
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-6">
+                        Desbloquea insights y toma decisiones con datos.
+                    </p>
+                    <button
+                        class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
+                        Aprende Más
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card 3: Ciberseguridad -->
+            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                <div class="h-48 overflow-hidden bg-teal-900">
+                    <img src="https://arandasoft.com/wp-content/uploads/2023/09/Grupo-2.jpg" alt="Ciberseguridad"
+                        class="w-full h-full object-cover" />
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">
+                        Ciberseguridad
+                    </h3>
+                    <p class="text-gray-600 text-sm mb-6">
+                        Protege los activos y la infraestructura digital.
+                    </p>
+                    <button
+                        class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
+                        Aprende Más
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Sección de Beneficios -->
-<section class="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
-    <!-- Elementos decorativos de fondo -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-tech-purple-200/20 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-tech-blue-200/20 rounded-full blur-3xl"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+<section class="py-32 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Título -->
         <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-                ¿Por qué elegir <span class="text-gradient">AcademiaPro</span>?
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900">
+                ¿Por qué Lumina.Core?
             </h2>
-            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                Te ofrecemos las herramientas y el apoyo que necesitas para triunfar en el mundo tech.
-            </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            @for (benefit of benefits; track benefit.titulo) {
-            <div class="text-center group hover-3d">
-                <div
-                    class="mb-6 inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br from-tech-blue-100 to-tech-purple-100 text-tech-purple-600 group-hover:from-tech-blue-600 group-hover:to-tech-purple-600 group-hover:text-white transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-6 shadow-lg group-hover:shadow-glow-purple">
-                    @if (benefit.icono === 'instructor') {
-                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Grid de beneficios -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Beneficio 1: Docentes Expertos -->
+            <div class="text-center">
+                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100">
+                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                    }
-                    @if (benefit.icono === 'projects') {
-                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            d="M12 14l9-5-9-5-9 5 9 5z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    }
-                    @if (benefit.icono === 'community') {
-                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
                     </svg>
-                    }
                 </div>
-
-                <h3
-                    class="text-2xl font-display font-bold text-gray-900 mb-3 group-hover:text-tech-blue-600 transition-colors">
-                    {{ benefit.titulo }}
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                    Docentes Expertos
                 </h3>
-                <p class="text-gray-600 leading-relaxed text-lg">
-                    {{ benefit.descripcion }}
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Aprende de profesionales líderes en la industria con experiencia real y comprobada.
                 </p>
             </div>
-            }
-        </div>
-    </div>
-</section>
 
-<!-- Sección de Testimonios -->
-<section class="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-                Historias de <span class="text-gradient">Éxito</span>
-            </h2>
-            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                Nuestros estudiantes son nuestra mayor carta de presentación.
-            </p>
-        </div>
-
-        <div class="max-w-4xl mx-auto">
-            @for (testimonial of testimonials; track testimonial.id) {
-            <div class="glass-dark rounded-3xl p-8 md:p-12 shadow-2xl border border-white/10">
-                <div class="flex justify-center mb-6">
-                    <div
-                        class="relative w-24 h-24 rounded-full overflow-hidden ring-4 ring-tech-purple-500/50 shadow-glow-purple">
-                        <img [src]="testimonial.avatar" [alt]="testimonial.nombre" class="w-full h-full object-cover"
-                            (error)="$event.target.src='assets/images/testimonials/default-avatar.jpg'" />
-                    </div>
-                </div>
-
-                <blockquote class="text-center mb-6">
-                    <p class="text-xl md:text-2xl text-white italic leading-relaxed">
-                        "{{ testimonial.testimonio }}"
-                    </p>
-                </blockquote>
-
-                <div class="text-center">
-                    <p class="font-bold text-white text-lg">{{ testimonial.nombre }}</p>
-                    <p class="text-sm text-gray-300">
-                        {{ testimonial.cargo }} en {{ testimonial.empresa }}
-                    </p>
-                </div>
-            </div>
-            }
-        </div>
-    </div>
-</section>
-
-<!-- Sección de FAQ -->
-<section class="py-16 md:py-24 bg-white">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-4">
-                Preguntas <span class="text-gradient">Frecuentes</span>
-            </h2>
-        </div>
-
-        <div class="space-y-4">
-            @for (faq of faqs; track faq.pregunta) {
-            <div
-                class="bg-gradient-to-r from-gray-50 to-white rounded-xl shadow-md hover:shadow-lg overflow-hidden border border-gray-100 transition-all duration-300">
-                <button (click)="toggleFAQ(faq)"
-                    class="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-tech-blue-50/50 transition-colors duration-300">
-                    <span class="font-semibold text-gray-900 pr-4">{{ faq.pregunta }}</span>
-                    <svg [class.rotate-180]="faq.isOpen"
-                        class="w-5 h-5 text-tech-blue-600 transform transition-transform duration-300 flex-shrink-0"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            <!-- Beneficio 2: Proyectos Prácticos -->
+            <div class="text-center">
+                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100">
+                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                     </svg>
-                </button>
-
-                @if (faq.isOpen) {
-                <div class="px-6 pb-5 text-gray-600 animate-fade-in">
-                    {{ faq.respuesta }}
                 </div>
-                }
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                    Proyectos Prácticos
+                </h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Construye un portafolio sólido trabajando en proyectos que resuelven problemas del mundo real.
+                </p>
             </div>
-            }
+
+            <!-- Beneficio 3: Soporte de Carrera -->
+            <div class="text-center">
+                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100">
+                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">
+                    Soporte de Carrera
+                </h3>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Te conectamos con oportunidades laborales y te preparamos para el éxito profesional.
+                </p>
+            </div>
         </div>
-    </div>
-</section>
-
-<!-- CTA Final -->
-<section
-    class="py-16 md:py-20 bg-gradient-to-r from-tech-blue-600 via-tech-purple-600 to-tech-cyan-600 relative overflow-hidden">
-    <!-- Elementos decorativos -->
-    <div class="absolute inset-0 bg-gradient-mesh opacity-30"></div>
-    <div class="absolute top-0 left-0 w-full h-full dot-pattern opacity-10"></div>
-
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-        <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-4">
-            ¿Listo para empezar tu viaje en el Desarrollo Web?
-        </h2>
-        <p class="text-xl text-white/90 mb-8">
-            Únete a miles de estudiantes y transforma tu futuro hoy mismo. Explora nuestros cursos y encuentra el camino
-            perfecto para ti.
-        </p>
-        <button routerLink="/programas"
-            class="inline-flex items-center px-8 py-4 bg-white text-tech-purple-600 text-lg font-semibold rounded-xl hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-glow-purple-lg shine-effect">
-            <span class="flex items-center">
-                Ver Todos los Cursos
-                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-            </span>
-        </button>
     </div>
 </section>

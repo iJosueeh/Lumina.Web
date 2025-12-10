@@ -17,7 +17,7 @@ export class Footer {
 
   footerSections: FooterSection[] = [
     {
-      title: 'AcademiaPro',
+      title: 'Lumina',
       links: [
         { label: 'Sobre Nosotros', route: '/sobre-nosotros' },
         { label: 'Nuestra Misión', route: '/sobre-nosotros#mision' },
@@ -61,15 +61,15 @@ export class Footer {
   ];
 
   socialLinks: SocialLink[] = [
-    { name: 'Facebook', url: 'https://facebook.com/academiapro', icon: 'facebook' },
-    { name: 'Twitter', url: 'https://twitter.com/academiapro', icon: 'twitter' },
-    { name: 'LinkedIn', url: 'https://linkedin.com/company/academiapro', icon: 'linkedin' },
-    { name: 'Instagram', url: 'https://instagram.com/academiapro', icon: 'instagram' },
-    { name: 'YouTube', url: 'https://youtube.com/academiapro', icon: 'youtube' }
+    { name: 'Facebook', url: 'https://facebook.com/lumina', icon: 'facebook' },
+    { name: 'Twitter', url: 'https://twitter.com/lumina', icon: 'twitter' },
+    { name: 'LinkedIn', url: 'https://linkedin.com/company/lumina', icon: 'linkedin' },
+    { name: 'Instagram', url: 'https://instagram.com/lumina', icon: 'instagram' },
+    { name: 'YouTube', url: 'https://youtube.com/lumina', icon: 'youtube' }
   ];
 
   contactInfo = {
-    email: 'contacto@academiapro.edu',
+    email: 'contacto@lumina.edu',
     phone: '+1 (555) 123-4567',
     address: '123 Education St, Learning City, LC 12345'
   };

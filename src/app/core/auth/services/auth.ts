@@ -52,6 +52,22 @@ export class Auth {
       );
   }
 
+  register(data: any): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, data)
+      .pipe(
+        tap(response => {
+          localStorage.setItem('token', response.token);
+
+          if (response.refreshToken) {
+            localStorage.setItem('refreshToken', response.refreshToken);
+          }
+
+          localStorage.setItem('currentUser', JSON.stringify(response.userInfo));
+          this.currentUserSubject.next(response.userInfo);
+        })
+      );
+  }
+
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');

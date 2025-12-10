@@ -8,6 +8,8 @@ import { CarritoService } from '../estudiante/services/carrito.service';
 import { CursoService } from '../cursos/services/curso.service';
 import { forkJoin, Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { PedidosService } from '@app/core/services/pedidos.service';
+import { CrearPedidoCommand, PedidoItemCommand } from '@app/core/models/pedido.model';
 
 @Component({
     selector: 'app-checkout',
@@ -21,6 +23,7 @@ export class Checkout implements OnInit {
     private cursoService = inject(CursoService);
     private fb = inject(FormBuilder);
     private router = inject(Router);
+    private pedidosService = inject(PedidosService); // Inyectar PedidosService
 
     cartItems: CourseDetalles[] = [];
     totalPrice = 0;
@@ -109,27 +112,60 @@ export class Checkout implements OnInit {
 
         this.processing = true;
 
-        // Simulación de procesamiento de pago (2 segundos)
-        setTimeout(() => {
+        const currentUser = this.authService.getCurrentUser();
+        if (!currentUser) {
+            this.router.navigate(['/login']);
             this.processing = false;
+            return;
+        }
 
-            // Aquí es donde llamarías al backend para procesar el pago
-            // Por ahora, simulamos éxito y navegamos a confirmación
+        const pedidoItems: PedidoItemCommand[] = this.cartItems.map(item => ({
+            cursoId: item.id
+        }));
 
-            // Guardar datos de la orden en sessionStorage para la página de confirmación
-            const orderData = {
-                items: this.cartItems,
-                total: this.totalPrice,
-                paymentMethod: this.selectedPaymentMethod,
-                orderDate: new Date().toISOString(),
-                orderId: this.generateOrderId()
-            };
+        const crearPedidoCommand: CrearPedidoCommand = {
+            clienteId: currentUser.id,
+            items: pedidoItems
+        };
 
-            sessionStorage.setItem('lastOrder', JSON.stringify(orderData));
-
-            // Navegar a página de confirmación
-            this.router.navigate(['/checkout/confirmacion']);
-        }, 2000);
+        this.pedidosService.crearPedido(crearPedidoCommand).subscribe({
+            next: (orderId: string) => {
+                // Clear the cart after successful order creation
+                this.carritoService.vaciarCarrito(currentUser.id).subscribe({
+                    next: () => {
+                        this.carritoService.updateCartItemCount(0); // Update cart count in Navbar
+                        const orderData = {
+                            items: this.cartItems,
+                            total: this.totalPrice,
+                            paymentMethod: this.selectedPaymentMethod,
+                            orderDate: new Date().toISOString(),
+                            orderId: orderId // Use the actual orderId from the backend
+                        };
+                        sessionStorage.setItem('lastOrder', JSON.stringify(orderData));
+                        this.router.navigate(['/checkout/confirmacion']);
+                    },
+                    error: (err) => {
+                        console.error('Error al vaciar el carrito:', err);
+                        // Even if clearing the cart fails, we might still want to go to confirmation
+                        // or handle this error separately. For now, redirecting to confirmation.
+                        const orderData = {
+                            items: this.cartItems,
+                            total: this.totalPrice,
+                            paymentMethod: this.selectedPaymentMethod,
+                            orderDate: new Date().toISOString(),
+                            orderId: orderId // Use the actual orderId from the backend
+                        };
+                        sessionStorage.setItem('lastOrder', JSON.stringify(orderData));
+                        this.router.navigate(['/checkout/confirmacion']);
+                    }
+                });
+            },
+            error: (err) => {
+                console.error('Error al crear el pedido:', err);
+                this.processing = false;
+                // Handle error (e.g., show a toast message to the user)
+            }
+        });
     }
 
     private generateOrderId(): string {

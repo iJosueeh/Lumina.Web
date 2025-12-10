@@ -47,7 +47,7 @@ export class Home implements OnInit {
       nombre: 'Ana García',
       cargo: 'Desarrolladora Web',
       empresa: 'Tech Solutions',
-      testimonio: 'Los cursos de AcademiaPro me dieron la confianza y las habilidades para cambiar de carrera y conseguir mi primer trabajo como desarrolladora front-end. ¡Totalmente recomendado!',
+      testimonio: 'Los cursos de Lumina.Core me dieron la confianza y las habilidades para cambiar de carrera y conseguir mi primer trabajo como desarrolladora front-end. ¡Totalmente recomendado!',
       avatar: 'https://plus.unsplash.com/premium_photo-1690086519096-0594592709d3?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXZhdGFyJTIwZmVtZW5pbm98ZW58MHx8MHx8fDA%3D'
     }
   ];

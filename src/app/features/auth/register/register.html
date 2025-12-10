@@ -1,1 +1,275 @@
-<p>register works!</p>
+<div class="min-h-screen flex">
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+        <div class="max-w-lg w-full space-y-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">
+                    Crea tu cuenta
+                </h1>
+                <p class="mt-2 text-gray-600">
+                    Únete a nuestra plataforma académica y comienza tu aprendizaje.
+                </p>
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-5">
+                <!-- Nombres -->
+                <div>
+                    <label for="nombres" class="block text-sm font-medium text-gray-700 mb-2">
+                        Nombres
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </div>
+                        <input id="nombres" type="text" formControlName="nombres" placeholder="Introduce tus nombres"
+                            [class.border-red-500]="nombres?.invalid && nombres?.touched"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150" />
+                    </div>
+                    @if (nombres?.invalid && nombres?.touched) {
+                    <p class="mt-1 text-sm text-red-600">
+                        @if (nombres?.errors?.['required']) {
+                        <span>Los nombres son requeridos</span>
+                        }
+                        @if (nombres?.errors?.['minlength']) {
+                        <span>Debe tener al menos 2 caracteres</span>
+                        }
+                    </p>
+                    }
+                </div>
+
+                <!-- Apellidos en Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Apellido Paterno -->
+                    <div>
+                        <label for="apellidoPaterno" class="block text-sm font-medium text-gray-700 mb-2">
+                            Apellido Paterno
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <input id="apellidoPaterno" type="text" formControlName="apellidoPaterno"
+                                placeholder="Apellido paterno"
+                                [class.border-red-500]="apellidoPaterno?.invalid && apellidoPaterno?.touched"
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150" />
+                        </div>
+                        @if (apellidoPaterno?.invalid && apellidoPaterno?.touched) {
+                        <p class="mt-1 text-sm text-red-600">
+                            @if (apellidoPaterno?.errors?.['required']) {
+                            <span>Requerido</span>
+                            }
+                        </p>
+                        }
+                    </div>
+
+                    <!-- Apellido Materno -->
+                    <div>
+                        <label for="apellidoMaterno" class="block text-sm font-medium text-gray-700 mb-2">
+                            Apellido Materno
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <input id="apellidoMaterno" type="text" formControlName="apellidoMaterno"
+                                placeholder="Apellido materno"
+                                [class.border-red-500]="apellidoMaterno?.invalid && apellidoMaterno?.touched"
+                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150" />
+                        </div>
+                        @if (apellidoMaterno?.invalid && apellidoMaterno?.touched) {
+                        <p class="mt-1 text-sm text-red-600">
+                            @if (apellidoMaterno?.errors?.['required']) {
+                            <span>Requerido</span>
+                            }
+                        </p>
+                        }
+                    </div>
+                </div>
+
+                <!-- Correo -->
+                <div>
+                    <label for="correo" class="block text-sm font-medium text-gray-700 mb-2">
+                        Correo Electrónico
+                    </label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <input id="correo" type="email" formControlName="correo" placeholder="tu@email.com"
+                            [class.border-red-500]="correo?.invalid && correo?.touched"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150" />
+                    </div>
+                    @if (correo?.invalid && correo?.touched) {
+                    <p class="mt-1 text-sm text-red-600">
+                        @if (correo?.errors?.['required']) {
+                        <span>El correo es requerido</span>
+                        }
+                        @if (correo?.errors?.['email']) {
+                        <span>Por favor ingresa un correo válido</span>
+                        }
+                    </p>
+                    }
+                </div>
+
+                <!-- Contraseñas en Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Contraseña -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Contraseña
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <input id="password" [type]="hidePassword ? 'password' : 'text'" formControlName="password"
+                                placeholder="Mínimo 6 caracteres"
+                                [class.border-red-500]="password?.invalid && password?.touched"
+                                class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150" />
+                            <button type="button" (click)="togglePasswordVisibility()"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition"
+                                tabindex="-1">
+                                @if (hidePassword) {
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                } @else {
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                </svg>
+                                }
+                            </button>
+                        </div>
+                        @if (password?.invalid && password?.touched) {
+                        <p class="mt-1 text-sm text-red-600">
+                            @if (password?.errors?.['required']) {
+                            <span>Requerida</span>
+                            }
+                            @if (password?.errors?.['minlength']) {
+                            <span>Mínimo 6 caracteres</span>
+                            }
+                        </p>
+                        }
+                    </div>
+
+                    <!-- Confirmar Contraseña -->
+                    <div>
+                        <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+                            Confirmar Contraseña
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <input id="confirmPassword" [type]="hideConfirmPassword ? 'password' : 'text'"
+                                formControlName="confirmPassword" placeholder="Repite tu contraseña"
+                                [class.border-red-500]="(confirmPassword?.invalid && confirmPassword?.touched) || (registerForm.hasError('passwordMismatch') && confirmPassword?.touched)"
+                                class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150" />
+                            <button type="button" (click)="toggleConfirmPasswordVisibility()"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition"
+                                tabindex="-1">
+                                @if (hideConfirmPassword) {
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                } @else {
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                </svg>
+                                }
+                            </button>
+                        </div>
+                        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+                        <p class="mt-1 text-sm text-red-600">
+                            @if (confirmPassword?.errors?.['required']) {
+                            <span>Debes confirmar</span>
+                            }
+                        </p>
+                        }
+                        @if (registerForm.hasError('passwordMismatch') && confirmPassword?.touched) {
+                        <p class="mt-1 text-sm text-red-600">
+                            <span>Las contraseñas no coinciden</span>
+                        </p>
+                        }
+                    </div>
+                </div>
+
+                @if (errorMessage) {
+                <div class="rounded-lg bg-red-50 border border-red-200 p-4 animate-fadeIn">
+                    <div class="flex">
+                        <svg class="h-5 w-5 text-red-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <p class="text-sm text-red-600">{{ errorMessage }}</p>
+                    </div>
+                </div>
+                }
+
+                <button type="submit" [disabled]="loading"
+                    class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-primary hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                    @if (loading) {
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                    }
+
+                    @if (loading) {
+                    <span>Creando cuenta...</span>
+                    } @else {
+                    <span>Crear Cuenta</span>
+                    }
+                </button>
+
+                <div class="text-center">
+                    <p class="text-sm text-gray-600">
+                        ¿Ya tienes una cuenta?
+                        <a routerLink="/login" class="font-semibold text-accent hover:text-accent/80 transition">
+                            Inicia sesión aquí
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="hidden lg:block lg:w-1/2 relative overflow-hidden">
+        <img src="https://facyt.uni.edu.py/wp-content/uploads/2024/10/IMG-20241009-WA0047.jpg" alt="Estudiantes"
+            class="absolute inset-0 w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-gray-900/30"></div>
+    </div>
+</div>

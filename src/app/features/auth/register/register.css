@@ -1,0 +1,39 @@
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+input {
+    transition: all 0.2s ease-in-out;
+
+    &:focus {
+        transform: translateY(-1px);
+    }
+}
+
+button[type="submit"]:not(:disabled) {
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 90, 135, 0.3);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}

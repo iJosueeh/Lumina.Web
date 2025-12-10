@@ -60,6 +60,9 @@ export class Login implements OnInit {
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         this.loading = false;
+        console.log('Login exitoso:', response);
+        console.log('Rol principal:', response.userInfo.rolPrincipal);
+
         this.snackBar.open('¡Inicio de sesión exitoso!', 'Cerrar', { duration: 3000, verticalPosition: 'top' });
 
         if (this.returnUrl) {
@@ -87,20 +90,22 @@ export class Login implements OnInit {
   }
 
   private redirectToDashboard(role?: string): void {
-    const userRole = role || this.authService.getUserRole();
+    const userRole = (role || this.authService.getUserRole())?.toUpperCase();
+    console.log('Redirigiendo para rol (normalizado):', userRole);
 
     switch (userRole) {
       case 'ADMIN':
         this.router.navigate(['/admin/dashboard']);
         break;
-      case 'PROFESIONAL':
+      case 'TEACHER':
         this.router.navigate(['/profesional/dashboard']);
         break;
-      case 'ESTUDIANTE':
+      case 'STUDENT':
         this.router.navigate(['/estudiante/dashboard']);
         break;
       default:
-        this.router.navigate(['/dashboard']);
+        console.warn('Rol no reconocido o sin dashboard específico:', userRole);
+        this.router.navigate(['/home']);
     }
   }
 
