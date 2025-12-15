@@ -6,6 +6,8 @@ import { CourseLista } from '@app/core/models/course-lista';
 import { FAQ } from '@app/core/models/faq';
 import { Testimonial } from '@app/core/models/testimonial';
 import { CursoService } from '../cursos/services/curso.service';
+import { CursosService } from '@app/core/services/cursos.service';
+import { Course } from '@app/core/models/course.model';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +17,7 @@ import { CursoService } from '../cursos/services/curso.service';
 })
 export class Home implements OnInit {
   private cursoService = inject(CursoService);
+  private cursosService = inject(CursosService);
 
   selectedFilter = 'Todos';
 
@@ -22,6 +25,7 @@ export class Home implements OnInit {
 
   allCourses: CourseLista[] = [];
   visibleCourses: CourseLista[] = []; // New property to hold a limited number of courses
+  featuredCourses: Course[] = []; // Cursos destacados para la sección de programas
 
   benefits: Benefit[] = [
     {
@@ -73,6 +77,7 @@ export class Home implements OnInit {
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.loadCourses();
+    this.loadFeaturedCourses();
   }
 
   loadCourses(): void {
@@ -83,6 +88,19 @@ export class Home implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los cursos:', error);
+      }
+    });
+  }
+
+  loadFeaturedCourses(): void {
+    this.cursosService.getFeaturedCourses().subscribe({
+      next: (courses) => {
+        this.featuredCourses = courses;
+      },
+      error: (error) => {
+        console.error('Error al cargar cursos destacados:', error);
+        // Fallback: mostrar array vacío
+        this.featuredCourses = [];
       }
     });
   }

@@ -1,5 +1,5 @@
 <!-- Hero Section -->
-<section class="py-24 bg-slate-50">
+<section class="py-24 bg-slate-50 dark:bg-dark-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
             class="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-slate-700 via-blue-900 to-purple-900 rounded-3xl">
@@ -41,9 +41,9 @@
 </section>
 
 <!-- Sección de Misión -->
-<section class="py-24 bg-slate-50">
+<section class="py-24 bg-slate-50 dark:bg-dark-bg">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-center text-gray-600 text-base md:text-lg leading-relaxed">
+        <p class="text-center text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
             En Lumina.Core, estamos dedicados a forjar la próxima generación de líderes en tecnología. Nuestra misión es
             proporcionar una educación de vanguardia, combinando teoría rigurosa con proyectos prácticos del mundo real
             para que puedas desatar todo tu potencial y transformar el futuro digital.
@@ -52,76 +52,45 @@
 </section>
 
 <!-- Sección de Programas Destacados -->
-<section class="py-24 bg-slate-50">
+<section class="py-24 bg-slate-50 dark:bg-dark-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Título -->
         <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-900">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-dark-text">
                 Programas Destacados
             </h2>
         </div>
 
         <!-- Grid de programas -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Card 1: Desarrollo de Software -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+            @if (featuredCourses.length > 0) {
+            @for (curso of featuredCourses; track curso.id) {
+            <a [routerLink]="['/cursos', curso.id]"
+                class="bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl dark:shadow-blue-900/20 transition-shadow duration-300 cursor-pointer border border-transparent dark:border-dark-border">
                 <div class="h-48 overflow-hidden bg-slate-800">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_JDXfYGuB3CwQocuCAzaoHp-K8FkgEbqxPw&s"
-                        alt="Desarrollo de Software" class="w-full h-full object-cover" />
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">
-                        Desarrollo de Software
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-6">
-                        Construye el futuro de las aplicaciones web y móviles.
-                    </p>
-                    <button
-                        class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
-                        Aprende Más
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 2: Ciencia de Datos -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div class="h-48 overflow-hidden bg-blue-900">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMmdkrvmxJjCMFXUG-k22buKceN02KoivqZA&s"
-                        alt="Ciencia de Datos" class="w-full h-full object-cover" />
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">
-                        Ciencia de Datos
-                    </h3>
-                    <p class="text-gray-600 text-sm mb-6">
-                        Desbloquea insights y toma decisiones con datos.
-                    </p>
-                    <button
-                        class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
-                        Aprende Más
-                    </button>
-                </div>
-            </div>
-
-            <!-- Card 3: Ciberseguridad -->
-            <div class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div class="h-48 overflow-hidden bg-teal-900">
-                    <img src="https://arandasoft.com/wp-content/uploads/2023/09/Grupo-2.jpg" alt="Ciberseguridad"
+                    <img [src]="curso.imagen || 'https://via.placeholder.com/400x200'" [alt]="curso.titulo"
                         class="w-full h-full object-cover" />
                 </div>
                 <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">
-                        Ciberseguridad
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">
+                        {{ curso.titulo }}
                     </h3>
-                    <p class="text-gray-600 text-sm mb-6">
-                        Protege los activos y la infraestructura digital.
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
+                        {{ curso.descripcion }}
                     </p>
                     <button
                         class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
                         Aprende Más
                     </button>
                 </div>
+            </a>
+            }
+            } @else {
+            <!-- Fallback: mostrar mensaje de carga o vacío -->
+            <div class="col-span-3 text-center py-12">
+                <p class="text-gray-500 dark:text-gray-400">Cargando programas destacados...</p>
             </div>
+            }
         </div>
     </div>
 </section>

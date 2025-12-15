@@ -16,24 +16,42 @@
   --color-secondary-dark: #7C3AED;
   --color-accent: #06B6D4;
   --color-accent-bright: #22D3EE;
-  
+
   /* Gradientes */
   --gradient-primary: linear-gradient(135deg, #0EA5E9 0%, #3B82F6 100%);
   --gradient-secondary: linear-gradient(135deg, #8B5CF6 0%, #A855F7 100%);
   --gradient-tech: linear-gradient(135deg, #06B6D4 0%, #3B82F6 50%, #8B5CF6 100%);
   --gradient-mesh: radial-gradient(at 40% 20%, hsla(210, 100%, 60%, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 80% 0%, hsla(270, 100%, 70%, 0.3) 0px, transparent 50%),
-                   radial-gradient(at 0% 50%, hsla(190, 100%, 60%, 0.3) 0px, transparent 50%);
-  
+    radial-gradient(at 80% 0%, hsla(270, 100%, 70%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(190, 100%, 60%, 0.3) 0px, transparent 50%);
+
   /* Sombras Coloridas */
   --shadow-glow-blue: 0 0 20px rgba(14, 165, 233, 0.3);
   --shadow-glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
   --shadow-glow-cyan: 0 0 20px rgba(6, 182, 212, 0.3);
-  
+
   /* Glassmorphism */
   --glass-bg: rgba(255, 255, 255, 0.1);
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-blur: blur(10px);
+
+  /* Light mode backgrounds and text */
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+}
+
+/* Dark mode variables */
+.dark {
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+
+  /* Adjust glassmorphism for dark mode */
+  --glass-bg: rgba(30, 41, 59, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 /* ============================================
@@ -56,14 +74,32 @@ body {
 }
 
 /* ============================================
+   SMOOTH TRANSITIONS FOR DARK MODE
+   ============================================ */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Exceptions - elements that should not transition */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* ============================================
    ANIMACIONES PERSONALIZADAS
    ============================================ */
 
 /* Animación de Gradiente */
 @keyframes gradient-shift {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -71,9 +107,12 @@ body {
 
 /* Animación de Flotación */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
@@ -84,6 +123,7 @@ body {
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
@@ -91,9 +131,12 @@ body {
 
 /* Animación de Glow Pulsante */
 @keyframes glow-pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
   }
+
   50% {
     box-shadow: 0 0 40px rgba(14, 165, 233, 0.6);
   }
@@ -105,6 +148,7 @@ body {
     opacity: 0;
     transform: scale(0.9);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -117,6 +161,7 @@ body {
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -128,6 +173,7 @@ body {
   0% {
     filter: hue-rotate(0deg);
   }
+
   100% {
     filter: hue-rotate(360deg);
   }
@@ -183,12 +229,10 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent);
   transition: left 0.5s;
 }
 
@@ -228,7 +272,7 @@ body {
 
 /* Patrón de Grid Decorativo */
 .grid-pattern {
-  background-image: 
+  background-image:
     linear-gradient(rgba(14, 165, 233, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(14, 165, 233, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;

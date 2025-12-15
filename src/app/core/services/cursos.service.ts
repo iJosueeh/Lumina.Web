@@ -19,6 +19,15 @@ export class CursosService {
     }
 
     /**
+     * Obtiene los cursos destacados (primeros 3)
+     */
+    getFeaturedCourses(): Observable<Course[]> {
+        return this.getAllCourses().pipe(
+            map(courses => courses.slice(0, 3))
+        );
+    }
+
+    /**
      * Obtiene el detalle completo de un curso por ID
      */
     getCourseById(id: string): Observable<CourseDetails> {

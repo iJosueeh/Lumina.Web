@@ -3,6 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContactInfo } from '@app/core/models/contact-info';
 
+interface RedSocial {
+  nombre: string;
+  url: string;
+  icono: string;
+}
+
 @Component({
   selector: 'app-contacto',
   standalone: true,
@@ -19,29 +25,49 @@ export class Contacto implements OnInit {
 
   contactInfo: ContactInfo[] = [
     {
-      icono: 'email',
-      titulo: 'Email',
-      valor: 'contacto@academiapro.com',
-      link: 'mailto:contacto@academiapro.com'
-    },
-    {
       icono: 'phone',
       titulo: 'Teléfono',
-      valor: '+34 912 345 678',
-      link: 'tel:+34912345678'
+      valor: '(01) 555-0199',
+      link: 'tel:015550199'
+    },
+    {
+      icono: 'email',
+      titulo: 'Email',
+      valor: 'admision@lumina.com',
+      link: 'mailto:admision@lumina.com'
+    },
+    {
+      icono: 'clock',
+      titulo: 'Horario de Atención',
+      valor: 'L-V: 8am - 6pm'
     },
     {
       icono: 'location',
-      titulo: 'Dirección',
-      valor: 'Calle de la Innovación, 123\n28080, Madrid, España'
+      titulo: 'Sede Central',
+      valor: 'Av. Tecnológica 123'
     }
+  ];
+
+  temasAsunto = [
+    'Información General',
+    'Proceso de Admisión',
+    'Programas y Cursos',
+    'Costos y Becas',
+    'Soporte Técnico',
+    'Otro'
+  ];
+
+  redesSociales: RedSocial[] = [
+    { nombre: 'Facebook', url: 'https://facebook.com', icono: 'facebook' },
+    { nombre: 'Twitter', url: 'https://twitter.com', icono: 'twitter' },
+    { nombre: 'LinkedIn', url: 'https://linkedin.com', icono: 'linkedin' }
   ];
 
   constructor(private fb: FormBuilder) {
     this.contactForm = this.fb.group({
       nombreCompleto: ['', [Validators.required, Validators.minLength(3)]],
       correoElectronico: ['', [Validators.required, Validators.email]],
-      asunto: ['', [Validators.required, Validators.minLength(5)]],
+      asunto: ['', Validators.required],
       mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
   }

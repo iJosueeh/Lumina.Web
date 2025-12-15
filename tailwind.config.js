@@ -1,9 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,ts}'],
+  darkMode: 'class', // Enable class-based dark mode
   theme: {
     extend: {
       colors: {
+        // Dark mode colors
+        dark: {
+          bg: '#0f172a', // slate-900 - Main background
+          card: '#1e293b', // slate-800 - Card background
+          border: '#334155', // slate-700 - Borders
+          text: '#f1f5f9', // slate-100 - Primary text
+          'text-secondary': '#cbd5e1', // slate-300 - Secondary text
+        },
         // Colores Tecnológicos Modernos
         'tech-blue': {
           50: '#f0f9ff',

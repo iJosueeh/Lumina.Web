@@ -18,39 +18,21 @@ export class CourseList implements OnInit {
   searchTerm = '';
   selectedCategoria = '';
   selectedNivel = '';
-  selectedUbicacion = '';
 
   currentPage = 1;
   itemsPerPage = 6;
 
-  categorias = [
-    'Todas las categorías',
-    'Programación',
-    'Diseño',
-    'Marketing',
-    'Data Science',
-    'Negocios'
-  ];
+  categorias: string[] = ['Todas las categorías'];
 
-  niveles = [
-    'Todos los niveles',
-    'Principiante',
-    'Intermedio',
-    'Avanzado'
-  ];
-
-  ubicaciones = [
-    'Todas las ubicaciones',
-    'Online',
-    'Presencial',
-    'Híbrido'
-  ];
+  niveles: string[] = ['Todos los niveles'];
 
   allCourses: CourseLista[] = [];
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.loadCourses();
+    this.loadCategorias();
+    this.loadNiveles();
   }
 
   loadCourses(): void {
@@ -60,6 +42,28 @@ export class CourseList implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los cursos:', error);
+      }
+    });
+  }
+
+  loadCategorias(): void {
+    this.cursoService.getCategorias().subscribe({
+      next: (cats) => {
+        this.categorias = ['Todas las categorías', ...cats];
+      },
+      error: (error) => {
+        console.error('Error al cargar categorías:', error);
+      }
+    });
+  }
+
+  loadNiveles(): void {
+    this.cursoService.getNiveles().subscribe({
+      next: (nivs) => {
+        this.niveles = ['Todos los niveles', ...nivs];
+      },
+      error: (error) => {
+        console.error('Error al cargar niveles:', error);
       }
     });
   }
@@ -110,7 +114,6 @@ export class CourseList implements OnInit {
     this.searchTerm = '';
     this.selectedCategoria = '';
     this.selectedNivel = '';
-    this.selectedUbicacion = '';
     this.currentPage = 1;
   }
 

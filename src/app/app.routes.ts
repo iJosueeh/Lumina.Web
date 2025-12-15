@@ -25,6 +25,42 @@ export const routes: Routes = [
         title: 'Inicio - Lumina'
     },
     {
+        path: 'carreras',
+        loadComponent: () =>
+            import('./features/carreras/carreras').then(m => m.Carreras),
+        title: 'Carreras - Lumina'
+    },
+    {
+        path: 'carreras/:id',
+        loadComponent: () =>
+            import('./features/carreras/carrera-detalle/carrera-detalle').then(m => m.CarreraDetalleComponent),
+        title: 'Detalle de Carrera - Lumina'
+    },
+    {
+        path: 'admision',
+        loadComponent: () =>
+            import('./features/admision/admision').then(m => m.Admision),
+        title: 'Admisión - Lumina'
+    },
+    {
+        path: 'vida-lumina',
+        loadComponent: () =>
+            import('./features/vida-lumina/vida-lumina').then(m => m.VidaLumina),
+        title: 'Vida Lumina - Lumina'
+    },
+    {
+        path: 'noticias-eventos',
+        loadComponent: () =>
+            import('./features/noticias-eventos/noticias-eventos').then(m => m.NoticiasEventos),
+        title: 'Noticias y Eventos - Lumina'
+    },
+    {
+        path: 'noticias/:id',
+        loadComponent: () =>
+            import('./features/noticias-eventos/noticia-detalle/noticia-detalle').then(m => m.NoticiaDetalleComponent),
+        title: 'Noticia - Lumina'
+    },
+    {
         path: 'cursos',
         loadComponent: () =>
             import('./features/cursos/course-list/course-list').then(m => m.CourseList),

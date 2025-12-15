@@ -20,24 +20,24 @@
 </section>
 
 <!-- Tabs Navigation -->
-<section class="bg-white border-b border-gray-200">
+<section class="bg-white dark:bg-dark-bg border-b border-gray-200 dark:border-dark-border">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex space-x-8 overflow-x-auto">
             <button (click)="activeTab = 'historia'" [class.border-blue-600]="activeTab === 'historia'"
                 [class.text-blue-600]="activeTab === 'historia'" [class.border-transparent]="activeTab !== 'historia'"
-                [class.text-gray-600]="activeTab !== 'historia'"
+                [class.text-gray-600]="activeTab !== 'historia'" [class.dark:text-gray-300]="activeTab !== 'historia'"
                 class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
                 Historia
             </button>
             <button (click)="activeTab = 'mision'" [class.border-blue-600]="activeTab === 'mision'"
                 [class.text-blue-600]="activeTab === 'mision'" [class.border-transparent]="activeTab !== 'mision'"
-                [class.text-gray-600]="activeTab !== 'mision'"
+                [class.text-gray-600]="activeTab !== 'mision'" [class.dark:text-gray-300]="activeTab !== 'mision'"
                 class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
                 Misión y Visión
             </button>
             <button (click)="activeTab = 'equipo'" [class.border-blue-600]="activeTab === 'equipo'"
                 [class.text-blue-600]="activeTab === 'equipo'" [class.border-transparent]="activeTab !== 'equipo'"
-                [class.text-gray-600]="activeTab !== 'equipo'"
+                [class.text-gray-600]="activeTab !== 'equipo'" [class.dark:text-gray-300]="activeTab !== 'equipo'"
                 class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
                 Nuestro Equipo
             </button>
@@ -45,6 +45,7 @@
                 [class.text-blue-600]="activeTab === 'infraestructura'"
                 [class.border-transparent]="activeTab !== 'infraestructura'"
                 [class.text-gray-600]="activeTab !== 'infraestructura'"
+                [class.dark:text-gray-300]="activeTab !== 'infraestructura'"
                 class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-blue-600 hover:border-blue-600 transition-colors">
                 Infraestructura
             </button>
@@ -53,9 +54,9 @@
 </section>
 
 <!-- Tab Content: Historia -->
-<section *ngIf="activeTab === 'historia'" class="py-24 bg-white">
+<section *ngIf="activeTab === 'historia'" class="py-24 bg-white dark:bg-dark-bg">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-16 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-dark-text mb-16 text-center">
             Nuestra Historia
         </h2>
 
@@ -75,9 +76,11 @@
                                     d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Fundación de la Institución</h3>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-2">Fundación de la Institución
+                        </h3>
                         <p class="text-sm font-semibold text-blue-600 mb-2">2018</p>
-                        <p class="text-sm text-gray-600">Inicio de operaciones con la visión de democratizar la
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Inicio de operaciones con la visión de
+                            democratizar la
                             educación tecnológica.</p>
                     </div>
                 </div>
@@ -92,9 +95,11 @@
                                     d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Lanzamiento de la Plataforma Online</h3>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-2">Lanzamiento de la
+                            Plataforma Online</h3>
                         <p class="text-sm font-semibold text-blue-600 mb-2">2019</p>
-                        <p class="text-sm text-gray-600">Apertura de nuestra plataforma de aprendizaje en línea.</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Apertura de nuestra plataforma de
+                            aprendizaje en línea.</p>
                     </div>
                 </div>
 
@@ -108,9 +113,11 @@
                                     d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Alcanzamos 10,000 Estudiantes</h3>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-2">Alcanzamos 10,000
+                            Estudiantes</h3>
                         <p class="text-sm font-semibold text-blue-600 mb-2">2021</p>
-                        <p class="text-sm text-gray-600">Hito importante con estudiantes de más de 30 países.</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Hito importante con estudiantes de más de 30
+                            países.</p>
                     </div>
                 </div>
 
@@ -127,9 +134,11 @@
                                     d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                             </svg>
                         </div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">Expansión a Nuevos Cursos de IA</h3>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-2">Expansión a Nuevos Cursos
+                            de IA</h3>
                         <p class="text-sm font-semibold text-blue-600 mb-2">2023</p>
-                        <p class="text-sm text-gray-600">Programas especializados en IA y Machine Learning.</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Programas especializados en IA y Machine
+                            Learning.</p>
                     </div>
                 </div>
             </div>
@@ -138,11 +147,11 @@
 </section>
 
 <!-- Tab Content: Misión y Visión -->
-<section *ngIf="activeTab === 'mision'" class="py-24 bg-gray-50">
+<section *ngIf="activeTab === 'mision'" class="py-24 bg-gray-50 dark:bg-dark-card">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Contenido de Texto con Typography -->
-            <article class="prose prose-slate lg:prose-lg max-w-none">
+            <article class="prose prose-slate dark:prose-invert lg:prose-lg max-w-none">
                 <h2>Misión y Visión</h2>
 
                 <p class="lead">
@@ -171,8 +180,9 @@
                             </div>
                         </div>
                         <div>
-                            <h4 class="text-lg font-bold text-gray-900 mb-1">Innovación</h4>
-                            <p class="text-gray-600 text-sm">Fomentamos la creatividad y la búsqueda de soluciones
+                            <h4 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-1">Innovación</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Fomentamos la creatividad y la búsqueda
+                                de soluciones
                                 vanguardistas.</p>
                         </div>
                     </div>
@@ -188,8 +198,9 @@
                             </div>
                         </div>
                         <div>
-                            <h4 class="text-lg font-bold text-gray-900 mb-1">Excelencia</h4>
-                            <p class="text-gray-600 text-sm">Comprometidos con los más altos estándares educativos y
+                            <h4 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-1">Excelencia</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Comprometidos con los más altos
+                                estándares educativos y
                                 profesionales.</p>
                         </div>
                     </div>
@@ -205,8 +216,9 @@
                             </div>
                         </div>
                         <div>
-                            <h4 class="text-lg font-bold text-gray-900 mb-1">Comunidad</h4>
-                            <p class="text-gray-600 text-sm">Construimos una red de apoyo global para el aprendizaje
+                            <h4 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-1">Comunidad</h4>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm">Construimos una red de apoyo global para
+                                el aprendizaje
                                 colaborativo.</p>
                         </div>
                     </div>
@@ -225,13 +237,13 @@
 </section>
 
 <!-- Tab Content: Nuestro Equipo -->
-<section *ngIf="activeTab === 'equipo'" class="py-24 bg-white">
+<section *ngIf="activeTab === 'equipo'" class="py-24 bg-white dark:bg-dark-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-dark-text mb-4">
                 Nuestro Equipo Directivo
             </h2>
-            <p class="text-base text-gray-600 max-w-2xl mx-auto">
+            <p class="text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
                 Conoce a los líderes que guían nuestra visión y compromiso con la excelencia educativa.
             </p>
         </div>
@@ -244,10 +256,10 @@
                         (error)="$event.target.src='https://ui-avatars.com/api/?name=' + member.nombre + '&size=200&background=3b82f6&color=fff'" />
                 </div>
 
-                <h3 class="text-lg font-bold text-gray-900 mb-1">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-dark-text mb-1">
                     {{ member.nombre }}
                 </h3>
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-400">
                     {{ member.cargo }}
                 </p>
             </div>
@@ -257,7 +269,7 @@
 </section>
 
 <!-- Tab Content: Infraestructura -->
-<section *ngIf="activeTab === 'infraestructura'" class="py-24 bg-gray-50">
+<section *ngIf="activeTab === 'infraestructura'" class="py-24 bg-gray-50 dark:bg-dark-card">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <!-- Imagen -->
@@ -269,7 +281,7 @@
             </div>
 
             <!-- Contenido de Texto con Typography -->
-            <article class="prose prose-slate lg:prose-lg max-w-none order-1 lg:order-2">
+            <article class="prose prose-slate dark:prose-invert lg:prose-lg max-w-none order-1 lg:order-2">
                 <h2>Infraestructura Virtual de Vanguardia</h2>
 
                 <p class="lead">
@@ -297,7 +309,7 @@
 </section>
 
 <!-- CTA Final -->
-<section class="py-24 bg-gray-50">
+<section class="py-24 bg-gray-50 dark:bg-dark-card">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-slate-900 rounded-3xl px-8 py-16 text-center">
             <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">

@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Auth } from '@app/core/auth/services/auth';
 import { NavItem } from '@app/core/models/nav-item';
 import { CarritoService } from '@app/features/estudiante/services/carrito.service';
+import { CursoCategoria } from '@app/core/models/curso-categoria';
+import { CarreraService } from '@app/features/carreras/services/carrera.service';
+import { Carrera } from '@app/core/models/carrera';
+import { CursoService } from '@app/features/cursos/services/curso.service';
+import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, RouterLink, RouterLinkActive, ThemeToggle],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -15,15 +20,31 @@ export class Header implements OnInit {
   private authService = inject(Auth);
   private router = inject(Router);
   private carritoService = inject(CarritoService);
+  private carreraService = inject(CarreraService);
+  private cursoService = inject(CursoService);
 
   isAuthenticated = false;
   currentUser: any = null;
   mobileMenuOpen = false;
   dropdownOpen = false;
+  carrerasDropdownOpen = false;
+  cursosDropdownOpen = false; // Nuevo estado
   cartCount = 0;
+
+  carreras: Carrera[] = [];
+
+  // Nuevas categorías para el dropdown de cursos
+  cursosCategorias: CursoCategoria[] = [
+    { nombre: 'Programación', icon: 'code' },
+    { nombre: 'Diseño', icon: 'palette' },
+    { nombre: 'Marketing', icon: 'trending-up' },
+    { nombre: 'Data Science', icon: 'database' },
+    { nombre: 'Negocios', icon: 'briefcase' }
+  ];
 
   navItems: NavItem[] = [
     { label: 'Carreras', route: '/carreras' },
+    { label: 'Cursos', route: '/cursos' }, // Nuevo item
     { label: 'Admisión', route: '/admision' },
     { label: 'Vida Lumina', route: '/vida-lumina' },
     { label: 'Nosotros', route: '/sobre-nosotros' },
@@ -32,6 +53,8 @@ export class Header implements OnInit {
   ];
 
   ngOnInit(): void {
+    this.loadCarreras();
+    this.loadCursosCategorias();
     this.authService.currentUser$.subscribe((user) => {
       this.currentUser = user;
       this.isAuthenticated = !!user;
@@ -43,6 +66,42 @@ export class Header implements OnInit {
     this.carritoService.cartItemCount$.subscribe(count => {
       this.cartCount = count;
     });
+  }
+
+  loadCarreras(): void {
+    this.carreraService.getAllCarreras().subscribe({
+      next: (data) => {
+        this.carreras = data;
+      },
+      error: (error) => {
+        console.error('Error loading carreras', error);
+      }
+    });
+  }
+
+  loadCursosCategorias(): void {
+    this.cursoService.getCategorias().subscribe({
+      next: (categorias) => {
+        this.cursosCategorias = categorias.map(cat => ({
+          nombre: cat,
+          icon: this.getIconForCategoria(cat)
+        }));
+      },
+      error: (error) => {
+        console.error('Error loading curso categorias', error);
+      }
+    });
+  }
+
+  private getIconForCategoria(categoria: string): string {
+    const iconMap: { [key: string]: string } = {
+      'Programación': 'code',
+      'Diseño': 'palette',
+      'Marketing': 'trending-up',
+      'Data Science': 'database',
+      'Negocios': 'briefcase'
+    };
+    return iconMap[categoria] || 'book';
   }
 
   loadCartCount(): void {
@@ -68,6 +127,42 @@ export class Header implements OnInit {
 
   closeDropdown(): void {
     this.dropdownOpen = false;
+  }
+
+  toggleCarrerasDropdown(): void {
+    this.carrerasDropdownOpen = !this.carrerasDropdownOpen;
+    if (this.carrerasDropdownOpen) this.cursosDropdownOpen = false; // Cerrar el otro dropdown
+  }
+
+  closeCarrerasDropdown(): void {
+    this.carrerasDropdownOpen = false;
+  }
+
+  // Métodos para el dropdown de Cursos
+  toggleCursosDropdown(): void {
+    this.cursosDropdownOpen = !this.cursosDropdownOpen;
+    if (this.cursosDropdownOpen) this.carrerasDropdownOpen = false; // Cerrar el otro dropdown
+  }
+
+  closeCursosDropdown(): void {
+    this.cursosDropdownOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    // Check for Carreras
+    const clickedInsideCarreras = target.closest('.carreras-dropdown');
+    if (!clickedInsideCarreras && this.carrerasDropdownOpen) {
+      this.carrerasDropdownOpen = false;
+    }
+
+    // Check for Cursos
+    const clickedInsideCursos = target.closest('.cursos-dropdown');
+    if (!clickedInsideCursos && this.cursosDropdownOpen) {
+      this.cursosDropdownOpen = false;
+    }
   }
 
   onLogin(): void {

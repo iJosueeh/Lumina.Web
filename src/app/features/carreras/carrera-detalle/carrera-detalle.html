@@ -1,0 +1,291 @@
+<div class="min-h-screen bg-gray-50 dark:bg-dark-bg">
+    @if (loading) {
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+    }
+
+    @if (!loading && !carrera) {
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text mb-4">Carrera no encontrada</h2>
+        <a routerLink="/carreras" class="text-blue-600 hover:text-blue-700">Volver a Carreras</a>
+    </div>
+    }
+
+    @if (!loading && carrera) {
+    <!-- Hero Section -->
+    <div class="relative h-96 bg-cover bg-center"
+        [style.background-image]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(' + carrera.imagenUrl + ')'">
+        <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
+            <!-- Breadcrumb -->
+            <nav class="mb-4 text-sm">
+                <a routerLink="/" class="hover:text-blue-300">Inicio</a>
+                <span class="mx-2">/</span>
+                <a routerLink="/carreras" class="hover:text-blue-300">Carreras</a>
+                <span class="mx-2">/</span>
+                <span>{{ carrera.nombre }}</span>
+            </nav>
+
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-center">{{ carrera.nombre }}</h1>
+
+            <div class="flex flex-wrap gap-3 items-center justify-center mb-6">
+                <span class="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-semibold">
+                    {{ carrera.categoria }}
+                </span>
+                <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold">
+                    {{ carrera.duracion }}
+                </span>
+                @for (mod of carrera.modalidad; track mod) {
+                <span class="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold">
+                    {{ mod }}
+                </span>
+                }
+            </div>
+
+            <button (click)="scrollToSection('cta-section')"
+                class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-lg">
+                Aplicar Ahora
+            </button>
+        </div>
+    </div>
+
+    <!-- Overview Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left: Description -->
+            <div class="lg:col-span-2">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-6">Acerca de la Carrera</h2>
+                <p class="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">{{ carrera.descripcion }}</p>
+
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <div class="text-3xl font-bold text-blue-600">{{ carrera.tasaEmpleabilidad }}%</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Tasa de Empleabilidad</div>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <div class="text-lg font-bold text-green-600">{{ carrera.salarioPromedio }}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">Salario Promedio</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Info Cards -->
+            <div class="space-y-4">
+                <div class="bg-white dark:bg-dark-card rounded-lg border border-gray-200 dark:border-dark-border p-6">
+                    <h3 class="font-semibold text-gray-900 dark:text-dark-text mb-4">Información General</h3>
+
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-dark-text">Duración</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">{{ carrera.duracion }}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-dark-text">Créditos Totales
+                                </div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">{{ carrera.creditosTotales }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-dark-text">Certificación</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">{{ carrera.certificacion }}</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-600 mr-3 mt-0.5" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                            <div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-dark-text">Nivel Académico</div>
+                                <div class="text-sm text-gray-600 dark:text-gray-400">{{ carrera.nivelAcademico }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan de Estudios -->
+    <section id="plan-estudios" class="bg-white dark:bg-dark-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-8 text-center">Plan de Estudios</h2>
+
+            <!-- Tabs -->
+            <div class="flex flex-wrap gap-2 justify-center mb-8">
+                @for (modulo of carrera.planEstudios; track modulo.numero) {
+                <button (click)="setModulo(modulo.numero)" [class.bg-blue-600]="selectedModulo === modulo.numero"
+                    [class.text-white]="selectedModulo === modulo.numero"
+                    [class.bg-gray-100]="selectedModulo !== modulo.numero" [class.text-gray-700
+                    dark:text-gray-300]="selectedModulo !== modulo.numero"
+                    class="px-6 py-2 rounded-lg font-semibold transition-colors hover:bg-blue-50">
+                    {{ modulo.nombre }}
+                </button>
+                }
+            </div>
+
+            <!-- Cursos del módulo seleccionado -->
+            @for (modulo of carrera.planEstudios; track modulo.numero) {
+            @if (selectedModulo === modulo.numero) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @for (curso of modulo.cursos; track curso.nombre) {
+                <div class="bg-gray-50 dark:bg-dark-card rounded-lg p-5 border border-gray-200 dark:border-dark-border">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-gray-900 dark:text-dark-text">{{ curso.nombre }}</h3>
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full">
+                            {{ curso.creditos }} créditos
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">{{ curso.descripcion }}</p>
+                </div>
+                }
+            </div>
+            }
+            }
+        </div>
+    </section>
+
+    <!-- Perfil del Egresado -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Perfil -->
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-6">Perfil del Egresado</h2>
+                <ul class="space-y-3">
+                    @for (item of carrera.perfilEgresado; track item) {
+                    <li class="flex items-start">
+                        <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span class="text-gray-700 dark:text-gray-300">{{ item }}</span>
+                    </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Competencias -->
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-6">Competencias</h2>
+                <div class="flex flex-wrap gap-2">
+                    @for (competencia of carrera.competencias; track competencia) {
+                    <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                        {{ competencia }}
+                    </span>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campo Laboral -->
+    <section class="bg-white dark:bg-dark-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-8 text-center">Campo Laboral</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                @for (cargo of carrera.campoLaboral; track cargo) {
+                <div
+                    class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-lg p-6 text-center border border-transparent dark:border-blue-700/30">
+                    <svg class="w-12 h-12 text-blue-600 mx-auto mb-3" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <h3 class="font-bold text-gray-900 dark:text-dark-text">{{ cargo }}</h3>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Requisitos -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-8 text-center">Requisitos de Admisión</h2>
+        <div class="max-w-3xl mx-auto">
+            <ul class="space-y-3">
+                @for (requisito of carrera.requisitos; track requisito) {
+                <li
+                    class="flex items-start bg-white dark:bg-dark-card rounded-lg p-4 border border-gray-200 dark:border-dark-border">
+                    <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-gray-700 dark:text-gray-300">{{ requisito }}</span>
+                </li>
+                }
+            </ul>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="bg-white dark:bg-dark-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-8 text-center">Lo que dicen nuestros
+                egresados</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @for (testimonio of carrera.testimonios; track testimonio.nombre) {
+                <div class="bg-gray-50 dark:bg-dark-card rounded-lg p-6 border border-gray-200 dark:border-dark-border">
+                    <div class="flex items-center mb-4">
+                        <img [src]="testimonio.avatarUrl" [alt]="testimonio.nombre"
+                            class="w-12 h-12 rounded-full object-cover mr-3">
+                        <div>
+                            <h3 class="font-bold text-gray-900 dark:text-dark-text">{{ testimonio.nombre }}</h3>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ testimonio.cargo }}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">{{ testimonio.empresa }}</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 italic text-sm">"{{ testimonio.texto }}"</p>
+                </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section id="cta-section" class="bg-gradient-to-r from-blue-600 to-blue-700 py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4">
+                ¿Listo para transformar tu futuro?
+            </h2>
+            <p class="text-lg mb-8 text-blue-100">
+                Únete a {{ carrera.nombre }} y conviértete en el profesional que la industria necesita.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a routerLink="/admision/aplicar"
+                    class="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors shadow-lg">
+                    Aplicar Ahora
+                </a>
+                <a routerLink="/contacto"
+                    class="px-8 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-400 transition-colors border-2 border-white">
+                    Solicitar Información
+                </a>
+            </div>
+        </div>
+    </section>
+    }
+</div>

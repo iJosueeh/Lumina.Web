@@ -31,27 +31,27 @@
     </div>
 </section>
 
-<section class="py-8 bg-white border-b border-gray-200">
+<section class="py-8 bg-white dark:bg-dark-bg border-b border-gray-200 dark:border-dark-border">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div class="text-center">
-                <p class="text-sm text-gray-600 mb-1">Duración</p>
-                <p class="text-xl font-bold text-gray-900">{{ curso.duracion }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Duración</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-dark-text">{{ curso.duracion }}</p>
             </div>
 
             <div class="text-center">
-                <p class="text-sm text-gray-600 mb-1">Modalidad</p>
-                <p class="text-xl font-bold text-gray-900">{{ curso.modalidad }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Modalidad</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-dark-text">{{ curso.modalidad }}</p>
             </div>
 
             <div class="text-center">
-                <p class="text-sm text-gray-600 mb-1">Certificación</p>
-                <p class="text-xl font-bold text-gray-900">{{ curso.certificacion }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Certificación</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-dark-text">{{ curso.certificacion }}</p>
             </div>
 
             <div class="text-center">
-                <p class="text-sm text-gray-600 mb-1">Nivel</p>
-                <p class="text-xl font-bold text-gray-900">{{ curso.nivel }}</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Nivel</p>
+                <p class="text-xl font-bold text-gray-900 dark:text-dark-text">{{ curso.nivel }}</p>
             </div>
         </div>
     </div>
@@ -62,17 +62,18 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
             <div class="lg:col-span-2 space-y-12">
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-6">
                         Temario del Curso
                     </h2>
                     <div class="space-y-4">
                         @for (modulo of curso.modulos; track modulo.id) {
-                        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <div
+                            class="bg-white dark:bg-dark-card rounded-lg border border-gray-200 dark:border-dark-border overflow-hidden">
                             <button (click)="toggleModule(modulo)"
                                 class="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200">
-                                <span class="font-semibold text-gray-900 pr-4">{{ modulo.titulo }}</span>
+                                <span class="font-semibold text-gray-900 dark:text-dark-text pr-4">{{ modulo.titulo }}</span>
                                 <svg [class.rotate-180]="modulo.isExpanded"
-                                    class="w-5 h-5 text-gray-500 transform transition-transform duration-200 flex-shrink-0"
+                                    class="w-5 h-5 text-gray-500 dark:text-gray-400 transform transition-transform duration-200 flex-shrink-0"
                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 9l-7 7-7-7" />
@@ -81,7 +82,7 @@
 
                             @if (modulo.isExpanded) {
                             <div class="px-6 pb-5 border-t border-gray-100 animate-fadeIn">
-                                <p class="text-gray-600 mt-4 mb-4">{{ modulo.descripcion }}</p>
+                                <p class="text-gray-600 dark:text-gray-400 mt-4 mb-4">{{ modulo.descripcion }}</p>
 
                                 @if (modulo.lecciones && modulo.lecciones.length > 0) {
                                 <ul class="space-y-2">
@@ -92,7 +93,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
-                                        <span class="text-gray-700">{{ leccion }}</span>
+                                        <span class="text-gray-700 dark:text-gray-300">{{ leccion }}</span>
                                     </li>
                                     }
                                 </ul>
@@ -105,23 +106,24 @@
                 </div>
 
                 <div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-6">
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-dark-text mb-6">
                         Lo que dicen nuestros alumnos
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         @for (testimonio of curso.testimonios; track testimonio.autor) {
-                        <div class="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <div
+                            class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-lg hover:shadow-xl dark:shadow-blue-900/20 transition-shadow duration-300">
                             <div class="flex items-center mb-4">
                                 <img [src]="testimonio.avatarUrl" [alt]="testimonio.autor"
                                     class="w-14 h-14 rounded-full mr-4 object-cover ring-2 ring-blue-200"
                                     (error)="$event.target.src='assets/images/testimonials/default-avatar.jpg'" />
                                 <div>
-                                    <h4 class="font-bold text-gray-900 text-lg">{{ testimonio.autor }}</h4>
+                                    <h4 class="font-bold text-gray-900 dark:text-dark-text text-lg">{{ testimonio.autor }}</h4>
                                     <div class="flex items-center">
                                         @for (star of [1, 2, 3, 4, 5]; track star) {
                                         <svg [class.text-yellow-400]="star <= testimonio.calificacion"
-                                            [class.text-gray-300]="star > testimonio.calificacion"
-                                            class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            [class.text-gray-300]="star > testimonio.calificacion" class="w-5 h-5"
+                                            fill="currentColor" viewBox="0 0 20 20">
                                             <path
                                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.96a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.368 2.448a1 1 0 00-.364 1.118l1.287 3.96c.3.921-.755 1.688-1.54 1.118l-3.368-2.448a1 1 0 00-1.176 0l-3.368 2.448c-.784.57-1.838-.197-1.539-1.118l1.287-3.96a1 1 0 00-.364-1.118L2.064 9.387c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69L9.049 2.927z" />
                                         </svg>
@@ -129,7 +131,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <p class="text-gray-600 italic">"{{ testimonio.comentario }}"</p>
+                            <p class="text-gray-600 dark:text-gray-400 italic">"{{ testimonio.comentario }}"</p>
                         </div>
                         }
                     </div>
@@ -139,20 +141,20 @@
             <div class="lg:col-span-1">
                 <div class="sticky top-8 space-y-6">
 
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Tu Docente</h3>
+                    <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-4">Tu Docente</h3>
 
                         <div class="flex items-center mb-4">
                             <img [src]="curso.instructor.avatar" [alt]="curso.instructor.nombre"
                                 class="w-16 h-16 rounded-full mr-4 object-cover"
                                 (error)="$event.target.src='assets/images/instructors/default-avatar.jpg'" />
                             <div>
-                                <h4 class="font-bold text-gray-900">{{ curso.instructor.nombre }}</h4>
-                                <p class="text-sm text-gray-600">{{ curso.instructor.cargo }}</p>
+                                <h4 class="font-bold text-gray-900 dark:text-dark-text">{{ curso.instructor.nombre }}</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ curso.instructor.cargo }}</p>
                             </div>
                         </div>
 
-                        <p class="text-gray-700 text-sm mb-4">
+                        <p class="text-gray-700 dark:text-gray-300 text-sm mb-4">
                             {{ curso.instructor.bio }}
                         </p>
 
@@ -168,8 +170,8 @@
                         }
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-lg p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Requisitos del Curso</h3>
+                    <div class="bg-white dark:bg-dark-card rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-4">Requisitos del Curso</h3>
                         <ul class="space-y-3">
                             @for (requisito of curso.requisitos; track requisito) {
                             <li class="flex items-start">
@@ -178,7 +180,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
-                                <span class="text-gray-700 text-sm">{{ requisito }}</span>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm">{{ requisito }}</span>
                             </li>
                             }
                         </ul>
@@ -189,3 +191,5 @@
     </div>
 </section>
 }
+
+
