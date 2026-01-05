@@ -7,6 +7,7 @@ import localeEs from '@angular/common/locales/es';
 import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './core/auth/interceptors/jwt-interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
 
 registerLocaleData(localeEs);
 
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([jwtInterceptor])
+      withInterceptors([jwtInterceptor, errorInterceptor])
     ),
     provideAnimations(),
     { provide: LOCALE_ID, useValue: 'es-ES' }
