@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { environment } from '@environments/environment';
 import { Auth } from '@app/core/auth/services/auth';
 import { NavItem } from '@app/core/models/nav-item';
 import { CarritoService } from '@app/features/estudiante/services/carrito.service';
@@ -30,6 +31,7 @@ export class Header implements OnInit {
   carrerasDropdownOpen = false;
   cursosDropdownOpen = false; // Nuevo estado
   cartCount = 0;
+  portalUrl = environment.portalUrl;
 
   carreras: Carrera[] = [];
 
@@ -74,7 +76,9 @@ export class Header implements OnInit {
         this.carreras = data;
       },
       error: (error) => {
-        console.error('Error loading carreras', error);
+        console.error('Error al cargar carreras:', error);
+        // Mantener carreras vacías si falla
+        this.carreras = [];
       }
     });
   }
@@ -88,7 +92,8 @@ export class Header implements OnInit {
         }));
       },
       error: (error) => {
-        console.error('Error loading curso categorias', error);
+        console.error('Error al cargar categorías de cursos:', error);
+        // Mantener categorías por defecto si falla
       }
     });
   }
