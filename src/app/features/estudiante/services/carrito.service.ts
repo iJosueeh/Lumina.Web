@@ -27,11 +27,21 @@ export class CarritoService {
   cartItemCount$ = this.cartItemCount.asObservable();
 
   agregarCurso(estudianteId: string, cursoId: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${estudianteId}/items`, { cursoId });
+    return this.http.post(`${this.apiUrl}/${estudianteId}/items`, { cursoId }).pipe(
+      catchError(error => {
+        console.error('Error al agregar curso al carrito:', error);
+        throw error;
+      })
+    );
   }
 
   eliminarCurso(estudianteId: string, cursoId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${estudianteId}/items/${cursoId}`);
+    return this.http.delete(`${this.apiUrl}/${estudianteId}/items/${cursoId}`).pipe(
+      catchError(error => {
+        console.error('Error al eliminar curso del carrito:', error);
+        throw error;
+      })
+    );
   }
 
   verCarrito(estudianteId: string): Observable<Carrito> {
@@ -41,7 +51,12 @@ export class CarritoService {
   }
 
   vaciarCarrito(estudianteId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${estudianteId}/items`);
+    return this.http.delete(`${this.apiUrl}/${estudianteId}/items`).pipe(
+      catchError(error => {
+        console.error('Error al vaciar carrito:', error);
+        throw error;
+      })
+    );
   }
 
   updateCartItemCount(count: number) {

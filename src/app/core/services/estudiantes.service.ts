@@ -135,7 +135,9 @@ export class EstudiantesService {
      * Obtiene el historial académico completo
      */
     getHistorialAcademico(estudianteId: string): Observable<any> {
-        return this.http.get(`${this.apiUrl}/estudiantes/${estudianteId}/historial`);
+        return this.http.get(`${this.apiUrl}/estudiantes/${estudianteId}/historial`).pipe(
+            catchError(() => of([]))
+        );
     }
 
     /**
@@ -145,6 +147,11 @@ export class EstudiantesService {
         return this.http.put<EstudianteInfo>(
             `${this.apiUrl}/estudiantes/${estudianteId}`,
             data
+        ).pipe(
+            catchError(error => {
+                console.error('Error al actualizar perfil:', error);
+                throw error;
+            })
         );
     }
 }
