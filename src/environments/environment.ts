@@ -6,4 +6,5 @@ export const environment = {
   estudiantesUrl: 'http://localhost:5003/api',
   pedidosUrl: 'http://localhost:5000/api',
   carrerasUrl: 'http://localhost:5069/api/carreras',
+  portalUrl: 'https://lumina-core-portal.pages.dev/login'
 };
