@@ -66,13 +66,21 @@ export class Checkout implements OnInit {
                 }
                 return new Observable<CourseDetalles[]>(subscriber => subscriber.next([]));
             })
-        ).subscribe(courses => {
-            this.cartItems = courses;
-            this.calculateTotal();
-            this.loading = false;
+        ).subscribe({
+            next: (courses) => {
+                this.cartItems = courses;
+                this.calculateTotal();
+                this.loading = false;
 
-            // Si el carrito está vacío, redirigir
-            if (this.cartItems.length === 0) {
+                // Si el carrito está vacío, redirigir
+                if (this.cartItems.length === 0) {
+                    this.router.navigate(['/carrito']);
+                }
+            },
+            error: (error) => {
+                console.error('Error al cargar detalles del carrito:', error);
+                this.loading = false;
+                this.cartItems = [];
                 this.router.navigate(['/carrito']);
             }
         });

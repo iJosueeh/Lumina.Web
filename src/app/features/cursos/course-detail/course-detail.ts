@@ -49,6 +49,7 @@ export class CourseDetail implements OnInit {
 
   loadCursoData(id: string): void {
     this.dataLoading = true;
+    this.errorMessage = '';
     this.cursoService.getCourseById(id).subscribe({
       next: (data) => {
         this.curso = data;
@@ -56,6 +57,7 @@ export class CourseDetail implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los detalles del curso:', error);
+        this.errorMessage = 'No se pudo cargar la información del curso. Por favor, intenta más tarde.';
         this.dataLoading = false;
       }
     });

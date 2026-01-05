@@ -40,7 +40,11 @@ export class Carreras implements OnInit {
                 this.carreras = data;
                 this.applyFilters();
             },
-            error: (error) => console.error('Error loading carreras', error)
+            error: (error) => {
+                console.error('Error loading carreras', error);
+                this.carreras = [];
+                this.applyFilters();
+            }
         });
     }
 
