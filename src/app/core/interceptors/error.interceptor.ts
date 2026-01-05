@@ -4,6 +4,11 @@ import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+// Sistema de debouncing para evitar múltiples notificaciones
+let errorQueue: Set<string> = new Set();
+let isShowingError = false;
+let errorTimeout: any = null;
+
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const snackBar = inject(MatSnackBar);
@@ -60,14 +65,51 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         });
       }
 
-      // Mostrar notificación al usuario
+      // Sistema de cola de errores para evitar abrumar al usuario
       if (showSnackbar && error.status !== 401) {
-        snackBar.open(errorMessage, 'Cerrar', {
-          duration: 5000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['error-snackbar']
-        });
+        const errorKey = `${error.status}-${req.url}`;
+        
+        // Solo agregar a la cola si no está ya procesándose
+        if (!errorQueue.has(errorKey)) {
+          errorQueue.add(errorKey);
+          
+          // Procesar la cola de errores de forma secuencial
+          const showNextError = () => {
+            if (errorQueue.size > 0 && !isShowingError) {
+              isShowingError = true;
+              
+              // Agrupar errores similares
+              const uniqueMessages = new Set<string>();
+              errorQueue.forEach(key => {
+                if (key.startsWith(error.status.toString())) {
+                  uniqueMessages.add(errorMessage);
+                }
+              });
+              
+              // Mostrar solo un mensaje si hay múltiples errores del mismo tipo
+              const finalMessage = errorQueue.size > 3 
+                ? 'Algunos servicios no están disponibles. Por favor, intenta más tarde.'
+                : errorMessage;
+              
+              snackBar.open(finalMessage, 'Cerrar', {
+                duration: 3000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['error-snackbar']
+              });
+              
+              // Limpiar la cola después de mostrar
+              setTimeout(() => {
+                errorQueue.clear();
+                isShowingError = false;
+              }, 3500);
+            }
+          };
+          
+          // Debounce: esperar 500ms antes de mostrar el error
+          clearTimeout(errorTimeout);
+          errorTimeout = setTimeout(showNextError, 500);
+        }
       }
 
       return throwError(() => error);
