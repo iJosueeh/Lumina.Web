@@ -75,9 +75,8 @@ export class Header implements OnInit {
       next: (data) => {
         this.carreras = data;
       },
-      error: (error) => {
-        console.error('Error al cargar carreras:', error);
-        // Mantener carreras vacías si falla
+      error: () => {
+        // El interceptor global ya maneja el error
         this.carreras = [];
       }
     });
@@ -91,9 +90,9 @@ export class Header implements OnInit {
           icon: this.getIconForCategoria(cat)
         }));
       },
-      error: (error) => {
-        console.error('Error al cargar categorías de cursos:', error);
-        // Mantener categorías por defecto si falla
+      error: () => {
+        // El interceptor global ya maneja el error
+        // Mantener categorías por defecto
       }
     });
   }

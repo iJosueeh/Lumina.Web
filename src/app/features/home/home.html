@@ -86,9 +86,19 @@
             </a>
             }
             } @else {
-            <!-- Fallback: mostrar mensaje de carga o vacío -->
+            <!-- Estado de carga o sin datos -->
             <div class="col-span-3 text-center py-12">
+                @if (loadingFeatured) {
                 <p class="text-gray-500 dark:text-gray-400">Cargando programas destacados...</p>
+                } @else {
+                <div class="space-y-3">
+                    <p class="text-gray-600 dark:text-gray-400 text-lg font-medium">No hay programas disponibles en este momento</p>
+                    <p class="text-gray-500 dark:text-gray-500 text-sm">Vuelve pronto para ver nuestros cursos destacados</p>
+                    <button routerLink="/cursos" class="mt-4 px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
+                        Ver Todos los Cursos
+                    </button>
+                </div>
+                }
             </div>
             }
         </div>

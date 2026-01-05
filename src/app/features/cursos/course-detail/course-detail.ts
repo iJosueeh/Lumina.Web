@@ -55,8 +55,8 @@ export class CourseDetail implements OnInit {
         this.curso = data;
         this.dataLoading = false;
       },
-      error: (error) => {
-        console.error('Error al cargar los detalles del curso:', error);
+      error: () => {
+        // El interceptor global ya maneja el error
         this.errorMessage = 'No se pudo cargar la información del curso. Por favor, intenta más tarde.';
         this.dataLoading = false;
       }

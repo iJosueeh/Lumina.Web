@@ -26,6 +26,7 @@ export class Home implements OnInit {
   allCourses: CourseLista[] = [];
   visibleCourses: CourseLista[] = []; // New property to hold a limited number of courses
   featuredCourses: Course[] = []; // Cursos destacados para la sección de programas
+  loadingFeatured = true; // Estado de carga de programas destacados
 
   benefits: Benefit[] = [
     {
@@ -86,21 +87,25 @@ export class Home implements OnInit {
         this.allCourses = courses;
         this.applyFiltersAndLimit();
       },
-      error: (error) => {
-        console.error('Error al cargar los cursos:', error);
+      error: () => {
+        // Silenciosamente manejar el error (ya lo maneja el interceptor global)
+        this.allCourses = [];
+        this.applyFiltersAndLimit();
       }
     });
   }
 
   loadFeaturedCourses(): void {
+    this.loadingFeatured = true;
     this.cursosService.getFeaturedCourses().subscribe({
       next: (courses) => {
         this.featuredCourses = courses;
+        this.loadingFeatured = false;
       },
-      error: (error) => {
-        console.error('Error al cargar cursos destacados:', error);
-        // Fallback: mostrar array vacío
+      error: () => {
+        // Silenciosamente manejar el error (ya lo maneja el interceptor global)
         this.featuredCourses = [];
+        this.loadingFeatured = false;
       }
     });
   }

@@ -77,8 +77,8 @@ export class Checkout implements OnInit {
                     this.router.navigate(['/carrito']);
                 }
             },
-            error: (error) => {
-                console.error('Error al cargar detalles del carrito:', error);
+            error: () => {
+                // El interceptor global ya maneja el error
                 this.loading = false;
                 this.cartItems = [];
                 this.router.navigate(['/carrito']);

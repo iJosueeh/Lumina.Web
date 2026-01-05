@@ -32,8 +32,8 @@ export class CarreraDetalleComponent implements OnInit {
                 this.loading = false;
                 window.scrollTo(0, 0);
             },
-            error: (error) => {
-                console.error('Error loading carrera details', error);
+            error: () => {
+                // El interceptor global ya maneja el error
                 this.loading = false;
             }
         });
