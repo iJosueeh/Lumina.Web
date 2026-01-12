@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
     Evaluacion,
@@ -11,20 +11,36 @@ import {
     TipoEvaluacion,
     EstadoEvaluacion
 } from '../models/evaluacion.model';
+import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EvaluacionesService {
     private http = inject(HttpClient);
+    private errorHandler = inject(ErrorHandlerService);
     private apiUrl = `${environment.apiUrl}/evaluaciones`; // Ajustar cuando sepas el puerto
+
+    // Estados de carga y error
+    loading = signal(false);
+    error = signal<{ isError: boolean; message: string } | null>(null);
 
     /**
      * Obtiene todas las evaluaciones de un estudiante
      */
     getEvaluacionesByEstudiante(estudianteId: string): Observable<Evaluacion[]> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.get<Evaluacion[]>(`${this.apiUrl}?estudianteId=${estudianteId}`).pipe(
-            catchError(() => {
+            map(evaluaciones => {
+                this.loading.set(false);
+                return evaluaciones;
+            }),
+            catchError((error) => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar las evaluaciones');
+                this.error.set(errorInfo);
                 console.warn('Endpoint getEvaluacionesByEstudiante no disponible, usando datos mock');
                 return of([
                     {

@@ -91,4 +91,31 @@ export class ErrorHandlerService {
     }
     return error?.message || 'Ha ocurrido un error inesperado.';
   }
+
+  /**
+   * Maneja errores HTTP de forma silenciosa y retorna un objeto de error para mostrar en la UI
+   * @param error El error HTTP capturado
+   * @param customMessage Mensaje personalizado opcional
+   * @returns Un objeto con información del error para mostrar en la UI
+   */
+  handleHttpError(error: any, customMessage?: string): { isError: boolean; message: string; statusCode?: number } {
+    const message = customMessage || this.getDefaultErrorMessage(error);
+    
+    console.error('Error HTTP capturado:', error);
+
+    return {
+      isError: true,
+      message,
+      statusCode: error?.status
+    };
+  }
+
+  /**
+   * Obtiene un mensaje de error amigable para mostrar cuando un microservicio no está disponible
+   */
+  getServiceUnavailableMessage(serviceName?: string): string {
+    return serviceName 
+      ? `El servicio de ${serviceName} no está disponible en este momento. Por favor, intenta más tarde.`
+      : 'El contenido no está disponible en este momento. Por favor, intenta más tarde.';
+  }
 }

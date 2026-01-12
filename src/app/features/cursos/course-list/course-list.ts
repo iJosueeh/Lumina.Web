@@ -4,16 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CourseLista } from '@app/core/models/course-lista';
 import { CursoService } from '@app/features/cursos/services/curso.service';
+import { ErrorMessageComponent } from '@app/shared/components/error-message/error-message';
 
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, ErrorMessageComponent],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css',
 })
 export class CourseList implements OnInit {
-  private cursoService = inject(CursoService);
+  cursoService = inject(CursoService);
 
   searchTerm = '';
   selectedCategoria = '';

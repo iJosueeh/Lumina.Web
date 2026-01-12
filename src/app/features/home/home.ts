@@ -8,16 +8,17 @@ import { Testimonial } from '@app/core/models/testimonial';
 import { CursoService } from '../cursos/services/curso.service';
 import { CursosService } from '@app/core/services/cursos.service';
 import { Course } from '@app/core/models/course.model';
+import { ErrorMessageComponent } from '@app/shared/components/error-message/error-message';
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ErrorMessageComponent],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
 export class Home implements OnInit {
   private cursoService = inject(CursoService);
-  private cursosService = inject(CursosService);
+  cursosService = inject(CursosService);
 
   selectedFilter = 'Todos';
 
@@ -26,7 +27,6 @@ export class Home implements OnInit {
   allCourses: CourseLista[] = [];
   visibleCourses: CourseLista[] = []; // New property to hold a limited number of courses
   featuredCourses: Course[] = []; // Cursos destacados para la sección de programas
-  loadingFeatured = true; // Estado de carga de programas destacados
 
   benefits: Benefit[] = [
     {
@@ -96,16 +96,13 @@ export class Home implements OnInit {
   }
 
   loadFeaturedCourses(): void {
-    this.loadingFeatured = true;
     this.cursosService.getFeaturedCourses().subscribe({
       next: (courses) => {
         this.featuredCourses = courses;
-        this.loadingFeatured = false;
       },
       error: () => {
-        // Silenciosamente manejar el error (ya lo maneja el interceptor global)
+        // El error ya es manejado por el servicio con signals
         this.featuredCourses = [];
-        this.loadingFeatured = false;
       }
     });
   }

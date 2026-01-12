@@ -7,7 +7,7 @@ import { CourseDetalles } from '@app/core/models/course-detalles';
 import { CarritoService } from '../estudiante/services/carrito.service';
 import { CursoService } from '../cursos/services/curso.service';
 import { forkJoin, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, filter } from 'rxjs/operators';
 import { PedidosService } from '@app/core/services/pedidos.service';
 import { CrearPedidoCommand, PedidoItemCommand } from '@app/core/models/pedido.model';
 
@@ -60,7 +60,9 @@ export class Checkout implements OnInit {
             switchMap(carrito => {
                 if (carrito.cursoIds && carrito.cursoIds.length > 0) {
                     const courseObservables: Observable<CourseDetalles>[] = carrito.cursoIds.map(id =>
-                        this.cursoService.getCourseById(id)
+                        this.cursoService.getCourseById(id).pipe(
+                            filter((course): course is CourseDetalles => course !== null)
+                        )
                     );
                     return forkJoin(courseObservables);
                 }
@@ -137,7 +139,13 @@ export class Checkout implements OnInit {
         };
 
         this.pedidosService.crearPedido(crearPedidoCommand).subscribe({
-            next: (orderId: string) => {
+            next: (orderId: string | null) => {
+                if (!orderId) {
+                    console.error('Error: No se recibió un ID de pedido válido');
+                    this.processing = false;
+                    return;
+                }
+                
                 // Clear the cart after successful order creation
                 this.carritoService.vaciarCarrito(currentUser.id).subscribe({
                     next: () => {

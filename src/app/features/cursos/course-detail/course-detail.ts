@@ -10,7 +10,7 @@ import { Auth } from '@app/core/auth/services/auth';
 
 @Component({
   selector: 'app-course-detail',
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.css',
 })

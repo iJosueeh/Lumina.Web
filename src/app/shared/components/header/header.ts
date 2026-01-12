@@ -170,7 +170,8 @@ export class Header implements OnInit {
   }
 
   onLogin(): void {
-    this.router.navigate(['/login']);
+    // Redirigir al portal estudiantil en nueva pestaña
+    window.open('https://lumina-core-portal.pages.dev/login', '_blank', 'noopener,noreferrer');
   }
 
   onLogout(): void {

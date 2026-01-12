@@ -1,173 +1,236 @@
 <!-- Hero Section -->
 <section class="py-24 bg-slate-50 dark:bg-dark-bg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div
+      class="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-slate-700 via-blue-900 to-purple-900 rounded-3xl"
+    >
+      <!-- Fondo con patrón sutil -->
+      <div class="absolute inset-0 opacity-10">
         <div
-            class="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-slate-700 via-blue-900 to-purple-900 rounded-3xl">
-            <!-- Fondo con patrón sutil -->
-            <div class="absolute inset-0 opacity-10">
-                <div class="absolute inset-0"
-                    style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;">
-                </div>
-            </div>
+          class="absolute inset-0"
+          style="
+            background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0);
+            background-size: 40px 40px;
+          "
+        ></div>
+      </div>
 
-            <!-- Contenido centrado -->
-            <div class="relative h-full flex items-center justify-center py-24 md:py-32 px-4">
-                <div class="text-center text-white space-y-6 w-full max-w-3xl">
-                    <!-- Título principal -->
-                    <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
-                        Lumina.Core
-                    </h1>
+      <!-- Contenido centrado -->
+      <div class="relative h-full flex items-center justify-center py-24 md:py-32 px-4">
+        <div class="text-center text-white space-y-6 w-full max-w-3xl">
+          <!-- Título principal -->
+          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+            Lumina.Core
+          </h1>
 
-                    <!-- Subtítulo -->
-                    <p class="text-xs md:text-sm text-gray-200 tracking-[0.4em] uppercase font-light">
-                        UNLEASH YOUR CODE
-                    </p>
+          <!-- Subtítulo -->
+          <p class="text-xs md:text-sm text-gray-200 tracking-[0.4em] uppercase font-light">
+            UNLEASH YOUR CODE
+          </p>
 
-                    <!-- Botones de acción -->
-                    <div class="flex flex-wrap gap-3 justify-center pt-8">
-                        <button routerLink="/carreras"
-                            class="px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg">
-                            Explora Carreras
-                        </button>
-                        <button routerLink="/admision"
-                            class="px-6 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-md hover:bg-gray-50 transition-all duration-200 shadow-md hover:shadow-lg">
-                            Proceso de Admisión
-                        </button>
-                    </div>
-                </div>
-            </div>
+          <!-- Botones de acción -->
+          <div class="flex flex-wrap gap-3 justify-center pt-8">
+            <button
+              routerLink="/carreras"
+              class="px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              Explora Carreras
+            </button>
+            <button
+              routerLink="/admision"
+              class="px-6 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-md hover:bg-gray-50 transition-all duration-200 shadow-md hover:shadow-lg"
+            >
+              Proceso de Admisión
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <!-- Sección de Misión -->
 <section class="py-24 bg-slate-50 dark:bg-dark-bg">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p class="text-center text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-            En Lumina.Core, estamos dedicados a forjar la próxima generación de líderes en tecnología. Nuestra misión es
-            proporcionar una educación de vanguardia, combinando teoría rigurosa con proyectos prácticos del mundo real
-            para que puedas desatar todo tu potencial y transformar el futuro digital.
-        </p>
-    </div>
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <p class="text-center text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+      En Lumina.Core, estamos dedicados a forjar la próxima generación de líderes en tecnología.
+      Nuestra misión es proporcionar una educación de vanguardia, combinando teoría rigurosa con
+      proyectos prácticos del mundo real para que puedas desatar todo tu potencial y transformar el
+      futuro digital.
+    </p>
+  </div>
 </section>
 
 <!-- Sección de Programas Destacados -->
 <section class="py-24 bg-slate-50 dark:bg-dark-bg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Título -->
-        <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-dark-text">
-                Programas Destacados
-            </h2>
-        </div>
-
-        <!-- Grid de programas -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @if (featuredCourses.length > 0) {
-            @for (curso of featuredCourses; track curso.id) {
-            <a [routerLink]="['/cursos', curso.id]"
-                class="bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl dark:shadow-blue-900/20 transition-shadow duration-300 cursor-pointer border border-transparent dark:border-dark-border">
-                <div class="h-48 overflow-hidden bg-slate-800">
-                    <img [src]="curso.imagen || 'https://via.placeholder.com/400x200'" [alt]="curso.titulo"
-                        class="w-full h-full object-cover" />
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">
-                        {{ curso.titulo }}
-                    </h3>
-                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
-                        {{ curso.descripcion }}
-                    </p>
-                    <button
-                        class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200">
-                        Aprende Más
-                    </button>
-                </div>
-            </a>
-            }
-            } @else {
-            <!-- Estado de carga o sin datos -->
-            <div class="col-span-3 text-center py-12">
-                @if (loadingFeatured) {
-                <p class="text-gray-500 dark:text-gray-400">Cargando programas destacados...</p>
-                } @else {
-                <div class="space-y-3">
-                    <p class="text-gray-600 dark:text-gray-400 text-lg font-medium">No hay programas disponibles en este momento</p>
-                    <p class="text-gray-500 dark:text-gray-500 text-sm">Vuelve pronto para ver nuestros cursos destacados</p>
-                    <button routerLink="/cursos" class="mt-4 px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
-                        Ver Todos los Cursos
-                    </button>
-                </div>
-                }
-            </div>
-            }
-        </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Título -->
+    <div class="text-center mb-12">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-dark-text">
+        Programas Destacados
+      </h2>
     </div>
+
+    <!-- Grid de programas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      @if (featuredCourses.length > 0) { @for (curso of featuredCourses; track curso.id) {
+      <a
+        [routerLink]="['/cursos', curso.id]"
+        class="bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl dark:shadow-blue-900/20 transition-shadow duration-300 cursor-pointer border border-transparent dark:border-dark-border"
+      >
+        <div class="h-48 overflow-hidden bg-slate-800">
+          <img
+            [src]="curso.imagen || 'https://via.placeholder.com/400x200'"
+            [alt]="curso.titulo"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">
+            {{ curso.titulo }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
+            {{ curso.descripcion }}
+          </p>
+          <button
+            class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200"
+          >
+            Aprende Más
+          </button>
+        </div>
+      </a>
+      } } @else {
+      <!-- Estado de carga o sin datos -->
+      <div class="col-span-3 text-center py-12">
+        @if (cursosService.loading()) {
+        <p class="text-gray-500 dark:text-gray-400">Cargando programas destacados...</p>
+        } @else if (cursosService.error()) {
+        <app-error-message
+          [message]="
+            cursosService.error()?.message || 'El contenido no está disponible en este momento'
+          "
+          [type]="'warning'"
+        >
+        </app-error-message>
+        } @else {
+        <div class="space-y-3">
+          <p class="text-gray-600 dark:text-gray-400 text-lg font-medium">
+            No hay programas disponibles en este momento
+          </p>
+          <p class="text-gray-500 dark:text-gray-500 text-sm">
+            Vuelve pronto para ver nuestros cursos destacados
+          </p>
+          <button
+            routerLink="/cursos"
+            class="mt-4 px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+          >
+            Ver Todos los Cursos
+          </button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
 </section>
 
 <!-- Sección de Beneficios -->
 <section class="py-32 bg-slate-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <!-- Título -->
-        <div class="text-center mb-16">
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-900">
-                ¿Por qué Lumina.Core?
-            </h2>
-        </div>
-
-        <!-- Grid de beneficios -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <!-- Beneficio 1: Docentes Expertos -->
-            <div class="text-center">
-                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100">
-                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 14l9-5-9-5-9 5 9 5z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">
-                    Docentes Expertos
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    Aprende de profesionales líderes en la industria con experiencia real y comprobada.
-                </p>
-            </div>
-
-            <!-- Beneficio 2: Proyectos Prácticos -->
-            <div class="text-center">
-                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100">
-                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">
-                    Proyectos Prácticos
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    Construye un portafolio sólido trabajando en proyectos que resuelven problemas del mundo real.
-                </p>
-            </div>
-
-            <!-- Beneficio 3: Soporte de Carrera -->
-            <div class="text-center">
-                <div class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100">
-                    <svg class="w-10 h-10 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-3">
-                    Soporte de Carrera
-                </h3>
-                <p class="text-gray-600 text-sm leading-relaxed">
-                    Te conectamos con oportunidades laborales y te preparamos para el éxito profesional.
-                </p>
-            </div>
-        </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Título -->
+    <div class="text-center mb-16">
+      <h2 class="text-4xl md:text-5xl font-bold text-gray-900">¿Por qué Lumina.Core?</h2>
     </div>
+
+    <!-- Grid de beneficios -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <!-- Beneficio 1: Docentes Expertos -->
+      <div class="text-center">
+        <div
+          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100"
+        >
+          <svg
+            class="w-10 h-10 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 14l9-5-9-5-9 5 9 5z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"
+            />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Docentes Expertos</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Aprende de profesionales líderes en la industria con experiencia real y comprobada.
+        </p>
+      </div>
+
+      <!-- Beneficio 2: Proyectos Prácticos -->
+      <div class="text-center">
+        <div
+          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100"
+        >
+          <svg
+            class="w-10 h-10 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+            />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Proyectos Prácticos</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Construye un portafolio sólido trabajando en proyectos que resuelven problemas del mundo
+          real.
+        </p>
+      </div>
+
+      <!-- Beneficio 3: Soporte de Carrera -->
+      <div class="text-center">
+        <div
+          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100"
+        >
+          <svg
+            class="w-10 h-10 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Soporte de Carrera</h3>
+        <p class="text-gray-600 text-sm leading-relaxed">
+          Te conectamos con oportunidades laborales y te preparamos para el éxito profesional.
+        </p>
+      </div>
+    </div>
+  </div>
 </section>

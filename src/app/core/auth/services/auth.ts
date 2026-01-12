@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthResponse } from '@app/core/models/auth-response';
 import { LoginRequest } from '@app/core/models/login-request';
+import { RegisterRequest, RegisterWithEnrollmentResponse } from '@app/core/models/register-request';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -66,6 +67,21 @@ export class Auth {
           this.currentUserSubject.next(response.userInfo);
         })
       );
+  }
+
+  /**
+   * Registra un nuevo usuario y opcionalmente lo matricula en una carrera
+   */
+  registerWithEnrollment(data: RegisterRequest): Observable<RegisterWithEnrollmentResponse> {
+    return this.http.post<RegisterWithEnrollmentResponse>(
+      `${environment.apiUrl}/auth/register-with-enrollment`,
+      data
+    ).pipe(
+      tap(response => {
+        // No guardamos token aquí, el usuario debe confirmar email primero
+        console.log('Usuario registrado:', response.userId);
+      })
+    );
   }
 
   logout(): void {

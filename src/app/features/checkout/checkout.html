@@ -1,20 +1,20 @@
-<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white py-8 md:py-12">
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-dark-bg dark:to-dark-card py-8 md:py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Breadcrumb -->
         <nav class="mb-8 flex items-center space-x-2 text-sm">
-            <a routerLink="/carrito" class="text-gray-500 hover:text-tech-blue-600 transition-colors">Carrito</a>
-            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a routerLink="/carrito" class="text-gray-500 dark:text-gray-400 hover:text-tech-blue-600 dark:hover:text-tech-blue-400 transition-colors">Carrito</a>
+            <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
-            <span class="text-gray-900 font-semibold">Pago</span>
+            <span class="text-gray-900 dark:text-dark-text font-semibold">Pago</span>
         </nav>
 
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-900 mb-3">
+            <h1 class="text-4xl md:text-5xl font-display font-bold text-gray-900 dark:text-dark-text mb-3">
                 Completar <span class="text-gradient">Compra</span>
             </h1>
-            <p class="text-lg text-gray-600">Estás a un paso de comenzar tu aprendizaje</p>
+            <p class="text-lg text-gray-600 dark:text-gray-400">Estás a un paso de comenzar tu aprendizaje</p>
         </div>
 
         @if (loading) {
@@ -28,8 +28,8 @@
             <!-- Left Column: Payment Form (2/3) -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Payment Methods -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100 dark:border-dark-border">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text mb-6 flex items-center">
                         <svg class="w-6 h-6 mr-2 text-tech-blue-600" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,7 +42,7 @@
                     <div class="grid grid-cols-3 gap-3 mb-8">
                         <button (click)="selectPaymentMethod('card')" [class]="selectedPaymentMethod === 'card' 
                                     ? 'bg-gradient-to-r from-tech-blue-600 to-tech-purple-600 text-white shadow-glow-blue' 
-                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'"
+                                    : 'bg-gray-50 dark:bg-dark-border text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-card'"
                             class="p-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 border-2"
                             [class.border-transparent]="selectedPaymentMethod === 'card'"
                             [class.border-gray-200]="selectedPaymentMethod !== 'card'">
@@ -55,7 +55,7 @@
 
                         <button (click)="selectPaymentMethod('paypal')" [class]="selectedPaymentMethod === 'paypal' 
                                     ? 'bg-gradient-to-r from-tech-blue-600 to-tech-purple-600 text-white shadow-glow-blue' 
-                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'"
+                                    : 'bg-gray-50 dark:bg-dark-border text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-card'"
                             class="p-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 border-2"
                             [class.border-transparent]="selectedPaymentMethod === 'paypal'"
                             [class.border-gray-200]="selectedPaymentMethod !== 'paypal'">
@@ -68,7 +68,7 @@
 
                         <button (click)="selectPaymentMethod('bank')" [class]="selectedPaymentMethod === 'bank' 
                                     ? 'bg-gradient-to-r from-tech-blue-600 to-tech-purple-600 text-white shadow-glow-blue' 
-                                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'"
+                                    : 'bg-gray-50 dark:bg-dark-border text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-card'"
                             class="p-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 border-2"
                             [class.border-transparent]="selectedPaymentMethod === 'bank'"
                             [class.border-gray-200]="selectedPaymentMethod !== 'bank'">
@@ -85,14 +85,14 @@
                     <form [formGroup]="paymentForm" class="space-y-5 animate-fade-in">
                         <!-- Card Number -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 Número de Tarjeta
                             </label>
                             <div class="relative">
                                 <input type="text" formControlName="cardNumber" (input)="formatCardNumber($event)"
                                     maxlength="19" placeholder="1234 5678 9012 3456"
-                                    [class]="isFieldInvalid('cardNumber') ? 'border-red-500 focus:ring-red-500' : isFieldValid('cardNumber') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 focus:ring-tech-blue-500'"
-                                    class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 font-mono">
+                                    [class]="isFieldInvalid('cardNumber') ? 'border-red-500 focus:ring-red-500' : isFieldValid('cardNumber') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 dark:border-dark-border focus:ring-tech-blue-500'"
+                                    class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 font-mono bg-white dark:bg-dark-card dark:text-dark-text">
                                 @if (isFieldValid('cardNumber')) {
                                 <svg class="absolute right-3 top-3.5 w-5 h-5 text-green-500" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
@@ -108,12 +108,12 @@
 
                         <!-- Card Holder -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 Nombre del Titular
                             </label>
                             <input type="text" formControlName="cardHolder" placeholder="JUAN PÉREZ"
-                                [class]="isFieldInvalid('cardHolder') ? 'border-red-500 focus:ring-red-500' : isFieldValid('cardHolder') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 focus:ring-tech-blue-500'"
-                                class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 uppercase">
+                                [class]="isFieldInvalid('cardHolder') ? 'border-red-500 focus:ring-red-500' : isFieldValid('cardHolder') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 dark:border-dark-border focus:ring-tech-blue-500'"
+                                class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 uppercase bg-white dark:bg-dark-card dark:text-dark-text">
                             @if (isFieldInvalid('cardHolder')) {
                             <p class="mt-1 text-sm text-red-600">{{ getFieldError('cardHolder') }}</p>
                             }
@@ -122,25 +122,25 @@
                         <!-- Expiry and CVV -->
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     Fecha de Expiración
                                 </label>
                                 <input type="text" formControlName="expiryDate" (input)="formatExpiryDate($event)"
                                     maxlength="5" placeholder="MM/YY"
-                                    [class]="isFieldInvalid('expiryDate') ? 'border-red-500 focus:ring-red-500' : isFieldValid('expiryDate') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 focus:ring-tech-blue-500'"
-                                    class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 font-mono">
+                                    [class]="isFieldInvalid('expiryDate') ? 'border-red-500 focus:ring-red-500' : isFieldValid('expiryDate') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 dark:border-dark-border focus:ring-tech-blue-500'"
+                                    class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 font-mono bg-white dark:bg-dark-card dark:text-dark-text">
                                 @if (isFieldInvalid('expiryDate')) {
                                 <p class="mt-1 text-sm text-red-600">{{ getFieldError('expiryDate') }}</p>
                                 }
                             </div>
 
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                     CVV
                                 </label>
                                 <input type="text" formControlName="cvv" maxlength="4" placeholder="123"
-                                    [class]="isFieldInvalid('cvv') ? 'border-red-500 focus:ring-red-500' : isFieldValid('cvv') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 focus:ring-tech-blue-500'"
-                                    class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 font-mono">
+                                    [class]="isFieldInvalid('cvv') ? 'border-red-500 focus:ring-red-500' : isFieldValid('cvv') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 dark:border-dark-border focus:ring-tech-blue-500'"
+                                    class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 font-mono bg-white dark:bg-dark-card dark:text-dark-text">
                                 @if (isFieldInvalid('cvv')) {
                                 <p class="mt-1 text-sm text-red-600">{{ getFieldError('cvv') }}</p>
                                 }
@@ -149,12 +149,12 @@
 
                         <!-- Country -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 País
                             </label>
                             <select formControlName="country"
-                                [class]="isFieldInvalid('country') ? 'border-red-500 focus:ring-red-500' : isFieldValid('country') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 focus:ring-tech-blue-500'"
-                                class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 bg-white">
+                                [class]="isFieldInvalid('country') ? 'border-red-500 focus:ring-red-500' : isFieldValid('country') ? 'border-green-500 focus:ring-green-500' : 'border-gray-300 dark:border-dark-border focus:ring-tech-blue-500'"
+                                class="w-full px-4 py-3 rounded-xl border-2 focus:outline-none focus:ring-2 transition-all duration-200 bg-white dark:bg-dark-card dark:text-dark-text">
                                 <option value="">Selecciona tu país</option>
                                 <option value="PE">Perú</option>
                                 <option value="MX">México</option>
@@ -179,8 +179,8 @@
                                     d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .76-.653h8.53c2.347 0 4.203.645 5.072 1.761.614.789.853 1.76.753 3.053a6.98 6.98 0 0 1-.814 2.74 6.634 6.634 0 0 1-1.587 1.876c-.714.559-1.573.972-2.55 1.226-.951.248-2.056.375-3.284.375H9.679a.77.77 0 0 0-.76.653l-.572 3.627a.641.641 0 0 1-.633.74z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Pagar con PayPal</h3>
-                        <p class="text-gray-600 mb-6">Serás redirigido a PayPal para completar tu pago de forma segura
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">Pagar con PayPal</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">Serás redirigido a PayPal para completar tu pago de forma segura
                         </p>
                     </div>
                     }
@@ -193,22 +193,22 @@
                                     d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
                             </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Transferencia Bancaria</h3>
-                        <p class="text-gray-600 mb-6">Recibirás las instrucciones de pago por correo electrónico</p>
+                        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">Transferencia Bancaria</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">Recibirás las instrucciones de pago por correo electrónico</p>
                     </div>
                     }
                 </div>
 
                 <!-- Security Badges -->
                 <div class="flex flex-wrap items-center justify-center gap-6 py-6">
-                    <div class="flex items-center space-x-2 text-gray-600">
+                    <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                         <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                         <span class="text-sm font-medium">Pago Seguro SSL</span>
                     </div>
-                    <div class="flex items-center space-x-2 text-gray-600">
+                    <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />

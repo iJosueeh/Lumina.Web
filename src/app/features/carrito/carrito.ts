@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, filter } from 'rxjs/operators';
 import { Auth } from '@app/core/auth/services/auth';
 import { Carrito, CarritoService } from '../estudiante/services/carrito.service';
 import { CursoService } from '../cursos/services/curso.service';
@@ -39,7 +39,9 @@ export class CarritoComponent implements OnInit {
       switchMap(carrito => {
         if (carrito.cursoIds && carrito.cursoIds.length > 0) {
           const courseObservables: Observable<CourseDetalles>[] = carrito.cursoIds.map(id =>
-            this.cursoService.getCourseById(id)
+            this.cursoService.getCourseById(id).pipe(
+              filter((course): course is CourseDetalles => course !== null)
+            )
           );
           return forkJoin(courseObservables);
         }

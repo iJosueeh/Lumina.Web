@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,34 +10,82 @@ import {
     DashboardStats
 } from '../models/estudiante.model';
 import { EnrolledCourse } from '../models/course.model';
+import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EstudiantesService {
     private http = inject(HttpClient);
+    private errorHandler = inject(ErrorHandlerService);
     private apiUrl = environment.estudiantesUrl;
+
+    // Estados de carga y error
+    loading = signal(false);
+    error = signal<{ isError: boolean; message: string } | null>(null);
 
     /**
      * Obtiene la información del estudiante actual
      */
-    getEstudianteInfo(id: string): Observable<EstudianteInfo> {
-        return this.http.get<EstudianteInfo>(`${this.apiUrl}/estudiantes/${id}`);
+    getEstudianteInfo(id: string): Observable<EstudianteInfo | null> {
+        this.loading.set(true);
+        this.error.set(null);
+        
+        return this.http.get<EstudianteInfo>(`${this.apiUrl}/estudiantes/${id}`).pipe(
+            map(info => {
+                this.loading.set(false);
+                return info;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar la información del estudiante');
+                this.error.set(errorInfo);
+                return of(null);
+            })
+        );
     }
 
     /**
      * Obtiene todas las matrículas del estudiante
      */
     getMatriculas(estudianteId: string): Observable<Matricula[]> {
-        return this.http.get<Matricula[]>(`${this.apiUrl}/estudiantes/${estudianteId}/matriculas`);
+        this.loading.set(true);
+        this.error.set(null);
+        
+        return this.http.get<Matricula[]>(`${this.apiUrl}/estudiantes/${estudianteId}/matriculas`).pipe(
+            map(matriculas => {
+                this.loading.set(false);
+                return matriculas;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar las matrículas');
+                this.error.set(errorInfo);
+                return of([]);
+            })
+        );
     }
 
     /**
      * Obtiene el progreso del estudiante en un curso específico
      */
-    getProgreso(estudianteId: string, cursoId: string): Observable<Progreso> {
+    getProgreso(estudianteId: string, cursoId: string): Observable<Progreso | null> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.get<Progreso>(
             `${this.apiUrl}/estudiantes/${estudianteId}/progreso/${cursoId}`
+        ).pipe(
+            map(progreso => {
+                this.loading.set(false);
+                return progreso;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar el progreso del curso');
+                this.error.set(errorInfo);
+                return of(null);
+            })
         );
     }
 
@@ -45,8 +93,18 @@ export class EstudiantesService {
      * Obtiene los cursos matriculados con información completa
      */
     getCursosMatriculados(estudianteId: string): Observable<EnrolledCourse[]> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.get<any[]>(`${this.apiUrl}/estudiantes/${estudianteId}/cursos-matriculados`).pipe(
-            catchError(() => {
+            map(cursos => {
+                this.loading.set(false);
+                return cursos;
+            }),
+            catchError((error) => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar los cursos matriculados');
+                this.error.set(errorInfo);
                 console.warn('Endpoint getCursosMatriculados no disponible, usando datos mock');
                 return of([
                     {
@@ -100,10 +158,20 @@ export class EstudiantesService {
      * Obtiene las estadísticas del dashboard
      */
     getDashboardStats(estudianteId: string): Observable<DashboardStats> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.get<DashboardStats>(
             `${this.apiUrl}/estudiantes/${estudianteId}/dashboard-stats`
         ).pipe(
-            catchError(() => {
+            map(stats => {
+                this.loading.set(false);
+                return stats;
+            }),
+            catchError((error) => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar las estadísticas');
+                this.error.set(errorInfo);
                 console.warn('Endpoint getDashboardStats no disponible, usando datos mock');
                 return of({
                     cursosActivos: 3,
@@ -124,10 +192,24 @@ export class EstudiantesService {
         estudianteId: string,
         cursoId: string,
         leccionId: string
-    ): Observable<void> {
+    ): Observable<void | null> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.post<void>(
             `${this.apiUrl}/estudiantes/${estudianteId}/cursos/${cursoId}/lecciones/${leccionId}/completar`,
             {}
+        ).pipe(
+            map(response => {
+                this.loading.set(false);
+                return response;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo marcar la lección como completada');
+                this.error.set(errorInfo);
+                return of(null);
+            })
         );
     }
 
@@ -135,23 +217,51 @@ export class EstudiantesService {
      * Obtiene el historial académico completo
      */
     getHistorialAcademico(estudianteId: string): Observable<any> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.get(`${this.apiUrl}/estudiantes/${estudianteId}/historial`).pipe(
-            catchError(() => of([]))
+            map(historial => {
+                this.loading.set(false);
+                return historial;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar el historial académico');
+                this.error.set(errorInfo);
+                return of([]);
+            })
         );
     }
 
     /**
      * Actualiza el perfil del estudiante
      */
-    actualizarPerfil(estudianteId: string, data: Partial<EstudianteInfo>): Observable<EstudianteInfo> {
+    actualizarPerfil(estudianteId: string, data: Partial<EstudianteInfo>): Observable<EstudianteInfo | null> {
+        this.loading.set(true);
+        this.error.set(null);
+        
         return this.http.put<EstudianteInfo>(
             `${this.apiUrl}/estudiantes/${estudianteId}`,
             data
         ).pipe(
+            map(perfil => {
+                this.loading.set(false);
+                return perfil;
+            }),
             catchError(error => {
-                console.error('Error al actualizar perfil:', error);
-                throw error;
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo actualizar el perfil');
+                this.error.set(errorInfo);
+                return of(null);
             })
         );
+    }
+
+    /**
+     * Limpia el estado de error
+     */
+    clearError(): void {
+        this.error.set(null);
     }
 }
