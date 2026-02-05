@@ -3,45 +3,48 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Auth } from '@app/core/auth/services/auth';
-import { CarreraService } from '@app/features/carreras/services/carrera.service';
 import { ErrorHandlerService } from '@app/core/services/error-handler.service';
-import { Carrera } from '@app/core/models/carrera';
-import { RegisterRequest } from '@app/core/models/register-request';
+import { RegisterWithEnrollmentRequest } from '@app/core/models/register-request';
+import { CursoService } from '@app/features/cursos/services/curso.service';
 
 @Component({
   selector: 'app-register-enrollment',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './register-enrollment.component.html',
-  styleUrl: './register-enrollment.component.css'
+  styleUrls: ['./register-enrollment.component.css']
 })
 export class RegisterEnrollmentComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(Auth);
-  private readonly carreraService = inject(CarreraService);
   private readonly errorHandler = inject(ErrorHandlerService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly cursoService = inject(CursoService);
 
   registerForm!: FormGroup;
-  carreras = signal<Carrera[]>([]);
   selectedCarreraId = signal<string | null>(null);
+  carreras = signal<Array<{id: string, nombre: string}>>([]); // Lista de cursos disponibles
   loading = signal(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+  generatedPassword = signal<string | null>(null);
+  showGeneratePasswordOption = signal(false);
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
 
   ngOnInit(): void {
-    // Obtener carreraId de query params si viene de una carrera específica
+    // Obtener carreraId de query params si viene de un curso específico
     this.route.queryParams.subscribe(params => {
       if (params['carreraId']) {
         this.selectedCarreraId.set(params['carreraId']);
       }
     });
 
+    // Cargar la lista de cursos disponibles
+    this.loadCursos();
+    
     this.initForm();
-    this.loadCarreras();
   }
 
   private initForm(): void {
@@ -50,33 +53,49 @@ export class RegisterEnrollmentComponent implements OnInit {
       apellidoPaterno: ['', [Validators.required, Validators.minLength(2)]],
       apellidoMaterno: ['', [Validators.required, Validators.minLength(2)]],
       correo: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]],
+      password: [''], // Opcional - se puede generar automáticamente
+      confirmPassword: [''],
       carreraId: [this.selectedCarreraId() || '', [Validators.required]],
       acceptTerms: [false, [Validators.requiredTrue]]
     }, {
       validators: this.passwordMatchValidator
+    });
+
+    // Escuchar cambios en el checkbox de generar contraseña
+    this.registerForm.get('password')?.valueChanges.subscribe(value => {
+      if (value && value.length > 0) {
+        this.showGeneratePasswordOption.set(false);
+      }
+    });
+  }
+
+  private loadCursos(): void {
+    this.cursoService.getAllCourses().subscribe({
+      next: (cursos) => {
+        // Mapear cursos a formato de carreras para compatibilidad
+        const cursosFormateados = cursos.map(curso => ({
+          id: curso.id,
+          nombre: curso.titulo
+        }));
+        this.carreras.set(cursosFormateados);
+      },
+      error: () => {
+        this.errorHandler.showErrorNotification('No se pudieron cargar los cursos disponibles');
+        this.carreras.set([]);
+      }
     });
   }
 
   private passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
+    
+    // Si ambos están vacíos, permitir (se generará contraseña)
+    if (!password && !confirmPassword) {
+      return null;
+    }
+    
     return password === confirmPassword ? null : { passwordMismatch: true };
-  }
-
-  private loadCarreras(): void {
-    this.carreraService.getAllCarreras().subscribe({
-      next: (carreras) => {
-        this.carreras.set(carreras);
-      },
-      error: () => {
-        const error = this.carreraService.error();
-        if (error) {
-          this.errorMessage.set(error.message);
-        }
-      }
-    });
   }
 
   togglePasswordVisibility(): void {
@@ -108,6 +127,7 @@ export class RegisterEnrollmentComponent implements OnInit {
   onSubmit(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
+      this.errorMessage.set('Por favor completa todos los campos requeridos');
       return;
     }
 
@@ -116,30 +136,44 @@ export class RegisterEnrollmentComponent implements OnInit {
     this.successMessage.set(null);
 
     const formValue = this.registerForm.value;
-    const request: RegisterRequest = {
+    
+    // Generar contraseña si no se proporcionó
+    let password = formValue.password;
+    if (!password || password.trim() === '') {
+      password = this.generateSecurePassword();
+      this.generatedPassword.set(password);
+    }
+    
+    const request: RegisterWithEnrollmentRequest = {
       nombres: formValue.nombres,
       apellidoPaterno: formValue.apellidoPaterno,
       apellidoMaterno: formValue.apellidoMaterno,
       correo: formValue.correo,
-      password: formValue.password,
-      carreraId: formValue.carreraId
+      password: password,
+      carreraId: formValue.carreraId || null
     };
 
     this.authService.registerWithEnrollment(request).subscribe({
       next: (response) => {
         this.loading.set(false);
-        this.successMessage.set(response.message);
         
-        this.errorHandler.showSuccessNotification(
-          '¡Registro exitoso! Revisa tu email para confirmar tu cuenta.'
-        );
+        let mensaje = '¡Registro exitoso! ';
+        if (this.generatedPassword()) {
+          mensaje += 'Tu contraseña ha sido generada automáticamente. ¡GUÁRDALA!';
+        } else {
+          mensaje += 'Ya puedes iniciar sesión con tu cuenta.';
+        }
+        this.successMessage.set(mensaje);
         
-        // Redirigir al login después de 3 segundos
+        this.errorHandler.showSuccessNotification(mensaje);
+        
+        // Redirigir al login después de 5 segundos (más tiempo si hay contraseña generada)
+        const delay = this.generatedPassword() ? 8000 : 3000;
         setTimeout(() => {
           this.router.navigate(['/login'], {
             queryParams: { registered: 'true' }
           });
-        }, 3000);
+        }, delay);
       },
       error: (error) => {
         this.loading.set(false);
@@ -153,6 +187,27 @@ export class RegisterEnrollmentComponent implements OnInit {
     });
   }
 
+  generatePasswordAutomatically(): void {
+    const password = this.generateSecurePassword();
+    this.registerForm.patchValue({
+      password: password,
+      confirmPassword: password
+    });
+    this.generatedPassword.set(password);
+    this.showGeneratePasswordOption.set(true);
+  }
+
+  private generateSecurePassword(): string {
+    const length = 12;
+    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+    return password;
+  }
+
   // Getters para template
   get nombres() { return this.registerForm.get('nombres'); }
   get apellidoPaterno() { return this.registerForm.get('apellidoPaterno'); }
@@ -162,8 +217,4 @@ export class RegisterEnrollmentComponent implements OnInit {
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
   get carreraId() { return this.registerForm.get('carreraId'); }
   get acceptTerms() { return this.registerForm.get('acceptTerms'); }
-  
-  // Exponer signals de CarreraService para el template
-  get carrerasLoading() { return this.carreraService.loading(); }
-  get carrerasError() { return this.carreraService.error(); }
 }

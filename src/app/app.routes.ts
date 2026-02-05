@@ -32,30 +32,6 @@ export const routes: Routes = [
         title: 'Inicio - Lumina'
     },
     {
-        path: 'carreras',
-        loadComponent: () =>
-            import('./features/carreras/carreras').then(m => m.Carreras),
-        title: 'Carreras - Lumina'
-    },
-    {
-        path: 'carreras/:id',
-        loadComponent: () =>
-            import('./features/carreras/carrera-detalle/carrera-detalle').then(m => m.CarreraDetalleComponent),
-        title: 'Detalle de Carrera - Lumina'
-    },
-    {
-        path: 'admision',
-        loadComponent: () =>
-            import('./features/admision/admision').then(m => m.Admision),
-        title: 'Admisión - Lumina'
-    },
-    {
-        path: 'vida-lumina',
-        loadComponent: () =>
-            import('./features/vida-lumina/vida-lumina').then(m => m.VidaLumina),
-        title: 'Vida Lumina - Lumina'
-    },
-    {
         path: 'noticias-eventos',
         loadComponent: () =>
             import('./features/noticias-eventos/noticias-eventos').then(m => m.NoticiasEventos),
@@ -74,20 +50,16 @@ export const routes: Routes = [
         title: 'Cursos - Lumina'
     },
     {
+        path: 'cursos/matricula/:id',
+        loadComponent: () =>
+            import('./features/cursos/course-enrollment/course-enrollment').then(m => m.CourseEnrollment),
+        title: 'Matrícula - Lumina'
+    },
+    {
         path: 'cursos/:id',
         loadComponent: () =>
             import('./features/cursos/course-detail/course-detail').then(m => m.CourseDetail),
         title: 'Detalle del Curso - Lumina'
-    },
-    {
-        path: 'carrito',
-        loadComponent: () => import('./features/carrito/carrito').then(m => m.CarritoComponent),
-        title: 'Carrito de Compras - Lumina'
-    },
-    {
-        path: 'checkout',
-        loadComponent: () => import('./features/checkout/checkout').then(m => m.Checkout),
-        title: 'Checkout - Lumina'
     },
     {
         path: 'sobre-nosotros',

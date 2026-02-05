@@ -1,8 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { AuthResponse } from '@app/core/models/auth-response';
 import { LoginRequest } from '@app/core/models/login-request';
-import { RegisterRequest, RegisterWithEnrollmentResponse } from '@app/core/models/register-request';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { 
+  RegisterRequest, 
+  RegisterWithEnrollmentRequest, 
+  RegisterWithEnrollmentResponse,
+  VerificarUsuarioResponse 
+} from '@app/core/models/register-request';
+import { BehaviorSubject, Observable, tap, catchError, of, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
@@ -72,14 +77,30 @@ export class Auth {
   /**
    * Registra un nuevo usuario y opcionalmente lo matricula en una carrera
    */
-  registerWithEnrollment(data: RegisterRequest): Observable<RegisterWithEnrollmentResponse> {
+  registerWithEnrollment(data: RegisterWithEnrollmentRequest): Observable<RegisterWithEnrollmentResponse> {
     return this.http.post<RegisterWithEnrollmentResponse>(
       `${environment.apiUrl}/auth/register-with-enrollment`,
       data
     ).pipe(
       tap(response => {
-        // No guardamos token aquí, el usuario debe confirmar email primero
-        console.log('Usuario registrado:', response.userId);
+        // No guardamos token aquí, el usuario debe hacer login después
+        console.log('Usuario registrado con matrícula:', response.userId);
+      })
+    );
+  }
+
+  /**
+   * Verifica si un usuario existe por correo electrónico
+   */
+  verificarUsuarioPorEmail(email: string): Observable<boolean> {
+    return this.http.get<VerificarUsuarioResponse>(
+      `${environment.apiUrl}/usuarios/check-email?email=${encodeURIComponent(email)}`
+    ).pipe(
+      map(response => response.existe),
+      catchError(error => {
+        console.error('Error al verificar usuario:', error);
+        // En caso de error, asumimos que no existe
+        return of(false);
       })
     );
   }

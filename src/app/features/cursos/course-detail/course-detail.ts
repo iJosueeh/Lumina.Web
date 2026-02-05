@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CourseDetalles } from '@app/core/models/course-detalles';
 import { Module } from '@app/core/models/module';
 import { CursoService } from '@app/features/cursos/services/curso.service';
-import { CarritoService } from '@app/features/estudiante/services/carrito.service';
 import { Auth } from '@app/core/auth/services/auth';
 
 @Component({
@@ -18,7 +17,6 @@ export class CourseDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
   private cursoService = inject(CursoService);
-  private carritoService = inject(CarritoService);
   private authService = inject(Auth);
   private router = inject(Router);
 
@@ -67,49 +65,13 @@ export class CourseDetail implements OnInit {
     module.isExpanded = !module.isExpanded;
   }
 
-  onAddToCart(): void {
-    const currentUser = this.authService.getCurrentUser();
-    if (!currentUser) {
-      this.errorMessage = 'Debes iniciar sesión para agregar cursos al carrito.';
-      return;
-    }
-
-    this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    const estudianteId = currentUser.id;
-    const cursoId = this.curso?.id;
-
-    if (!estudianteId || !cursoId) {
-      this.errorMessage = 'No se pudo obtener la información del usuario o del curso.';
-      this.loading = false;
-      return;
-    }
-
-    this.carritoService.agregarCurso(estudianteId, cursoId).subscribe({
-      next: () => {
-        this.loading = false;
-        this.successMessage = '¡Curso añadido a la cesta!';
-        this.carritoService.verCarrito(estudianteId).subscribe(carrito => {
-          this.carritoService.updateCartItemCount(carrito.cursoIds.length);
-        });
-        setTimeout(() => { this.successMessage = ''; }, 3000);
-      },
-      error: (error) => {
-        this.loading = false;
-        this.errorMessage = 'Hubo un error al agregar el curso a la cesta.';
-        console.error('Error al agregar al carrito:', error);
-        setTimeout(() => { this.errorMessage = ''; }, 3000);
-      }
-    });
-  }
-
   addToCartOrRedirect(): void {
-    if (this.isAuthenticated) {
-      this.onAddToCart();
+    // Redirigir directamente a la página de matrícula sin verificar autenticación
+    if (this.curso?.id) {
+      console.log('Navegando a matrícula con ID:', this.curso.id);
+      this.router.navigate(['/cursos/matricula', this.curso.id]);
     } else {
-      this.router.navigate(['/login'], { queryParams: { returnUrl: this.router.url } });
+      console.error('No se puede navegar: curso.id no está disponible');
     }
   }
 
