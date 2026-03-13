@@ -4,7 +4,7 @@ export const environment = {
   apiUrl: 'http://localhost:7777/api',              // Usuarios
   coursesUrl: 'http://localhost:9999/api/cursos',    // Cursos (HTTP)
   noticiasEventosUrl: 'http://localhost:4444/api',   // NoticiasEventos
-  estudiantesUrl: 'http://localhost:6666/api',       // Estudiantes
+  estudiantesUrl: 'http://localhost:8080/api',       // Estudiantes
   pedidosUrl: 'http://localhost:3333/api',           // Pedidos
   carrerasUrl: 'http://localhost:5000/api/carreras', // Carreras
   docentesUrl: 'http://localhost:8888/api',          // Docentes
