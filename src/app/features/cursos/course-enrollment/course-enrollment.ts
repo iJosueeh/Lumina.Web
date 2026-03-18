@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Auth } from '@app/core/auth/services/auth';
+import { EstudiantesService } from '@app/core/services/estudiantes.service';
 import { CursoService } from '@app/features/cursos/services/curso.service';
 import { CourseDetalles } from '@app/core/models/course-detalles';
 
@@ -23,6 +24,7 @@ export class CourseEnrollment implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(Auth);
+  private estudiantesService = inject(EstudiantesService);
   private cursoService = inject(CursoService);
 
   currentStep = 0;  // Comienza en 0 para el login/verificación
@@ -239,16 +241,37 @@ export class CourseEnrollment implements OnInit {
       return;
     }
 
-    // Aquí deberías llamar al endpoint de matrícula
-    // Por ahora simulamos el éxito
-    setTimeout(() => {
-      this.successMessage = this.isExistingUser 
-        ? '¡Matrícula completada! Ya tienes acceso al curso en tu cuenta.' 
-        : '¡Matrícula completada! Te enviamos los detalles de acceso a tu correo.';
-      this.loading = false;
-      this.currentStep = 3;  // Paso final
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+    // Si ya inició sesión, la matrícula se persiste inmediatamente desde el botón.
+    if (this.isExistingUser) {
+      this.estudiantesService.enrollInCourse(this.curso.id).subscribe({
+        next: (result) => {
+          if (!result) {
+            this.errorMessage = 'No se pudo completar la matrícula. Intenta nuevamente.';
+            this.loading = false;
+            return;
+          }
+
+          this.successMessage = result.alreadyEnrolled
+            ? 'Ya estabas matriculado en este curso. Puedes ingresar desde tu panel.'
+            : '¡Matrícula completada! Ya tienes acceso al curso en tu cuenta.';
+
+          this.loading = false;
+          this.currentStep = 3;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        error: () => {
+          this.errorMessage = 'No se pudo completar la matrícula. Intenta nuevamente.';
+          this.loading = false;
+        }
+      });
+      return;
+    }
+
+    // Para usuarios recién registrados, la matrícula se procesa desde el backend durante el registro.
+    this.successMessage = '¡Matrícula completada! Te enviamos los detalles de acceso a tu correo.';
+    this.loading = false;
+    this.currentStep = 3;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   cancelEnrollment(): void {

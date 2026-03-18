@@ -20,6 +20,30 @@ export class EstudiantesService {
     private errorHandler = inject(ErrorHandlerService);
     private apiUrl = environment.estudiantesUrl;
 
+    /**
+     * Respuesta estándar para operaciones de matrícula.
+     */
+    enrollInCourse(cursoId: string): Observable<{ enrolled: boolean; alreadyEnrolled: boolean; message: string } | null> {
+        this.loading.set(true);
+        this.error.set(null);
+
+        return this.http.post<{ enrolled: boolean; alreadyEnrolled: boolean; message: string }>(
+            `${this.apiUrl}/perfil-estudiante/matricular/${cursoId}`,
+            {}
+        ).pipe(
+            map(response => {
+                this.loading.set(false);
+                return response;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo completar la matrícula');
+                this.error.set(errorInfo);
+                return of(null);
+            })
+        );
+    }
+
     // Estados de carga y error
     loading = signal(false);
     error = signal<{ isError: boolean; message: string } | null>(null);

@@ -23,6 +23,7 @@ export interface RegisterWithEnrollmentRequest {
     correo: string;
     password: string;
     carreraId?: string | null; // ID del curso/programación al que se matriculará
+    cursoNombre?: string | null; // Nombre del curso para resolver programación correcta
     
     // Dirección
     fechaNacimiento?: string;

@@ -150,7 +150,9 @@ export class RegisterEnrollmentComponent implements OnInit {
       apellidoMaterno: formValue.apellidoMaterno,
       correo: formValue.correo,
       password: password,
-      carreraId: formValue.carreraId || null
+      carreraId: formValue.carreraId || null,
+      // Obtener el nombre del curso seleccionado
+      cursoNombre: this.obtenerNombreCurso(formValue.carreraId)
     };
 
     this.authService.registerWithEnrollment(request).subscribe({
@@ -207,6 +209,12 @@ export class RegisterEnrollmentComponent implements OnInit {
     }
     return password;
   }
+
+    private obtenerNombreCurso(carreraId: string): string | null {
+      if (!carreraId) return null;
+      const curso = this.carreras().find(c => c.id === carreraId);
+      return curso ? curso.nombre : null;
+    }
 
   // Getters para template
   get nombres() { return this.registerForm.get('nombres'); }
