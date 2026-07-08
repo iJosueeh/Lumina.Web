@@ -1,6 +1,6 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, catchError, of } from 'rxjs';
+import { Observable, catchError, of, finalize, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Course, CourseDetails } from '../models/course.model';
 import { ErrorHandlerService } from './error-handler.service';
@@ -12,128 +12,65 @@ export class CursosService {
     private http = inject(HttpClient);
     private errorHandler = inject(ErrorHandlerService);
     private apiUrl = environment.coursesUrl;
+    private activeRequests = 0;
+    private coursesCache = signal<Course[] | null>(null);
 
-    // Estados de carga y error
     loading = signal(false);
     error = signal<{ isError: boolean; message: string } | null>(null);
 
-    /**
-     * Obtiene todos los cursos disponibles
-     */
-    getAllCourses(): Observable<Course[]> {
-        this.loading.set(true);
-        this.error.set(null);
-        
-        return this.http.get<Course[]>(this.apiUrl).pipe(
-            map(courses => {
-                this.loading.set(false);
-                return courses;
-            }),
-            catchError(error => {
-                this.loading.set(false);
-                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar los cursos');
-                this.error.set(errorInfo);
-                return of([]);
-            })
-        );
-    }
+    readonly categorias = computed(() => {
+        const courses = this.coursesCache();
+        if (!courses) return [];
+        const set = new Set<string>();
+        courses.forEach(c => { if (c.categoria) set.add(c.categoria); });
+        return Array.from(set).sort();
+    });
 
-    /**
-     * Obtiene los cursos destacados (primeros 3)
-     */
-    getFeaturedCourses(): Observable<Course[]> {
-        this.loading.set(true);
-        this.error.set(null);
-        
-        return this.getAllCourses().pipe(
-            map(courses => {
-                this.loading.set(false);
-                return courses.slice(0, 3);
-            }),
-            catchError(error => {
-                this.loading.set(false);
-                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar los cursos destacados');
-                this.error.set(errorInfo);
-                return of([]);
-            })
-        );
-    }
+    private trackRequest<T>(source$: Observable<T>): Observable<T> {
+        this.activeRequests++;
+        if (this.activeRequests === 1) {
+            this.loading.set(true);
+            this.error.set(null);
+        }
 
-    /**
-     * Obtiene el detalle completo de un curso por ID
-     */
-    getCourseById(id: string): Observable<CourseDetails | null> {
-        this.loading.set(true);
-        this.error.set(null);
-        
-        return this.http.get<CourseDetails>(`${this.apiUrl}/${id}`).pipe(
-            map(course => {
-                this.loading.set(false);
-                return course;
-            }),
-            catchError(error => {
-                this.loading.set(false);
-                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar el detalle del curso');
-                this.error.set(errorInfo);
-                return of(null);
-            })
-        );
-    }
-
-    /**
-     * Obtiene los cursos en los que el estudiante está matriculado
-     * Nota: Este endpoint debería estar en el microservicio de Estudiantes
-     */
-    getEnrolledCourses(estudianteId: string): Observable<Course[]> {
-        this.loading.set(true);
-        this.error.set(null);
-        
-        return this.http.get<any[]>(`${environment.estudiantesUrl}/estudiantes/${estudianteId}/matriculas`)
-            .pipe(
-                map(matriculas => {
+        return source$.pipe(
+            finalize(() => {
+                this.activeRequests--;
+                if (this.activeRequests === 0) {
                     this.loading.set(false);
-                    return matriculas.map(m => ({
-                        id: m.cursoId,
-                        titulo: m.cursoNombre || '',
-                        descripcion: '',
-                        categoria: '',
-                        nivel: '',
-                        imagen: ''
-                    }));
-                }),
+                }
+            })
+        );
+    }
+
+    getAllCourses(forceRefresh = false): Observable<Course[]> {
+        if (this.coursesCache() && !forceRefresh) {
+            return of(this.coursesCache()!);
+        }
+        return this.trackRequest(
+            this.http.get<Course[]>(this.apiUrl).pipe(
+                tap(courses => this.coursesCache.set(courses)),
                 catchError(error => {
-                    this.loading.set(false);
-                    const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar las matrículas');
+                    const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar los cursos');
                     this.error.set(errorInfo);
                     return of([]);
                 })
-            );
-    }
-
-    /**
-     * Busca cursos por término
-     */
-    searchCourses(term: string): Observable<Course[]> {
-        return this.getAllCourses().pipe(
-            map(courses => courses.filter(c =>
-                c.titulo.toLowerCase().includes(term.toLowerCase()) ||
-                c.descripcion.toLowerCase().includes(term.toLowerCase())
-            ))
+            )
         );
     }
 
-    /**
-     * Filtra cursos por categoría
-     */
-    getCoursesByCategory(categoria: string): Observable<Course[]> {
-        return this.getAllCourses().pipe(
-            map(courses => courses.filter(c => c.categoria === categoria))
+    getCourseById(id: string): Observable<CourseDetails | null> {
+        return this.trackRequest(
+            this.http.get<CourseDetails>(`${this.apiUrl}/${id}`).pipe(
+                catchError(error => {
+                    const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar el detalle del curso');
+                    this.error.set(errorInfo);
+                    return of(null);
+                })
+            )
         );
     }
 
-    /**
-     * Limpia el estado de error
-     */
     clearError(): void {
         this.error.set(null);
     }

@@ -73,46 +73,29 @@
 
     <!-- Grid de programas -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      @if (featuredCourses.length > 0) { @for (curso of featuredCourses; track curso.id) {
-      <a
-        [routerLink]="['/cursos', curso.id]"
-        class="bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl dark:shadow-blue-900/20 transition-shadow duration-300 cursor-pointer border border-transparent dark:border-dark-border"
-      >
-        <div class="h-48 overflow-hidden bg-slate-800">
-          <img
-            [src]="curso.imagen || 'https://via.placeholder.com/400x200'"
-            [alt]="curso.titulo"
-            class="w-full h-full object-cover"
-          />
+      @if (cursosService.loading()) {
+      <!-- Skeleton Loading -->
+      @for (skeleton of [1,2,3]; track skeleton) {
+      <div class="bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg animate-pulse border border-transparent dark:border-dark-border">
+        <div class="h-48 bg-gray-300 dark:bg-gray-700"></div>
+        <div class="p-6 space-y-4">
+          <div class="h-5 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+          <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
+          <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
+          <div class="h-10 bg-gray-300 dark:bg-gray-700 rounded-lg w-full mt-6"></div>
         </div>
-        <div class="p-6">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">
-            {{ curso.titulo }}
-          </h3>
-          <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
-            {{ curso.descripcion }}
-          </p>
-          <button
-            class="w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200"
-          >
-            Aprende Más
-          </button>
-        </div>
-      </a>
-      } } @else {
-      <!-- Estado de carga o sin datos -->
+      </div>
+      }
+      } @else if (cursosService.error()) {
       <div class="col-span-3 text-center py-12">
-        @if (cursosService.loading()) {
-        <p class="text-gray-500 dark:text-gray-400">Cargando programas destacados...</p>
-        } @else if (cursosService.error()) {
         <app-error-message
-          [message]="
-            cursosService.error()?.message || 'El contenido no está disponible en este momento'
-          "
+          [message]="cursosService.error()?.message || 'El contenido no está disponible en este momento'"
           [type]="'warning'"
         >
         </app-error-message>
-        } @else {
+      </div>
+      } @else if (featuredCourses.length === 0) {
+      <div class="col-span-3 text-center py-12">
         <div class="space-y-3">
           <p class="text-gray-600 dark:text-gray-400 text-lg font-medium">
             No hay programas disponibles en este momento
@@ -127,9 +110,35 @@
             Ver Todos los Cursos
           </button>
         </div>
-        }
       </div>
-      }
+      } @else { @for (curso of featuredCourses; track curso.id) {
+      <a
+        [routerLink]="['/cursos', curso.id]"
+        class="flex flex-col bg-white dark:bg-dark-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl dark:shadow-blue-900/20 transition-shadow duration-300 cursor-pointer border border-transparent dark:border-dark-border"
+      >
+        <div class="h-48 overflow-hidden bg-slate-800 shrink-0">
+          <img
+            [src]="curso.imagen || '/placeholder.webp'"
+            [alt]="curso.titulo"
+            class="w-full h-full object-cover"
+            (error)="$event.target.src='/placeholder.webp'"
+          />
+        </div>
+        <div class="p-6 flex flex-col flex-1">
+          <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-2">
+            {{ curso.titulo }}
+          </h3>
+          <p class="text-gray-600 dark:text-gray-400 text-sm flex-1">
+            {{ curso.descripcion }}
+          </p>
+          <button
+            class="mt-4 w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200"
+          >
+            Aprende Más
+          </button>
+        </div>
+      </a>
+      } }
     </div>
   </div>
 </section>

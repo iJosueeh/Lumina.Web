@@ -1,45 +1,96 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { CourseLista } from '@app/core/models/course-lista';
-import { CursoService } from '@app/features/cursos/services/curso.service';
+import { RouterLink, ActivatedRoute } from '@angular/router';
+import { Course } from '@app/core/models/course.model';
+import { CursosService } from '@app/core/services/cursos.service';
 import { ErrorMessageComponent } from '@app/shared/components/error-message/error-message';
+import { scrollToTop } from '@shared/utils/form.utils';
 
 @Component({
   selector: 'app-course-list',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule, ErrorMessageComponent],
   templateUrl: './course-list.html',
   styleUrl: './course-list.css',
 })
 export class CourseList implements OnInit {
-  cursoService = inject(CursoService);
+  cursosService = inject(CursosService);
+  private route = inject(ActivatedRoute);
 
-  searchTerm = '';
-  selectedCategoria = '';
-  selectedNivel = '';
-
-  currentPage = 1;
+  searchTerm = signal('');
+  selectedCategoria = signal('');
+  selectedNivel = signal('');
+  currentPage = signal(1);
   itemsPerPage = 6;
 
-  categorias: string[] = ['Todas las categorías'];
+  allCourses = signal<Course[]>([]);
 
-  niveles: string[] = ['Todos los niveles'];
+  categorias = computed(() => {
+    const set = new Set<string>();
+    this.allCourses().forEach(course => {
+      if (course.categoria) set.add(course.categoria);
+    });
+    return ['Todas las categorías', ...Array.from(set)];
+  });
 
-  allCourses: CourseLista[] = [];
+  niveles = computed(() => {
+    const set = new Set<string>();
+    this.allCourses().forEach(course => {
+      if (course.nivel) set.add(course.nivel);
+    });
+    return ['Todos los niveles', ...Array.from(set)];
+  });
+
+  filteredCourses = computed(() => {
+    let filtered = this.allCourses();
+
+    const term = this.searchTerm();
+    if (term) {
+      filtered = filtered.filter(course =>
+        course.titulo.toLowerCase().includes(term.toLowerCase()) ||
+        course.descripcion.toLowerCase().includes(term.toLowerCase())
+      );
+    }
+
+    const categoria = this.selectedCategoria();
+    if (categoria && categoria !== 'Todas las categorías') {
+      filtered = filtered.filter(course => course.categoria === categoria);
+    }
+
+    const nivel = this.selectedNivel();
+    if (nivel && nivel !== 'Todos los niveles') {
+      filtered = filtered.filter(course => course.nivel === nivel);
+    }
+
+    return filtered;
+  });
+
+  paginatedCourses = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    return this.filteredCourses().slice(startIndex, endIndex);
+  });
+
+  totalPages = computed(() => Math.ceil(this.filteredCourses().length / this.itemsPerPage));
+
+  pages = computed(() => Array.from({ length: this.totalPages() }, (_, i) => i + 1));
 
   ngOnInit(): void {
-    window.scrollTo(0, 0);
+    scrollToTop();
+    this.route.queryParams.subscribe(params => {
+      if (params['categoria']) {
+        this.selectedCategoria.set(params['categoria']);
+      }
+    });
     this.loadCourses();
-    this.loadCategorias();
-    this.loadNiveles();
   }
 
   loadCourses(): void {
-    this.cursoService.getAllCourses().subscribe({
+    this.cursosService.getAllCourses().subscribe({
       next: (courses) => {
-        this.allCourses = courses;
+        this.allCourses.set(courses);
       },
       error: (error) => {
         console.error('Error al cargar los cursos:', error);
@@ -47,84 +98,42 @@ export class CourseList implements OnInit {
     });
   }
 
-  loadCategorias(): void {
-    this.cursoService.getCategorias().subscribe({
-      next: (cats) => {
-        this.categorias = ['Todas las categorías', ...cats];
-      },
-      error: (error) => {
-        console.error('Error al cargar categorías:', error);
-      }
-    });
+  updateSearchTerm(value: string): void {
+    this.searchTerm.set(value);
+    this.currentPage.set(1);
   }
 
-  loadNiveles(): void {
-    this.cursoService.getNiveles().subscribe({
-      next: (nivs) => {
-        this.niveles = ['Todos los niveles', ...nivs];
-      },
-      error: (error) => {
-        console.error('Error al cargar niveles:', error);
-      }
-    });
+  updateCategoria(value: string): void {
+    this.selectedCategoria.set(value);
+    this.currentPage.set(1);
   }
 
-  get filteredCourses(): CourseLista[] {
-    let filtered = this.allCourses;
-
-    if (this.searchTerm) {
-      filtered = filtered.filter(course =>
-        course.titulo.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        course.descripcion.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-
-    if (this.selectedCategoria && this.selectedCategoria !== 'Todas las categorías') {
-      filtered = filtered.filter(course => course.categoria === this.selectedCategoria);
-    }
-
-    if (this.selectedNivel && this.selectedNivel !== 'Todos los niveles') {
-      filtered = filtered.filter(course => course.nivel === this.selectedNivel);
-    }
-
-    return filtered;
-  }
-
-  get paginatedCourses(): CourseLista[] {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    return this.filteredCourses.slice(startIndex, endIndex);
-  }
-
-  get totalPages(): number {
-    return Math.ceil(this.filteredCourses.length / this.itemsPerPage);
-  }
-
-  get pages(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  updateNivel(value: string): void {
+    this.selectedNivel.set(value);
+    this.currentPage.set(1);
   }
 
   goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
+    if (page >= 1 && page <= this.totalPages()) {
+      this.currentPage.set(page);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   clearFilters(): void {
-    this.searchTerm = '';
-    this.selectedCategoria = '';
-    this.selectedNivel = '';
-    this.currentPage = 1;
+    this.searchTerm.set('');
+    this.selectedCategoria.set('');
+    this.selectedNivel.set('');
+    this.currentPage.set(1);
   }
 
-  getBadgeColor(color: string, type: 'bg' | 'text'): string {
+  getBadgeColor(color: string | undefined, type: 'bg' | 'text'): string {
     const colors: { [key: string]: { bg: string, text: string } } = {
       'teal': { bg: 'bg-teal-100', text: 'text-teal-700' },
       'gray': { bg: 'bg-gray-100', text: 'text-gray-700' },
       'blue': { bg: 'bg-blue-100', text: 'text-blue-700' },
       'purple': { bg: 'bg-purple-100', text: 'text-purple-700' }
     };
-    return colors[color]?.[type] || colors['gray'][type];
+    return colors[color || 'gray']?.[type] || colors['gray'][type];
   }
 }

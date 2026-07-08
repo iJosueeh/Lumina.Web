@@ -1,16 +1,17 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal, computed } from '@angular/core';
 import { AuthResponse } from '@app/core/models/auth-response';
 import { LoginRequest } from '@app/core/models/login-request';
-import { 
-  RegisterRequest, 
-  RegisterWithEnrollmentRequest, 
+import {
+  RegisterRequest,
+  RegisterWithEnrollmentRequest,
   RegisterWithEnrollmentResponse,
-  VerificarUsuarioResponse 
+  VerificarUsuarioResponse
 } from '@app/core/models/register-request';
-import { BehaviorSubject, Observable, tap, catchError, of, map } from 'rxjs';
+import { Observable, tap, catchError, of, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
+import { CookieService } from '@app/core/services/cookie.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +19,16 @@ import { environment } from '@environments/environment';
 export class Auth {
   private http = inject(HttpClient);
   private router = inject(Router);
+  private cookieService = inject(CookieService);
 
-  private currentUserSubject = new BehaviorSubject<AuthResponse['userInfo'] | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private _currentUser = signal<AuthResponse['userInfo'] | null>(null);
+
+  readonly currentUser = this._currentUser.asReadonly();
+  readonly isAuthenticated = computed(() => !!this._currentUser());
+  readonly userRole = computed(() => this._currentUser()?.rolPrincipal?.toUpperCase() ?? null);
+
+  private readonly COOKIE_TOKEN_KEY = 'auth_token';
+  private readonly GATEWAY_DOMAIN = 'localhost';
 
   constructor() {
     this.loadUserFromStorage();
@@ -30,7 +38,7 @@ export class Auth {
     const storedUser = localStorage.getItem('currentUser');
     if (storedUser) {
       try {
-        this.currentUserSubject.next(JSON.parse(storedUser));
+        this._currentUser.set(JSON.parse(storedUser));
       } catch (error) {
         console.error('Error al parsear usuario del localStorage', error);
         localStorage.removeItem('currentUser');
@@ -38,40 +46,58 @@ export class Auth {
     }
   }
 
+  private saveTokenToCookie(token: string, days: number = 7): void {
+    const domain = this.GATEWAY_DOMAIN;
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expiresStr = `expires=${expires.toUTCString()}`;
+    
+    document.cookie = `${this.COOKIE_TOKEN_KEY}=${token};${expiresStr};path=/;domain=${domain};SameSite=Lax`;
+    console.log('✅ [AUTH] Token guardado en cookie para dominio:', domain);
+  }
+
   login(credentials: LoginRequest): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, credentials)
-      .pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/login`,
+      credentials,
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
+        this.saveTokenToCookie(response.token);
 
-          if (response.refreshToken) {
-            localStorage.setItem('refreshToken', response.refreshToken);
-          }
+        if (response.refreshToken) {
+          localStorage.setItem('refreshToken', response.refreshToken);
+        }
 
-          localStorage.setItem('currentUser', JSON.stringify(response.userInfo));
-          this.currentUserSubject.next(response.userInfo);
+        localStorage.setItem('currentUser', JSON.stringify(response.userInfo));
+        this._currentUser.set(response.userInfo);
 
-          if (credentials.rememberMe) {
-            localStorage.setItem('rememberMe', 'true');
-          }
-        })
-      );
+        if (credentials.rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+      })
+    );
   }
 
   register(data: any): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, data)
-      .pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/register`,
+      data,
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
+        this.saveTokenToCookie(response.token);
 
-          if (response.refreshToken) {
-            localStorage.setItem('refreshToken', response.refreshToken);
-          }
+        if (response.refreshToken) {
+          localStorage.setItem('refreshToken', response.refreshToken);
+        }
 
-          localStorage.setItem('currentUser', JSON.stringify(response.userInfo));
-          this.currentUserSubject.next(response.userInfo);
-        })
-      );
+        localStorage.setItem('currentUser', JSON.stringify(response.userInfo));
+        this._currentUser.set(response.userInfo);
+      })
+    );
   }
 
   /**
@@ -80,10 +106,10 @@ export class Auth {
   registerWithEnrollment(data: RegisterWithEnrollmentRequest): Observable<RegisterWithEnrollmentResponse> {
     return this.http.post<RegisterWithEnrollmentResponse>(
       `${environment.apiUrl}/auth/register-with-enrollment`,
-      data
+      data,
+      { withCredentials: true }
     ).pipe(
       tap(response => {
-        // No guardamos token aquí, el usuario debe hacer login después
         console.log('Usuario registrado con matrícula:', response.userId);
       })
     );
@@ -99,7 +125,6 @@ export class Auth {
       map(response => response.existe),
       catchError(error => {
         console.error('Error al verificar usuario:', error);
-        // En caso de error, asumimos que no existe
         return of(false);
       })
     );
@@ -111,12 +136,14 @@ export class Auth {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('rememberMe');
 
-    this.currentUserSubject.next(null);
+    document.cookie = `${this.COOKIE_TOKEN_KEY}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${this.GATEWAY_DOMAIN}`;
+
+    this._currentUser.set(null);
 
     this.router.navigate(['/login']);
   }
 
-  isAuthenticated(): boolean {
+  checkIsAuthenticated(): boolean {
     const token = this.getToken();
     if (!token) {
       return false;
@@ -130,25 +157,28 @@ export class Auth {
   }
 
   getCurrentUser(): AuthResponse['userInfo'] | null {
-    return this.currentUserSubject.value;
+    return this._currentUser();
   }
 
   getUserRole(): string | null {
-    const user = this.getCurrentUser();
-    return user ? user.rolPrincipal : null;
+    return this.userRole();
   }
 
   refreshToken(): Observable<AuthResponse> {
     const refreshToken = localStorage.getItem('refreshToken');
-    return this.http.post<AuthResponse>(`${environment.apiUrl}/auth/refresh`, { refreshToken })
-      .pipe(
-        tap(response => {
-          localStorage.setItem('token', response.token);
-          if (response.refreshToken) {
-            localStorage.setItem('refreshToken', response.refreshToken);
-          }
-        })
-      );
+    return this.http.post<AuthResponse>(
+      `${environment.apiUrl}/auth/refresh`, 
+      { refreshToken },
+      { withCredentials: true }
+    ).pipe(
+      tap(response => {
+        localStorage.setItem('token', response.token);
+        this.saveTokenToCookie(response.token);
+        if (response.refreshToken) {
+          localStorage.setItem('refreshToken', response.refreshToken);
+        }
+      })
+    );
   }
 
   private isTokenExpired(token: string): boolean {

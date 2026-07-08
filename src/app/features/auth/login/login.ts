@@ -1,13 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../../core/auth/services/auth';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { environment } from '@environments/environment';
+import { markFormGroupTouched, scrollToTop } from '@shared/utils/form.utils';
+import { redirectToDashboard } from '@core/utils/navigation.utils';
 
 @Component({
   selector: 'app-login',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, MatSnackBarModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -18,17 +22,17 @@ export class Login implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
   loginForm: FormGroup;
-  hidePassword = true;
-  loading = false;
-  errorMessage = '';
+  loading = signal(false);
+  errorMessage = signal('');
   returnUrl = '';
   sessionExpired = false;
 
   constructor() {
-    if (this.authService.isAuthenticated()) {
-      this.redirectToDashboard();
+    if (this.authService.checkIsAuthenticated()) {
+      redirectToDashboard();
     }
 
     this.loginForm = this.fb.group({
@@ -39,27 +43,28 @@ export class Login implements OnInit {
   }
 
   ngOnInit(): void {
-    window.scrollTo(0, 0);
+    scrollToTop();
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '';
     this.sessionExpired = this.route.snapshot.queryParams['sessionExpired'] === 'true';
 
     if (this.sessionExpired) {
-      this.errorMessage = 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.';
+      this.errorMessage.set('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
     }
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
-      this.markFormGroupTouched(this.loginForm);
+      markFormGroupTouched(this.loginForm);
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
 
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
-        this.loading = false;
+        this.loading.set(false);
+        this.cdr.markForCheck();
         console.log('Login exitoso:', response);
         console.log('Rol principal:', response.userInfo.rolPrincipal);
 
@@ -68,45 +73,15 @@ export class Login implements OnInit {
         if (this.returnUrl) {
           this.router.navigateByUrl(this.returnUrl);
         } else {
-          this.redirectToDashboard(response.userInfo.rolPrincipal);
+          redirectToDashboard(response.userInfo.rolPrincipal);
         }
       },
       error: (error) => {
-        this.loading = false;
-        this.errorMessage = error.error?.message || 'Credenciales inválidas. Por favor, intenta de nuevo.';
+        this.loading.set(false);
+        this.errorMessage.set(error.error?.message || 'Credenciales inválidas. Por favor, intenta de nuevo.');
+        this.cdr.markForCheck();
       }
     });
-  }
-
-  togglePasswordVisibility(): void {
-    this.hidePassword = !this.hidePassword;
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
-    });
-  }
-
-  private redirectToDashboard(role?: string): void {
-    const userRole = (role || this.authService.getUserRole())?.toUpperCase();
-    console.log('Redirigiendo para rol (normalizado):', userRole);
-
-    switch (userRole) {
-      case 'ADMIN':
-        this.router.navigate(['/admin/dashboard']);
-        break;
-      case 'TEACHER':
-        this.router.navigate(['/profesional/dashboard']);
-        break;
-      case 'STUDENT':
-        this.router.navigate(['/estudiante/dashboard']);
-        break;
-      default:
-        console.warn('Rol no reconocido o sin dashboard específico:', userRole);
-        this.router.navigate(['/home']);
-    }
   }
 
   get email() {

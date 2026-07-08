@@ -37,37 +37,7 @@ export class ProgramacionesService {
             `${this.apiUrl}?estudianteId=${estudianteId}&hasta=${fechaLimite.toISOString()}`
         ).pipe(
             catchError(() => {
-                console.warn('Endpoint getProximasClases no disponible, usando datos mock');
-                return of([
-                    {
-                        id: '1',
-                        titulo: 'Clase de .NET Core',
-                        descripcion: 'Introducción a Web API',
-                        fechaInicio: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // Mañana
-                        fechaFin: new Date(new Date().getTime() + 26 * 60 * 60 * 1000),
-                        cursoId: '1',
-                        cursoNombre: 'Desarrollo Web con .NET',
-                        tipo: 'CLASE_VIRTUAL',
-                        enlaceReunion: 'https://meet.google.com/abc-defg-hij',
-                        docenteId: 'd1',
-                        docenteNombre: 'Juan Pérez',
-                        modalidad: 'Virtual' as 'Virtual'
-                    },
-                    {
-                        id: '2',
-                        titulo: 'Taller de Angular',
-                        descripcion: 'Componentes y Servicios',
-                        fechaInicio: new Date(new Date().getTime() + 48 * 60 * 60 * 1000), // Pasado mañana
-                        fechaFin: new Date(new Date().getTime() + 50 * 60 * 60 * 1000),
-                        cursoId: '2',
-                        cursoNombre: 'Frontend con Angular',
-                        tipo: 'TALLER',
-                        aula: 'Laboratorio 3',
-                        docenteId: 'd2',
-                        docenteNombre: 'Ana García',
-                        modalidad: 'Presencial' as 'Presencial'
-                    }
-                ]);
+                return of([]);
             })
         );
     }

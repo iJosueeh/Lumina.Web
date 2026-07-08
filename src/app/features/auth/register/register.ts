@@ -1,15 +1,20 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../../core/auth/services/auth';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RegisterRequest } from '../../../core/models/register-request';
+import { environment } from '@environments/environment';
+import { markFormGroupTouched, scrollToTop } from '@shared/utils/form.utils';
+import { redirectToDashboard } from '@core/utils/navigation.utils';
+import { passwordMatchValidator } from '@shared/validators/password-match.validator';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, MatSnackBarModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, MatSnackBarModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -20,14 +25,14 @@ export class Register implements OnInit {
   private snackBar = inject(MatSnackBar);
 
   registerForm: FormGroup;
-  hidePassword = true;
-  hideConfirmPassword = true;
-  loading = false;
-  errorMessage = '';
+  hidePassword = signal(true);
+  hideConfirmPassword = signal(true);
+  loading = signal(false);
+  errorMessage = signal('');
 
   constructor() {
-    if (this.authService.isAuthenticated()) {
-      this.redirectToDashboard();
+    if (this.authService.checkIsAuthenticated()) {
+      redirectToDashboard();
     }
 
     this.registerForm = this.fb.group({
@@ -38,44 +43,32 @@ export class Register implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
     }, {
-      validators: this.passwordMatchValidator
+      validators: passwordMatchValidator
     });
   }
 
   ngOnInit(): void {
-    window.scrollTo(0, 0);
-  }
-
-  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
-    const password = control.get('password');
-    const confirmPassword = control.get('confirmPassword');
-
-    if (!password || !confirmPassword) {
-      return null;
-    }
-
-    return password.value === confirmPassword.value ? null : { passwordMismatch: true };
+    scrollToTop();
   }
 
   onSubmit(): void {
     if (this.registerForm.invalid) {
-      this.markFormGroupTouched(this.registerForm);
+      markFormGroupTouched(this.registerForm);
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
 
     const formValue = this.registerForm.value;
 
-    // Preparar el payload con valores por defecto para campos no solicitados
     const registerData: RegisterRequest = {
       nombres: formValue.nombres,
       apellidoPaterno: formValue.apellidoPaterno,
       apellidoMaterno: formValue.apellidoMaterno,
       correo: formValue.correo,
       password: formValue.password,
-      fechaNacimiento: '2000-01-01', // Valor temporal
+      fechaNacimiento: '2000-01-01',
       pais: 'Perú',
       departamento: 'Lima',
       provincia: 'Lima',
@@ -85,52 +78,27 @@ export class Register implements OnInit {
 
     this.authService.register(registerData).subscribe({
       next: (response) => {
-        this.loading = false;
+        this.loading.set(false);
         this.snackBar.open('¡Registro exitoso! Bienvenido a Academia Pro', 'Cerrar', {
           duration: 3000,
           verticalPosition: 'top'
         });
 
-        this.redirectToDashboard(response.userInfo.rolPrincipal);
+        redirectToDashboard(response.userInfo.rolPrincipal);
       },
       error: (error) => {
-        this.loading = false;
-        this.errorMessage = error.error?.message || 'Error al registrar. Por favor, intenta de nuevo.';
+        this.loading.set(false);
+        this.errorMessage.set(error.error?.message || 'Error al registrar. Por favor, intenta de nuevo.');
       }
     });
   }
 
   togglePasswordVisibility(): void {
-    this.hidePassword = !this.hidePassword;
+    this.hidePassword.update(v => !v);
   }
 
   toggleConfirmPasswordVisibility(): void {
-    this.hideConfirmPassword = !this.hideConfirmPassword;
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
-    });
-  }
-
-  private redirectToDashboard(role?: string): void {
-    const userRole = (role || this.authService.getUserRole())?.toUpperCase();
-
-    switch (userRole) {
-      case 'ADMIN':
-        this.router.navigate(['/admin/dashboard']);
-        break;
-      case 'TEACHER':
-        this.router.navigate(['/profesional/dashboard']);
-        break;
-      case 'STUDENT':
-        this.router.navigate(['/estudiante/dashboard']);
-        break;
-      default:
-        this.router.navigate(['/home']);
-    }
+    this.hideConfirmPassword.update(v => !v);
   }
 
   get nombres() {

@@ -1,11 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Auth } from '@app/core/auth/services/auth';
 import { EstudiantesService } from '@app/core/services/estudiantes.service';
-import { CursoService } from '@app/features/cursos/services/curso.service';
-import { CourseDetalles } from '@app/core/models/course-detalles';
+import { CursosService } from '@app/core/services/cursos.service';
+import { CourseDetails } from '@app/core/models/course.model';
+import { scrollToTop, markFormGroupTouched } from '@shared/utils/form.utils';
+import { generateSecurePassword } from '@core/utils/password.utils';
 
 interface EnrollmentStep {
   id: number;
@@ -15,149 +16,183 @@ interface EnrollmentStep {
 
 @Component({
   selector: 'app-course-enrollment',
-  imports: [CommonModule, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule],
   templateUrl: './course-enrollment.html',
   styleUrls: ['./course-enrollment.css'],
+  host: {
+    'class': 'block',
+  },
 })
-export class CourseEnrollment implements OnInit {
+export class CourseEnrollment implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private authService = inject(Auth);
   private estudiantesService = inject(EstudiantesService);
-  private cursoService = inject(CursoService);
+  private cursosService = inject(CursosService);
 
-  currentStep = 0;  // Comienza en 0 para el login/verificación
-  curso: CourseDetalles | null = null;
-  loading = false;
-  errorMessage = '';
-  successMessage = '';
-  generatedPassword: string | null = null;
-  
-  // Estado del flujo
-  isExistingUser = false;  // true si el usuario ya existe y se autenticó
-  showLoginForm = true;    // true para mostrar login, false para registro
-  isAuthenticating = false;
+  // ─── State ───────────────────────────────────────────────
+  readonly currentStep = signal(0);
+  readonly curso = signal<CourseDetails | null>(null);
+  readonly loadingCurso = signal(true);
+  readonly cursoError = signal<string | null>(null);
 
-  steps: EnrollmentStep[] = [
+  readonly loading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
+  readonly successMessage = signal<string | null>(null);
+  readonly generatedPassword = signal<string | null>(null);
+
+  readonly isExistingUser = signal(false);
+  readonly showLoginForm = signal(true);
+  readonly isAuthenticating = signal(false);
+
+  // ─── Constants ───────────────────────────────────────────
+  readonly steps: EnrollmentStep[] = [
     { id: 0, title: 'Verificación', description: 'Inicia sesión o crea tu cuenta' },
     { id: 1, title: 'Confirmación del Curso', description: 'Verifica la información' },
-    { id: 2, title: 'Finalizar', description: 'Completa tu matrícula' }
+    { id: 2, title: 'Finalizar', description: 'Completa tu matrícula' },
   ];
 
-  // Formulario de login (Step 0 - opción 1)
+  // ─── Derived State ───────────────────────────────────────
+  readonly headerSubtitle = computed(() => {
+    return this.currentStep() === 0
+      ? 'Inicia sesión o crea una cuenta para matricularte en el curso'
+      : 'Completa los siguientes pasos para matricularte en el curso';
+  });
+
+  readonly showNavButtons = computed(() => {
+    const step = this.currentStep();
+    return step > 0 && step < 3;
+  });
+
+  readonly showStep0BackButton = computed(() => this.currentStep() === 0);
+
+  // ─── Forms ───────────────────────────────────────────────
   loginForm: FormGroup;
-  
-  // Formulario de registro (Step 0 - opción 2)
   registerForm: FormGroup;
 
   constructor() {
-    // Formulario de Login
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
+      password: ['', [Validators.required]],
     });
 
-    // Formulario de Registro
     this.registerForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.minLength(2)]],
       apellidoPaterno: ['', [Validators.required, Validators.minLength(2)]],
       apellidoMaterno: ['', [Validators.required, Validators.minLength(2)]],
       correoElectronico: ['', [Validators.required, Validators.email]],
-      password: [''],  // Opcional - se generará si está vacío
+      password: [''],
       telefono: ['', [Validators.required, Validators.pattern(/^[0-9]{9,15}$/)]],
       documento: ['', [Validators.required, Validators.minLength(8)]],
       fechaNacimiento: ['', [Validators.required]],
       direccion: ['', [Validators.required, Validators.minLength(10)]],
       ciudad: ['', [Validators.required]],
-      codigoPostal: ['', [Validators.required]]
+      codigoPostal: ['', [Validators.required]],
     });
   }
 
+  // ─── Lifecycle ───────────────────────────────────────────
   ngOnInit(): void {
-    window.scrollTo(0, 0);
-
+    scrollToTop();
     const cursoId = this.route.snapshot.paramMap.get('id');
     if (cursoId) {
       this.loadCursoData(cursoId);
+    } else {
+      this.cursoError.set('No se proporcionó un ID de curso válido.');
+      this.loadingCurso.set(false);
     }
   }
 
+  ngOnDestroy(): void {
+    // Cleanup if needed
+  }
+
+  // ─── Data Loading ────────────────────────────────────────
   loadCursoData(id: string): void {
-    this.loading = true;
-    this.cursoService.getCourseById(id).subscribe({
+    this.loadingCurso.set(true);
+    this.cursoError.set(null);
+
+    this.cursosService.getCourseById(id).subscribe({
       next: (data) => {
-        this.curso = data;
-        this.loading = false;
+        this.curso.set(data);
+        this.loadingCurso.set(false);
       },
       error: () => {
-        this.errorMessage = 'No se pudo cargar la información del curso.';
-        this.loading = false;
-      }
+        this.cursoError.set('No se pudo cargar la información del curso.');
+        this.loadingCurso.set(false);
+      },
     });
   }
 
-  // Alternar entre formulario de login y registro en Step 0
+  // ─── Tab Toggle ──────────────────────────────────────────
   toggleAuthForm(): void {
-    this.showLoginForm = !this.showLoginForm;
-    this.errorMessage = '';
-    this.successMessage = '';
+    this.showLoginForm.update(v => !v);
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
   }
 
-  // Procesar Login (Step 0 - opción 1)
+  selectLoginTab(): void {
+    this.showLoginForm.set(true);
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+  }
+
+  selectRegisterTab(): void {
+    this.showLoginForm.set(false);
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+  }
+
+  // ─── Login ───────────────────────────────────────────────
   processLogin(): void {
     if (!this.loginForm.valid) {
-      this.markFormGroupTouched(this.loginForm);
-      this.errorMessage = 'Por favor completa todos los campos.';
+      markFormGroupTouched(this.loginForm);
+      this.errorMessage.set('Por favor completa todos los campos.');
       return;
     }
 
-    this.isAuthenticating = true;
-    this.errorMessage = '';
+    this.isAuthenticating.set(true);
+    this.errorMessage.set(null);
 
     const { email, password } = this.loginForm.value;
 
     this.authService.login({ email, password, rememberMe: false }).subscribe({
-      next: (response) => {
-        this.isExistingUser = true;
-        this.successMessage = `¡Bienvenido de vuelta! Ahora confirma tu matrícula al curso.`;
-        this.isAuthenticating = false;
-        
-        // Avanzar al siguiente paso (confirmación del curso)
-        setTimeout(() => {
-          this.currentStep = 1;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 1000);
+      next: () => {
+        this.isExistingUser.set(true);
+        this.successMessage.set('¡Bienvenido de vuelta! Ahora confirma tu matrícula al curso.');
+        this.isAuthenticating.set(false);
+        this.goToStep(1);
       },
       error: (error) => {
-        this.isAuthenticating = false;
+        this.isAuthenticating.set(false);
         if (error.status === 401) {
-          this.errorMessage = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+          this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
         } else if (error.status === 404) {
-          this.errorMessage = 'No existe una cuenta con este correo. ¿Deseas crear una?';
+          this.errorMessage.set('No existe una cuenta con este correo. ¿Deseas crear una?');
         } else {
-          this.errorMessage = 'Error al iniciar sesión. Por favor intenta nuevamente.';
+          this.errorMessage.set('Error al iniciar sesión. Por favor intenta nuevamente.');
         }
-      }
+      },
     });
   }
 
-  // Procesar Registro (Step 0 - opción 2)
+  // ─── Register ────────────────────────────────────────────
   processRegister(): void {
     if (!this.registerForm.valid) {
-      this.markFormGroupTouched(this.registerForm);
-      this.errorMessage = 'Por favor completa todos los campos requeridos.';
+      markFormGroupTouched(this.registerForm);
+      this.errorMessage.set('Por favor completa todos los campos requeridos.');
       return;
     }
 
-    this.isAuthenticating = true;
-    this.errorMessage = '';
-    
-    // Generar contraseña si no se proporcionó
+    this.isAuthenticating.set(true);
+    this.errorMessage.set(null);
+
     let password = this.registerForm.value.password;
     if (!password || password.trim() === '') {
-      password = this.generateSecurePassword();
-      this.generatedPassword = password;
+      password = generateSecurePassword();
+      this.generatedPassword.set(password);
     }
 
     const formData = this.registerForm.value;
@@ -166,132 +201,107 @@ export class CourseEnrollment implements OnInit {
       apellidoPaterno: formData.apellidoPaterno,
       apellidoMaterno: formData.apellidoMaterno,
       correo: formData.correoElectronico,
-      password: password,
-      carreraId: this.curso?.id || null,
+      password,
+      carreraId: this.curso()?.id || null,
       fechaNacimiento: formData.fechaNacimiento,
       pais: 'Peru',
       departamento: formData.ciudad || 'Lima',
       provincia: formData.ciudad || 'Lima',
       distrito: formData.ciudad || 'Lima',
-      calle: formData.direccion
+      calle: formData.direccion,
     };
 
     this.authService.registerWithEnrollment(registerData).subscribe({
       next: (response) => {
-        this.isExistingUser = false;
-        this.successMessage = response?.message || '¡Cuenta creada exitosamente!';
-        this.isAuthenticating = false;
-        
-        // Avanzar al paso de confirmación
-        setTimeout(() => {
-          this.currentStep = 1;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }, 1000);
+        this.isExistingUser.set(false);
+        this.successMessage.set(response?.message || '¡Cuenta creada exitosamente!');
+        this.isAuthenticating.set(false);
+        this.goToStep(1);
       },
       error: (error) => {
-        this.isAuthenticating = false;
+        this.isAuthenticating.set(false);
         if (error.status === 400 || error.status === 409) {
-          this.errorMessage = error.error?.message || 'El correo ya está registrado. Intenta iniciar sesión.';
+          this.errorMessage.set(error.error?.message || 'El correo ya está registrado. Intenta iniciar sesión.');
         } else {
-          this.errorMessage = 'Error al crear la cuenta. Por favor intenta nuevamente.';
+          this.errorMessage.set('Error al crear la cuenta. Por favor intenta nuevamente.');
         }
-        console.error('Error en registro:', error);
-      }
+      },
     });
   }
 
+  // ─── Step Navigation ─────────────────────────────────────
+  private goToStep(step: number): void {
+    this.currentStep.set(step);
+    scrollToTop();
+  }
+
   nextStep(): void {
-    this.errorMessage = '';
-    
-    if (this.currentStep === 0) {
-      // No avanzar desde Step 0, deben usar login o registro
-      return;
-    }
-    
-    if (this.currentStep < this.steps.length - 1) {
-      this.currentStep++;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.errorMessage.set(null);
+    if (this.currentStep() < this.steps.length - 1) {
+      this.goToStep(this.currentStep() + 1);
     }
   }
 
   previousStep(): void {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-      this.errorMessage = '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (this.currentStep() > 0) {
+      this.errorMessage.set(null);
+      this.goToStep(this.currentStep() - 1);
     }
   }
 
-  goToStep(step: number): boolean {
-    // No permitir navegación manual en el nuevo flujo
-    return false;
-  }
-
-  canNavigateToStep(step: number): boolean {
-    return false;  // Deshabilitar navegación manual por ahora
-  }
-
+  // ─── Enrollment ──────────────────────────────────────────
   completeEnrollment(): void {
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set(null);
 
-    if (!this.curso || !this.curso.id) {
-      this.errorMessage = 'Error: No se encontró información del curso.';
-      this.loading = false;
+    const cursoData = this.curso();
+    if (!cursoData?.id) {
+      this.errorMessage.set('Error: No se encontró información del curso.');
+      this.loading.set(false);
       return;
     }
 
-    // Si ya inició sesión, la matrícula se persiste inmediatamente desde el botón.
-    if (this.isExistingUser) {
-      this.estudiantesService.enrollInCourse(this.curso.id).subscribe({
+    if (this.isExistingUser()) {
+      this.estudiantesService.enrollInCourse(cursoData.id).subscribe({
         next: (result) => {
           if (!result) {
-            this.errorMessage = 'No se pudo completar la matrícula. Intenta nuevamente.';
-            this.loading = false;
+            this.errorMessage.set('No se pudo completar la matrícula. Intenta nuevamente.');
+            this.loading.set(false);
             return;
           }
 
-          this.successMessage = result.alreadyEnrolled
-            ? 'Ya estabas matriculado en este curso. Puedes ingresar desde tu panel.'
-            : '¡Matrícula completada! Ya tienes acceso al curso en tu cuenta.';
-
-          this.loading = false;
-          this.currentStep = 3;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          this.successMessage.set(
+            result.alreadyEnrolled
+              ? 'Ya estabas matriculado en este curso. Puedes ingresar desde tu panel.'
+              : '¡Matrícula completada! Ya tienes acceso al curso en tu cuenta.'
+          );
+          this.loading.set(false);
+          this.goToStep(3);
         },
         error: () => {
-          this.errorMessage = 'No se pudo completar la matrícula. Intenta nuevamente.';
-          this.loading = false;
-        }
+          this.errorMessage.set('No se pudo completar la matrícula. Intenta nuevamente.');
+          this.loading.set(false);
+        },
       });
       return;
     }
 
-    // Para usuarios recién registrados, la matrícula se procesa desde el backend durante el registro.
-    this.successMessage = '¡Matrícula completada! Te enviamos los detalles de acceso a tu correo.';
-    this.loading = false;
-    this.currentStep = 3;
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // For new users: enrollment was processed during registration
+    this.successMessage.set('¡Matrícula completada! Te enviamos los detalles de acceso a tu correo.');
+    this.loading.set(false);
+    this.goToStep(3);
   }
 
   cancelEnrollment(): void {
     if (confirm('¿Estás seguro de que deseas cancelar la matrícula?')) {
-      this.router.navigate(['/cursos', this.curso?.id]);
+      this.router.navigate(['/cursos', this.curso()?.id]);
     }
   }
 
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
-    });
-  }
-
-  // Getters para formulario de login
+  // ─── Template Getters ────────────────────────────────────
   get loginEmail() { return this.loginForm.get('email'); }
   get loginPassword() { return this.loginForm.get('password'); }
 
-  // Getters para formulario de registro
   get nombres() { return this.registerForm.get('nombres'); }
   get apellidoPaterno() { return this.registerForm.get('apellidoPaterno'); }
   get apellidoMaterno() { return this.registerForm.get('apellidoMaterno'); }
@@ -303,15 +313,4 @@ export class CourseEnrollment implements OnInit {
   get direccion() { return this.registerForm.get('direccion'); }
   get ciudad() { return this.registerForm.get('ciudad'); }
   get codigoPostal() { return this.registerForm.get('codigoPostal'); }
-
-  private generateSecurePassword(): string {
-    const length = 12;
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-    let password = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-    return password;
-  }
 }

@@ -1,29 +1,34 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CourseDetalles } from '@app/core/models/course-detalles';
-import { Module } from '@app/core/models/module';
-import { CursoService } from '@app/features/cursos/services/curso.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CourseDetails, Module } from '@app/core/models/course.model';
+import { CursosService } from '@app/core/services/cursos.service';
 import { Auth } from '@app/core/auth/services/auth';
+import { ErrorHandlerService } from '@app/core/services/error-handler.service';
+import { scrollToTop } from '@shared/utils/form.utils';
 
 @Component({
   selector: 'app-course-detail',
-  imports: [CommonModule, ReactiveFormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './course-detail.html',
   styleUrl: './course-detail.css',
 })
 export class CourseDetail implements OnInit {
   private route = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
-  private cursoService = inject(CursoService);
+  private cursosService = inject(CursosService);
   private authService = inject(Auth);
   private router = inject(Router);
+  private errorHandler = inject(ErrorHandlerService);
+  private cdr = inject(ChangeDetectorRef);
 
-  curso: CourseDetalles | null = null;
+  curso: CourseDetails | null = null;
+  cursoId: string | null = null;
   enrollForm: FormGroup;
   loading = false;
-  dataLoading = false;
+  dataLoading = true;
   successMessage = '';
   errorMessage = '';
   isAuthenticated = false;
@@ -36,27 +41,35 @@ export class CourseDetail implements OnInit {
   }
 
   ngOnInit(): void {
-    window.scrollTo(0, 0);
+    scrollToTop();
     this.isAuthenticated = this.authService.isAuthenticated();
 
-    const cursoId = this.route.snapshot.paramMap.get('id');
-    if (cursoId) {
-      this.loadCursoData(cursoId);
+    this.cursoId = this.route.snapshot.paramMap.get('id');
+    if (this.cursoId) {
+      this.loadCursoData(this.cursoId);
     }
   }
 
   loadCursoData(id: string): void {
     this.dataLoading = true;
     this.errorMessage = '';
-    this.cursoService.getCourseById(id).subscribe({
+    this.cursosService.getCourseById(id).subscribe({
       next: (data) => {
         this.curso = data;
         this.dataLoading = false;
+
+        if (!data) {
+          this.errorMessage = 'No se encontró el curso solicitado.';
+          console.error('Curso no encontrado - ID:', id);
+        }
+
+        this.cdr.markForCheck();
       },
-      error: () => {
-        // El interceptor global ya maneja el error
-        this.errorMessage = 'No se pudo cargar la información del curso. Por favor, intenta más tarde.';
+      error: (error) => {
         this.dataLoading = false;
+        this.errorMessage = 'No se pudo cargar la información del curso. Por favor, intenta más tarde.';
+        console.error('Error al cargar curso:', id, error);
+        this.cdr.markForCheck();
       }
     });
   }
@@ -73,13 +86,6 @@ export class CourseDetail implements OnInit {
     } else {
       console.error('No se puede navegar: curso.id no está disponible');
     }
-  }
-
-  private markFormGroupTouched(formGroup: FormGroup): void {
-    Object.keys(formGroup.controls).forEach(key => {
-      const control = formGroup.get(key);
-      control?.markAsTouched();
-    });
   }
 
   get nombreCompleto() {

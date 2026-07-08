@@ -36,6 +36,7 @@ export interface Module {
     titulo: string;
     descripcion: string;
     lecciones: number;
+    isExpanded?: boolean;
 }
 
 export interface Testimonial {

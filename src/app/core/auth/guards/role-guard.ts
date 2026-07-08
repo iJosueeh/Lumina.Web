@@ -1,6 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { Auth } from '../services/auth';
 import { inject } from '@angular/core';
+import { environment } from '@environments/environment';
 
 export const roleGuard: CanActivateFn = (route, state) => {
   const authService = inject(Auth);
@@ -14,19 +15,20 @@ export const roleGuard: CanActivateFn = (route, state) => {
   }
 
   const currentUserRole = userRole;
+  const portalBase = environment.portalUrl.replace('/login', '');
 
   if (!currentUserRole) {
     router.navigate(['/login']);
   } else {
     switch (currentUserRole) {
       case 'ADMIN':
-        router.navigate(['/admin/dashboard']);
+        window.location.href = `${portalBase}/admin`;
         break;
       case 'TEACHER':
-        router.navigate(['/profesional/dashboard']);
+        window.location.href = `${portalBase}/teacher`;
         break;
       case 'STUDENT':
-        router.navigate(['/estudiante/dashboard']);
+        window.location.href = `${portalBase}/student`;
         break;
       default:
         router.navigate(['/unauthorized']);

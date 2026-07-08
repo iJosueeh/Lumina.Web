@@ -23,7 +23,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar cursos por nombre o tema..."
+                <input type="text" [ngModel]="searchTerm()" (ngModelChange)="updateSearchTerm($event)" placeholder="Buscar cursos por nombre o tema..."
                     class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text" />
             </div>
 
@@ -31,9 +31,9 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!-- Categoría -->
                 <div>
-                    <select [(ngModel)]="selectedCategoria" (change)="currentPage = 1"
+                    <select [ngModel]="selectedCategoria()" (ngModelChange)="updateCategoria($event)"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 bg-white">
-                        @for (categoria of categorias; track categoria) {
+                        @for (categoria of categorias(); track categoria) {
                         <option [value]="categoria === 'Todas las categorías' ? '' : categoria">
                             {{ categoria }}
                         </option>
@@ -43,9 +43,9 @@
 
                 <!-- Nivel de Dificultad -->
                 <div>
-                    <select [(ngModel)]="selectedNivel" (change)="currentPage = 1"
+                    <select [ngModel]="selectedNivel()" (ngModelChange)="updateNivel($event)"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 bg-white">
-                        @for (nivel of niveles; track nivel) {
+                        @for (nivel of niveles(); track nivel) {
                         <option [value]="nivel === 'Todos los niveles' ? '' : nivel">
                             {{ nivel }}
                         </option>
@@ -64,7 +64,7 @@
 
             <!-- Results Count -->
             <div class="text-sm text-gray-600">
-                Mostrando {{ paginatedCourses.length }} de {{ filteredCourses.length }} cursos
+                Mostrando {{ paginatedCourses().length }} de {{ filteredCourses().length }} cursos
             </div>
         </div>
     </div>
@@ -74,17 +74,30 @@
 <section class="py-16 md:py-24 bg-gray-50 dark:bg-dark-bg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        @if (cursoService.loading()) {
-        <!-- Loading State -->
-        <div class="text-center py-16">
-            <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-            <p class="text-gray-600 dark:text-gray-400">Cargando cursos...</p>
+        @if (cursosService.loading()) {
+        <!-- Skeleton Loading -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @for (skeleton of [1,2,3,4,5,6]; track skeleton) {
+            <div class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md animate-pulse border border-transparent dark:border-dark-border">
+                <div class="h-48 bg-gray-300 dark:bg-gray-700"></div>
+                <div class="p-6 space-y-4">
+                    <div class="flex gap-2">
+                        <div class="h-5 w-16 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                        <div class="h-5 w-20 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+                    </div>
+                    <div class="h-6 bg-gray-300 dark:bg-gray-700 rounded w-3/4"></div>
+                    <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-full"></div>
+                    <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-2/3"></div>
+                    <div class="h-12 bg-gray-300 dark:bg-gray-700 rounded-lg w-full"></div>
+                </div>
+            </div>
+            }
         </div>
-        } @else if (cursoService.error()) {
+        } @else if (cursosService.error()) {
         <!-- Error State -->
         <div class="max-w-2xl mx-auto">
-            <app-error-message 
-                [message]="cursoService.error()?.message || 'No se pudieron cargar los cursos'"
+            <app-error-message
+                [message]="cursosService.error()?.message || 'No se pudieron cargar los cursos'"
                 [type]="'error'">
             </app-error-message>
             <div class="text-center mt-6">
@@ -97,7 +110,7 @@
                 </button>
             </div>
         </div>
-        } @else if (filteredCourses.length === 0) {
+        } @else if (filteredCourses().length === 0) {
         <!-- No Results -->
         <div class="text-center py-16">
             <svg class="mx-auto h-24 w-24 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,14 +127,14 @@
         } @else {
         <!-- Courses Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @for (course of paginatedCourses; track course.id) {
+            @for (course of paginatedCourses(); track course.id) {
             <div
-                class="bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md hover:shadow-2xl dark:shadow-blue-900/20 transition-all duration-300 transform hover:-translate-y-2 group border border-transparent dark:border-dark-border">
+                class="flex flex-col bg-white dark:bg-dark-card rounded-xl overflow-hidden shadow-md hover:shadow-2xl dark:shadow-blue-900/20 transition-all duration-300 transform hover:-translate-y-2 group border border-transparent dark:border-dark-border">
                 <!-- Course Image -->
-                <div class="relative h-48 overflow-hidden bg-gradient-to-br from-teal-400 to-teal-600">
-                    <img [src]="course.imagen" [alt]="course.titulo"
+                <div class="relative h-48 overflow-hidden bg-gradient-to-br from-teal-400 to-teal-600 shrink-0">
+                    <img [src]="course.imagen || '/placeholder.webp'" [alt]="course.titulo"
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                        (error)="$event.target.src='assets/images/courses/default-course.jpg'" />
+                        (error)="$event.target.src='/placeholder.webp'" />
                     <!-- Overlay -->
                     <div
                         class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -129,7 +142,7 @@
                 </div>
 
                 <!-- Course Content -->
-                <div class="p-6">
+                <div class="p-6 flex flex-col flex-1">
                     <!-- Badges -->
                     <div class="flex flex-wrap gap-2 mb-3">
                         <span
@@ -149,13 +162,13 @@
                     </h3>
 
                     <!-- Description -->
-                    <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 text-sm">
+                    <p class="text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 text-sm flex-1">
                         {{ course.descripcion }}
                     </p>
 
                     <!-- CTA Button -->
                     <button [routerLink]="['/cursos', course.id]"
-                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center group">
+                        class="mt-auto w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center group">
                         Ver Detalles
                         <svg class="w-5 h-5 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none"
                             stroke="currentColor" viewBox="0 0 24 24">
@@ -169,10 +182,10 @@
         </div>
 
         <!-- Pagination -->
-        @if (totalPages > 1) {
+        @if (totalPages() > 1) {
         <div class="flex justify-center items-center space-x-2 mt-12">
             <!-- Previous Button -->
-            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1"
+            <button (click)="goToPage(currentPage() - 1)" [disabled]="currentPage() === 1"
                 class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -180,21 +193,21 @@
             </button>
 
             <!-- Page Numbers -->
-            @for (page of pages; track page) {
-            @if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) { <button
+            @for (page of pages(); track page) {
+            @if (page === 1 || page === totalPages() || (page >= currentPage() - 1 && page <= currentPage() + 1)) { <button
                 (click)="goToPage(page)"
-                [class]="page === currentPage 
-                  ? 'px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold' 
+                [class]="page === currentPage()
+                  ? 'px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold'
                   : 'px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition duration-150'">
                 {{ page }}
                 </button>
-                } @else if (page === currentPage - 2 || page === currentPage + 2) {
+                } @else if (page === currentPage() - 2 || page === currentPage() + 2) {
                 <span class="px-2 text-gray-500">...</span>
                 }
                 }
 
                 <!-- Next Button -->
-                <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages"
+                <button (click)="goToPage(currentPage() + 1)" [disabled]="currentPage() === totalPages()"
                     class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />

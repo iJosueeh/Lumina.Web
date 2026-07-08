@@ -19,19 +19,11 @@ export interface RegisterRequest {
 export interface RegisterWithEnrollmentRequest {
     nombres: string;
     apellidoPaterno: string;
-    apellidoMaterno: string;
+    apellidoMaterno?: string;
     correo: string;
     password: string;
-    carreraId?: string | null; // ID del curso/programación al que se matriculará
-    cursoNombre?: string | null; // Nombre del curso para resolver programación correcta
-    
-    // Dirección
-    fechaNacimiento?: string;
-    pais?: string;
-    departamento?: string;
-    provincia?: string;
-    distrito?: string;
-    calle?: string;
+    carreraId?: string | null;
+    cursoNombre?: string | null;
 }
 
 // Response específico para registro con matrícula

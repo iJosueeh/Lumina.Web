@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, forkJoin, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
@@ -129,58 +129,11 @@ export class EstudiantesService {
                 this.loading.set(false);
                 const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar los cursos matriculados');
                 this.error.set(errorInfo);
-                console.warn('Endpoint getCursosMatriculados no disponible, usando datos mock');
-                return of([
-                    {
-                        id: '1',
-                        titulo: 'Introducción a .NET 8',
-                        imagenUrl: 'assets/images/courses/dotnet.jpg',
-                        progreso: 75,
-                        ultimaActividad: new Date(),
-                        instructor: 'Juan Pérez',
-                        totalLecciones: 20,
-                        leccionesCompletadas: 15,
-                        descripcion: 'Curso introductorio a .NET 8',
-                        categoria: 'Desarrollo Backend',
-                        nivel: 'Principiante',
-                        imagen: 'assets/images/courses/dotnet.jpg'
-                    },
-                    {
-                        id: '2',
-                        titulo: 'Angular Avanzado',
-                        imagenUrl: 'assets/images/courses/angular.jpg',
-                        progreso: 30,
-                        ultimaActividad: new Date(),
-                        instructor: 'Ana García',
-                        totalLecciones: 25,
-                        leccionesCompletadas: 8,
-                        descripcion: 'Curso avanzado de Angular',
-                        categoria: 'Desarrollo Frontend',
-                        nivel: 'Avanzado',
-                        imagen: 'assets/images/courses/angular.jpg'
-                    },
-                    {
-                        id: '3',
-                        titulo: 'SQL Server para Desarrolladores',
-                        imagenUrl: 'assets/images/courses/sql.jpg',
-                        progreso: 0,
-                        ultimaActividad: new Date(),
-                        instructor: 'Carlos López',
-                        totalLecciones: 15,
-                        leccionesCompletadas: 0,
-                        descripcion: 'Optimización y diseño de bases de datos',
-                        categoria: 'Base de Datos',
-                        nivel: 'Intermedio',
-                        imagen: 'assets/images/courses/sql.jpg'
-                    }
-                ]);
+                return of([]);
             })
         );
     }
 
-    /**
-     * Obtiene las estadísticas del dashboard
-     */
     getDashboardStats(estudianteId: string): Observable<DashboardStats> {
         this.loading.set(true);
         this.error.set(null);
@@ -196,14 +149,13 @@ export class EstudiantesService {
                 this.loading.set(false);
                 const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar las estadísticas');
                 this.error.set(errorInfo);
-                console.warn('Endpoint getDashboardStats no disponible, usando datos mock');
                 return of({
-                    cursosActivos: 3,
-                    evaluacionesPendientes: 2,
-                    promedioGeneral: 8.5,
-                    horasEstudio: 120,
-                    cursosCompletados: 1,
-                    horasEstudioSemana: 10
+                    cursosActivos: 0,
+                    evaluacionesPendientes: 0,
+                    promedioGeneral: 0,
+                    horasEstudio: 0,
+                    cursosCompletados: 0,
+                    horasEstudioSemana: 0
                 });
             })
         );

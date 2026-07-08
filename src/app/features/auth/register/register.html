@@ -199,7 +199,7 @@
               </div>
               <input
                 id="password"
-                [type]="hidePassword ? 'password' : 'text'"
+                [type]="hidePassword() ? 'password' : 'text'"
                 formControlName="password"
                 placeholder="Mínimo 6 caracteres"
                 [class.border-red-500]="password?.invalid && password?.touched"
@@ -211,7 +211,7 @@
                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition"
                 tabindex="-1"
               >
-                @if (hidePassword) {
+                @if (hidePassword()) {
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
@@ -273,7 +273,7 @@
               </div>
               <input
                 id="confirmPassword"
-                [type]="hideConfirmPassword ? 'password' : 'text'"
+                [type]="hideConfirmPassword() ? 'password' : 'text'"
                 formControlName="confirmPassword"
                 placeholder="Repite tu contraseña"
                 [class.border-red-500]="
@@ -288,7 +288,7 @@
                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition"
                 tabindex="-1"
               >
-                @if (hideConfirmPassword) {
+                @if (hideConfirmPassword()) {
                   <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
@@ -330,7 +330,7 @@
           </div>
         </div>
 
-        @if (errorMessage) {
+        @if (errorMessage()) {
           <div class="rounded-lg bg-red-50 border border-red-200 p-4 animate-fadeIn">
             <div class="flex">
               <svg
@@ -344,17 +344,17 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <p class="text-sm text-red-600">{{ errorMessage }}</p>
+              <p class="text-sm text-red-600">{{ errorMessage() }}</p>
             </div>
           </div>
         }
 
         <button
           type="submit"
-          [disabled]="loading"
+          [disabled]="loading()"
           class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-primary hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          @if (loading) {
+          @if (loading()) {
             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
               <circle
                 class="opacity-25"
@@ -372,7 +372,7 @@
             </svg>
           }
 
-          @if (loading) {
+          @if (loading()) {
             <span>Creando cuenta...</span>
           } @else {
             <span>Crear Cuenta</span>

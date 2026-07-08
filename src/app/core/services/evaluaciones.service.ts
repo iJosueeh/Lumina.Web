@@ -41,39 +41,7 @@ export class EvaluacionesService {
                 this.loading.set(false);
                 const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar las evaluaciones');
                 this.error.set(errorInfo);
-                console.warn('Endpoint getEvaluacionesByEstudiante no disponible, usando datos mock');
-                return of([
-                    {
-                        id: '1',
-                        titulo: 'Examen Parcial de .NET',
-                        cursoId: '1',
-                        cursoNombre: 'Desarrollo Web con .NET',
-                        fechaInicio: new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
-                        fechaFin: new Date(new Date().getTime() + 26 * 60 * 60 * 1000),
-                        fechaLimite: new Date(new Date().getTime() + 26 * 60 * 60 * 1000),
-                        duracionMinutos: 60,
-                        duracion: 60,
-                        estado: EstadoEvaluacion.Pendiente,
-                        tipo: TipoEvaluacion.Examen,
-                        intentos: 0,
-                        intentosMaximos: 1
-                    },
-                    {
-                        id: '2',
-                        titulo: 'Quiz de Componentes',
-                        cursoId: '2',
-                        cursoNombre: 'Frontend con Angular',
-                        fechaInicio: new Date(new Date().getTime() + 48 * 60 * 60 * 1000),
-                        fechaFin: new Date(new Date().getTime() + 50 * 60 * 60 * 1000),
-                        fechaLimite: new Date(new Date().getTime() + 50 * 60 * 60 * 1000),
-                        duracionMinutos: 30,
-                        duracion: 30,
-                        estado: EstadoEvaluacion.Pendiente,
-                        tipo: TipoEvaluacion.Quiz,
-                        intentos: 0,
-                        intentosMaximos: 3
-                    }
-                ]);
+                return of([]);
             })
         );
     }

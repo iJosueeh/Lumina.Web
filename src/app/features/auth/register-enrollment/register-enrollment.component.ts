@@ -1,18 +1,22 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Auth } from '@app/core/auth/services/auth';
 import { ErrorHandlerService } from '@app/core/services/error-handler.service';
 import { RegisterWithEnrollmentRequest } from '@app/core/models/register-request';
-import { CursoService } from '@app/features/cursos/services/curso.service';
+import { LoginRequest } from '@app/core/models/login-request';
+import { CursosService } from '@app/core/services/cursos.service';
+import { environment } from '@environments/environment';
+import { generateSecurePassword } from '@core/utils/password.utils';
 
 @Component({
   selector: 'app-register-enrollment',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './register-enrollment.component.html',
-  styleUrls: ['./register-enrollment.component.css']
+  styleUrls: ['./register-enrollment.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterEnrollmentComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
@@ -20,90 +24,89 @@ export class RegisterEnrollmentComponent implements OnInit {
   private readonly errorHandler = inject(ErrorHandlerService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly cursoService = inject(CursoService);
+  private readonly cursosService = inject(CursosService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   registerForm!: FormGroup;
   selectedCarreraId = signal<string | null>(null);
-  carreras = signal<Array<{id: string, nombre: string}>>([]); // Lista de cursos disponibles
+  carreras = signal<Array<{id: string, nombre: string}>>([]);
   loading = signal(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
   generatedPassword = signal<string | null>(null);
-  showGeneratePasswordOption = signal(false);
-  hidePassword = signal(true);
-  hideConfirmPassword = signal(true);
 
   ngOnInit(): void {
-    // Obtener carreraId de query params si viene de un curso específico
     this.route.queryParams.subscribe(params => {
       if (params['carreraId']) {
         this.selectedCarreraId.set(params['carreraId']);
       }
+      this.cdr.markForCheck();
     });
 
-    // Cargar la lista de cursos disponibles
     this.loadCursos();
-    
     this.initForm();
   }
 
   private initForm(): void {
     this.registerForm = this.fb.group({
       nombres: ['', [Validators.required, Validators.minLength(2)]],
-      apellidoPaterno: ['', [Validators.required, Validators.minLength(2)]],
-      apellidoMaterno: ['', [Validators.required, Validators.minLength(2)]],
+      apellidos: ['', [Validators.required, Validators.minLength(2)]],
       correo: ['', [Validators.required, Validators.email]],
-      password: [''], // Opcional - se puede generar automáticamente
+      correoConfirmacion: ['', [Validators.required, Validators.email]],
+      password: [''],
       confirmPassword: [''],
       carreraId: [this.selectedCarreraId() || '', [Validators.required]],
       acceptTerms: [false, [Validators.requiredTrue]]
     }, {
-      validators: this.passwordMatchValidator
-    });
-
-    // Escuchar cambios en el checkbox de generar contraseña
-    this.registerForm.get('password')?.valueChanges.subscribe(value => {
-      if (value && value.length > 0) {
-        this.showGeneratePasswordOption.set(false);
-      }
+      validators: [this.passwordMatchValidator, this.emailMatchValidator]
     });
   }
 
   private loadCursos(): void {
-    this.cursoService.getAllCourses().subscribe({
+    this.cursosService.getAllCourses().subscribe({
       next: (cursos) => {
-        // Mapear cursos a formato de carreras para compatibilidad
         const cursosFormateados = cursos.map(curso => ({
           id: curso.id,
           nombre: curso.titulo
         }));
         this.carreras.set(cursosFormateados);
+        this.cdr.markForCheck();
       },
       error: () => {
         this.errorHandler.showErrorNotification('No se pudieron cargar los cursos disponibles');
         this.carreras.set([]);
+        this.cdr.markForCheck();
       }
     });
   }
 
-  private passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
+  private passwordMatchValidator(form: AbstractControl): ValidationErrors | null {
     const password = form.get('password')?.value;
     const confirmPassword = form.get('confirmPassword')?.value;
-    
-    // Si ambos están vacíos, permitir (se generará contraseña)
+
     if (!password && !confirmPassword) {
       return null;
     }
-    
+
     return password === confirmPassword ? null : { passwordMismatch: true };
   }
 
-  togglePasswordVisibility(): void {
-    this.hidePassword.update(v => !v);
+  private emailMatchValidator(form: AbstractControl): ValidationErrors | null {
+    const correo = form.get('correo')?.value;
+    const correoConfirmacion = form.get('correoConfirmacion')?.value;
+
+    if (!correo || !correoConfirmacion) {
+      return null;
+    }
+
+    return correo === correoConfirmacion ? null : { emailMismatch: true };
   }
 
-  toggleConfirmPasswordVisibility(): void {
-    this.hideConfirmPassword.update(v => !v);
+  private splitApellidos(apellidos: string): { paterno: string; materno: string } {
+    const parts = apellidos.trim().split(/\s+/);
+    if (parts.length === 0) return { paterno: '', materno: 'No especificado' };
+    if (parts.length === 1) return { paterno: parts[0], materno: 'No especificado' };
+    return { paterno: parts[0], materno: parts.slice(1).join(' ') };
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -136,91 +139,106 @@ export class RegisterEnrollmentComponent implements OnInit {
     this.successMessage.set(null);
 
     const formValue = this.registerForm.value;
-    
-    // Generar contraseña si no se proporcionó
+
     let password = formValue.password;
     if (!password || password.trim() === '') {
-      password = this.generateSecurePassword();
+      password = generateSecurePassword();
       this.generatedPassword.set(password);
     }
-    
+
+    const { paterno, materno } = this.splitApellidos(formValue.apellidos);
+
     const request: RegisterWithEnrollmentRequest = {
       nombres: formValue.nombres,
-      apellidoPaterno: formValue.apellidoPaterno,
-      apellidoMaterno: formValue.apellidoMaterno,
+      apellidoPaterno: paterno,
+      apellidoMaterno: materno,
       correo: formValue.correo,
       password: password,
       carreraId: formValue.carreraId || null,
-      // Obtener el nombre del curso seleccionado
       cursoNombre: this.obtenerNombreCurso(formValue.carreraId)
     };
 
     this.authService.registerWithEnrollment(request).subscribe({
       next: (response) => {
         this.loading.set(false);
-        
-        let mensaje = '¡Registro exitoso! ';
-        if (this.generatedPassword()) {
-          mensaje += 'Tu contraseña ha sido generada automáticamente. ¡GUÁRDALA!';
-        } else {
-          mensaje += 'Ya puedes iniciar sesión con tu cuenta.';
-        }
-        this.successMessage.set(mensaje);
-        
-        this.errorHandler.showSuccessNotification(mensaje);
-        
-        // Redirigir al login después de 5 segundos (más tiempo si hay contraseña generada)
-        const delay = this.generatedPassword() ? 8000 : 3000;
-        setTimeout(() => {
-          this.router.navigate(['/login'], {
-            queryParams: { registered: 'true' }
-          });
-        }, delay);
+        this.cdr.markForCheck();
+
+        const loginRequest: LoginRequest = {
+          email: formValue.correo,
+          password: password,
+          rememberMe: true
+        };
+
+        this.authService.login(loginRequest).subscribe({
+          next: (loginResponse) => {
+            const portalBase = environment.portalUrl.replace('/login', '');
+            const userRole = loginResponse.userInfo.rolPrincipal?.toUpperCase();
+
+            let redirectUrl = `${portalBase}/student`;
+            if (userRole === 'ADMIN') {
+              redirectUrl = `${portalBase}/admin`;
+            } else if (userRole === 'TEACHER') {
+              redirectUrl = `${portalBase}/teacher`;
+            }
+
+            let mensaje = '¡Registro y login exitosos! Redirigiendo al portal...';
+            this.successMessage.set(mensaje);
+            this.errorHandler.showSuccessNotification(mensaje);
+            this.cdr.markForCheck();
+
+            setTimeout(() => {
+              window.location.href = redirectUrl;
+            }, 1500);
+          },
+          error: (loginError) => {
+            let mensaje = '¡Registro exitoso! Por favor inicia sesión.';
+            if (this.generatedPassword()) {
+              mensaje += ' Tu contraseña ha sido generada automáticamente.';
+            }
+            this.successMessage.set(mensaje);
+            this.errorHandler.showSuccessNotification(mensaje);
+            this.cdr.markForCheck();
+
+            setTimeout(() => {
+              this.router.navigate(['/login'], {
+                queryParams: { registered: 'true' }
+              });
+            }, 3000);
+          }
+        });
       },
       error: (error) => {
         this.loading.set(false);
-        
+
         const errorInfo = this.errorHandler.handleHttpError(
           error,
           'Error al procesar el registro'
         );
         this.errorMessage.set(errorInfo.message);
+        this.cdr.markForCheck();
       }
     });
   }
 
   generatePasswordAutomatically(): void {
-    const password = this.generateSecurePassword();
+    const password = generateSecurePassword();
     this.registerForm.patchValue({
       password: password,
       confirmPassword: password
     });
     this.generatedPassword.set(password);
-    this.showGeneratePasswordOption.set(true);
   }
 
-  private generateSecurePassword(): string {
-    const length = 12;
-    const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
-    let password = '';
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-    return password;
+  private obtenerNombreCurso(carreraId: string): string | null {
+    if (!carreraId) return null;
+    const curso = this.carreras().find(c => c.id === carreraId);
+    return curso ? curso.nombre : null;
   }
 
-    private obtenerNombreCurso(carreraId: string): string | null {
-      if (!carreraId) return null;
-      const curso = this.carreras().find(c => c.id === carreraId);
-      return curso ? curso.nombre : null;
-    }
-
-  // Getters para template
   get nombres() { return this.registerForm.get('nombres'); }
-  get apellidoPaterno() { return this.registerForm.get('apellidoPaterno'); }
-  get apellidoMaterno() { return this.registerForm.get('apellidoMaterno'); }
+  get apellidos() { return this.registerForm.get('apellidos'); }
   get correo() { return this.registerForm.get('correo'); }
+  get correoConfirmacion() { return this.registerForm.get('correoConfirmacion'); }
   get password() { return this.registerForm.get('password'); }
   get confirmPassword() { return this.registerForm.get('confirmPassword'); }
   get carreraId() { return this.registerForm.get('carreraId'); }

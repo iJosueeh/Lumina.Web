@@ -8,6 +8,7 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from './core/auth/interceptors/jwt-interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { httpCacheInterceptor } from './core/interceptors/http-cache.interceptor';
 import { provideLoadingBarRouter } from '@ngx-loading-bar/router';
 
 registerLocaleData(localeEs);
@@ -18,7 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([jwtInterceptor, errorInterceptor])
+      withInterceptors([httpCacheInterceptor, jwtInterceptor, errorInterceptor])
     ),
     provideAnimationsAsync(),
     provideLoadingBarRouter(),

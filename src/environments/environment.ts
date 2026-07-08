@@ -1,14 +1,14 @@
 export const environment = {
   production: false,
-  // Microservicios Backend
-  apiUrl: 'http://localhost:7777/api',              // Usuarios
-  coursesUrl: 'http://localhost:9999/api/cursos',    // Cursos (HTTP)
-  noticiasEventosUrl: 'http://localhost:4444/api',   // NoticiasEventos
-  estudiantesUrl: 'http://localhost:8080/api',       // Estudiantes
-  pedidosUrl: 'http://localhost:3333/api',           // Pedidos
-  carrerasUrl: 'http://localhost:5000/api/carreras', // Carreras
-  docentesUrl: 'http://localhost:8888/api',          // Docentes
-  evaluacionesUrl: 'http://localhost:5555/api',      // Evaluaciones
-  // Frontend Portal
-  portalUrl: 'https://lumina-core-portal.pages.dev/login'
+  // Microservicios Backend via API Gateway (Port 5100)
+  apiUrl: 'http://localhost:5100/usuarios/api',              // Usuarios
+  coursesUrl: 'http://localhost:5100/cursos/api/cursos',    // Cursos
+  noticiasEventosUrl: 'http://localhost:5100/noticias/api',   // NoticiasEventos
+  estudiantesUrl: 'http://localhost:5100/estudiantes/api',       // Estudiantes
+  pedidosUrl: 'http://localhost:5100/pedidos/api',           // Pedidos
+  carrerasUrl: 'http://localhost:5100/carreras/api/carreras', // Carreras
+  docentesUrl: 'http://localhost:5100/docentes/api',          // Docentes
+  evaluacionesUrl: 'http://localhost:5100/evaluaciones/api',      // Evaluaciones
+  // Frontend Portal (localhost para desarrollo)
+  portalUrl: 'http://localhost:4201/login'
 };
