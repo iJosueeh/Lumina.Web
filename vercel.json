@@ -7,35 +7,31 @@
   "rewrites": [
     {
       "source": "/api/usuarios/:path*",
-      "destination": "https://usuarios.lumina.edu/api/:path*"
+      "destination": "https://lumina-usuarios.onrender.com/api/:path*"
     },
     {
       "source": "/api/estudiantes/:path*",
-      "destination": "https://estudiantes.lumina.edu/api/:path*"
+      "destination": "https://lumina-estudiantes.onrender.com/api/:path*"
     },
     {
       "source": "/api/cursos/:path*",
-      "destination": "https://cursos.lumina.edu/api/:path*"
+      "destination": "https://lumina-cursos.onrender.com/api/:path*"
     },
     {
       "source": "/api/evaluaciones/:path*",
-      "destination": "https://evaluaciones.lumina.edu/api/:path*"
+      "destination": "https://lumina-evaluaciones.onrender.com/api/:path*"
     },
     {
       "source": "/api/noticias/:path*",
-      "destination": "https://noticias.lumina.edu/api/:path*"
+      "destination": "https://lumina-noticiaseventos.onrender.com/api/:path*"
     },
     {
       "source": "/api/docentes/:path*",
-      "destination": "https://docentes.lumina.edu/api/:path*"
+      "destination": "https://lumina-docentes.onrender.com/api/:path*"
     },
     {
       "source": "/api/carreras/:path*",
-      "destination": "https://carreras.lumina.edu/api/:path*"
-    },
-    {
-      "source": "/api/pedidos/:path*",
-      "destination": "https://pedidos.lumina.edu/api/:path*"
+      "destination": "https://lumina-carreras.onrender.com/api/:path*"
     }
   ],
   "headers": [
