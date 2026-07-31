@@ -1,0 +1,63 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "angular",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist/plataforma-academica/browser",
+  "installCommand": "pnpm install",
+  "rewrites": [
+    {
+      "source": "/api/usuarios/:path*",
+      "destination": "https://usuarios.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/estudiantes/:path*",
+      "destination": "https://estudiantes.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/cursos/:path*",
+      "destination": "https://cursos.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/evaluaciones/:path*",
+      "destination": "https://evaluaciones.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/noticias/:path*",
+      "destination": "https://noticias.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/docentes/:path*",
+      "destination": "https://docentes.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/carreras/:path*",
+      "destination": "https://carreras.lumina.edu/api/:path*"
+    },
+    {
+      "source": "/api/pedidos/:path*",
+      "destination": "https://pedidos.lumina.edu/api/:path*"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/:path*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type,Authorization,X-Requested-With,Accept"
+        }
+      ]
+    }
+  ],
+  "env": {
+    "NG_BUILD_CONFIGURATION": "production"
+  }
+}
