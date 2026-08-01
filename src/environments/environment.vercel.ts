@@ -13,7 +13,6 @@ export const environment = {
   coursesUrl: '/api/cursos',
   noticiasEventosUrl: '/api/noticias',
   estudiantesUrl: '/api/estudiantes',
-  pedidosUrl: '/api/pedidos',
   carrerasUrl: '/api/carreras',
   docentesUrl: '/api/docentes',
   evaluacionesUrl: '/api/evaluaciones',
