@@ -42,15 +42,15 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
-            },
-            "vercel": {
+              "outputHashing": "all",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.vercel.ts"
                 }
-              ],
+              ]
+            },
+            "vercel": {
               "budgets": [
                 {
                   "type": "initial",
