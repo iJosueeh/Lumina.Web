@@ -18,5 +18,5 @@ export const environment = {
   evaluacionesUrl: '/api/evaluaciones',
   
   // Frontend Portal URL (relative for same-domain)
-  portalUrl: '/login',
+  portalUrl: 'https://lumina-core-portal.vercel.app/login',
 };
