@@ -36,15 +36,15 @@ export class EstudiantesService {
         }
 
         return this.getOrCreateEstudianteId(user.id).pipe(
-            switchMap(estudianteId => {
-                if (!estudianteId) {
-                    return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo obtener tu perfil de estudiante.' });
-                }
-                // Crear inscripción
-                return this.http.post<{ id: string }>(
-                    `${this.apiUrl}/${estudianteId}/inscripciones`,
-                    { cursoId }
-                ).pipe(
+                switchMap(estudianteId => {
+                    if (!estudianteId) {
+                        return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo obtener tu perfil de estudiante.' });
+                    }
+                    // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
+                    return this.http.post<{ id: string }>(
+                        this.apiUrl,
+                        { estudianteId, cursoId }
+                    ).pipe(
                     map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
                     catchError((err: HttpErrorResponse) => {
                         if (err.status === 409) {
