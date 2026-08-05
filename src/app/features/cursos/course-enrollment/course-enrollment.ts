@@ -115,7 +115,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       this.isExistingUser.set(true);
       this.successMessage.set(
         user
-          ? `¡Hola ${user.nombres} ${user.apellidos}! Procesando tu inscripción...`
+          ? `¡Hola ${user.nombre} ${user.apellido}! Procesando tu inscripción...`
           : '¡Bienvenido de vuelta! Procesando tu inscripción...'
       );
       this.loadCursoData(cursoId);
