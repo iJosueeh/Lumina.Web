@@ -31,9 +31,13 @@ export class EstudiantesService {
      */
     enrollInCourse(cursoId: string): Observable<{ enrolled: boolean; alreadyEnrolled: boolean; message: string } | null> {
         const user = this.auth.currentUser();
+        console.log('[enrollInCourse] currentUser:', JSON.stringify(user));
+        console.log('[enrollInCourse] user.id:', user?.id);
         if (!user?.id) {
+            console.warn('[enrollInCourse] ❌ user.id es null/vacío — no se puede inscribir');
             return of(null);
         }
+        console.log('[enrollInCourse] ✅ user.id:', user.id, 'procediendo con enrollment');
 
         return this.getOrCreateEstudianteId(user.id).pipe(
             switchMap(estudianteId => {
