@@ -46,7 +46,7 @@ export class EstudiantesService {
                 }
                 // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
                 return this.http.post<{ id: string }>(
-                    this.apiUrl,
+                    `${this.apiUrl}/inscripciones`,
                     { estudianteId, cursoId }
                 ).pipe(
                     map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
