@@ -7,6 +7,7 @@ import { CursosService } from '@app/core/services/cursos.service';
 import { CourseDetails } from '@app/core/models/course.model';
 import { scrollToTop, markFormGroupTouched } from '@shared/utils/form.utils';
 import { generateSecurePassword } from '@core/utils/password.utils';
+import { environment } from '@environments/environment';
 
 interface EnrollmentStep {
   id: number;
@@ -46,6 +47,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   readonly isExistingUser = signal(false);
   readonly showLoginForm = signal(true);
   readonly isAuthenticating = signal(false);
+  portalUrl = environment.portalUrl;
 
   // ─── Constants ───────────────────────────────────────────
   readonly steps: EnrollmentStep[] = [

@@ -33,6 +33,7 @@ export class RegisterEnrollmentComponent implements OnInit {
   loading = signal(false);
   errorMessage = signal<string | null>(null);
   successMessage = signal<string | null>(null);
+  portalUrl = environment.portalUrl;
   generatedPassword = signal<string | null>(null);
 
   ngOnInit(): void {

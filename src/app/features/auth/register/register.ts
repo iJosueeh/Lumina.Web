@@ -24,6 +24,8 @@ export class Register implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
+  portalUrl = environment.portalUrl;
+
   registerForm: FormGroup;
   hidePassword = signal(true);
   hideConfirmPassword = signal(true);
