@@ -412,47 +412,15 @@ export class CourseEnrollment implements OnInit, OnDestroy {
 
   // ─── Complete Enrollment (Step 1 — ahora obsoleto, legado) ──────────
   completeEnrollment(): void {
-    // Este método ya no se usa para usuarios existentes (se hace en attemptEnrollmentForExistingUser)
-    // pero se mantiene por compatibilidad con el template
+    // El enrollment ya fue procesado:
+    // - Usuarios existentes: attemptEnrollmentForExistingUser() → step 2
+    // - Usuarios nuevos: processRegister() → step 2 (registro + enrollment via backend)
+    // Solo avanzamos al paso final de confirmación
     this.loading.set(true);
-    this.errorMessage.set(null);
-
-    const cursoData = this.curso();
-    if (!cursoData?.id) {
-      this.errorMessage.set('Error: No se encontró información del curso.');
+    setTimeout(() => {
       this.loading.set(false);
-      return;
-    }
-
-    if (this.isExistingUser()) {
-      this.estudiantesService.enrollInCourse(cursoData.id).subscribe({
-        next: (result) => {
-          if (!result) {
-            this.errorMessage.set('No se pudo completar la matrícula. Intenta nuevamente.');
-            this.loading.set(false);
-            return;
-          }
-
-          this.successMessage.set(
-            result.alreadyEnrolled
-              ? 'Ya estabas matriculado en este curso. Puedes ingresar desde tu panel.'
-              : '¡Matrícula completada! Ya tienes acceso al curso en tu cuenta.'
-          );
-          this.loading.set(false);
-          this.goToStep(2);
-        },
-        error: () => {
-          this.errorMessage.set('No se pudo completar la matrícula. Intenta nuevamente.');
-          this.loading.set(false);
-        },
-      });
-      return;
-    }
-
-    // For new users: enrollment was processed during registration
-    this.successMessage.set('¡Matrícula completada! Te enviamos los detalles de acceso a tu correo.');
-    this.loading.set(false);
-    this.goToStep(2);
+      this.goToStep(3);
+    }, 500); // Breve delay para mostrar feedback visual
   }
 
   cancelEnrollment(): void {
