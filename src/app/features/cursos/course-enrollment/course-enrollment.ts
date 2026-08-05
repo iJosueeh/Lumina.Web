@@ -307,6 +307,31 @@ export class CourseEnrollment implements OnInit, OnDestroy {
     this.isAuthenticating.set(true);
     this.errorMessage.set(null);
 
+    const email = this.registerForm.value.correoElectronico!;
+
+    // Pre-check: verificar si el email ya existe antes de intentar registrar
+    this.authService.checkEmail(email).subscribe({
+      next: (emailCheck) => {
+        if (emailCheck.existe) {
+          // El email ya existe → redirigir al tab de login con mensaje
+          this.isAuthenticating.set(false);
+          this.currentStep.set(0); // Volver al tab de login
+          this.selectLoginTab();
+          this.errorMessage.set('Este correo ya tiene una cuenta. Inicia sesión para continuar.');
+          return;
+        }
+        // Email disponible → proseguir con registro
+        this.doRegister();
+      },
+      error: () => {
+        // Si falla el check, proseguir con registro (el backend validará)
+        this.doRegister();
+      }
+    });
+  }
+
+  private doRegister(): void {
+    const email = this.registerForm.value.correoElectronico!;
     let password = this.registerForm.value.password;
     if (!password || password.trim() === '') {
       password = generateSecurePassword();
@@ -318,7 +343,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       nombres: formData.nombres,
       apellidoPaterno: formData.apellidoPaterno,
       apellidoMaterno: formData.apellidoMaterno,
-      correo: formData.correoElectronico,
+      correo: email,
       password,
       carreraId: this.curso()?.id || null,
       fechaNacimiento: formData.fechaNacimiento,
@@ -346,6 +371,8 @@ export class CourseEnrollment implements OnInit, OnDestroy {
         this.isAuthenticating.set(false);
         if (error.status === 400 || error.status === 409) {
           this.errorMessage.set(error.error?.message || 'El correo ya está registrado. Intenta iniciar sesión.');
+          this.currentStep.set(0);
+          this.selectLoginTab();
         } else {
           this.errorMessage.set('Error al crear la cuenta. Por favor intenta nuevamente.');
         }
