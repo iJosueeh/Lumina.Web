@@ -203,9 +203,22 @@
                   [attr.aria-invalid]="loginEmail?.invalid && loginEmail?.touched"
                   [attr.aria-describedby]="loginEmail?.invalid && loginEmail?.touched ? 'loginEmail-error' : null"
                   class="w-full px-4 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-dark-bg dark:text-dark-text transition-colors"
-                  placeholder="tu@correo.com">
+                  placeholder="tu@correo.com"
+                  (blur)="checkEmail()">
                 @if (loginEmail?.invalid && loginEmail?.touched) {
                 <p id="loginEmail-error" class="mt-1 text-sm text-red-600 dark:text-red-400" role="alert">Por favor ingresa un correo válido</p>
+                }
+                @if (emailCheckLoading()) {
+                  <p class="mt-1 text-sm text-blue-600 dark:text-blue-400">Verificando...</p>
+                }
+                @if (emailCheckDone() && !emailCheckLoading()) {
+                  <p class="mt-1 text-sm" [class]="isExistingUser() ? 'text-green-600 dark:text-green-400' : 'text-purple-600 dark:text-purple-400'">
+                    @if (isExistingUser()) {
+                      ✓ Ya tienes cuenta — inicia sesión con tu contraseña
+                    } @else {
+                      ✦ Cuenta nueva — completa el formulario de registro
+                    }
+                  </p>
                 }
               </div>
 
@@ -622,9 +635,9 @@
             class="px-8 py-3 border border-gray-300 dark:border-dark-border text-base font-semibold rounded-lg text-gray-700 dark:text-dark-text bg-white dark:bg-dark-card hover:bg-gray-50 dark:hover:bg-dark-border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             Ver Todos los Cursos
           </a>
-          <a href="{{ portalUrl }}" target="_blank" rel="noopener noreferrer"
+          <a routerLink="/cursos/mis-cursos"
             class="px-8 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            Iniciar Sesión en el Portal
+            Ir a Mis Cursos
           </a>
         </div>
       </section>

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
     EstudianteInfo,
@@ -11,6 +11,7 @@ import {
 } from '../models/estudiante.model';
 import { EnrolledCourse } from '../models/course.model';
 import { ErrorHandlerService } from './error-handler.service';
+import { Auth } from '../auth/services/auth';
 
 @Injectable({
     providedIn: 'root'
@@ -18,27 +19,61 @@ import { ErrorHandlerService } from './error-handler.service';
 export class EstudiantesService {
     private http = inject(HttpClient);
     private errorHandler = inject(ErrorHandlerService);
+    private auth = inject(Auth);
     private apiUrl = environment.estudiantesUrl;
 
     /**
-     * Respuesta estándar para operaciones de matrícula.
+     * Inscribe al estudiante autenticado en un curso.
+     * Flujo: obtener estudianteId por usuarioId → crear estudiante si no existe → POST /estudiantes/{id}/inscripciones
+     * Retorna error con status 409 si ya está inscrito.
      */
     enrollInCourse(cursoId: string): Observable<{ enrolled: boolean; alreadyEnrolled: boolean; message: string } | null> {
-        this.loading.set(true);
-        this.error.set(null);
+        const user = this.auth.currentUser();
+        if (!user?.id) {
+            return of(null);
+        }
 
-        return this.http.post<{ enrolled: boolean; alreadyEnrolled: boolean; message: string }>(
-            `${this.apiUrl}/perfil-estudiante/matricular/${cursoId}`,
-            {}
+        return this.getOrCreateEstudianteId(user.id).pipe(
+            switchMap(estudianteId => {
+                if (!estudianteId) {
+                    return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo obtener tu perfil de estudiante.' });
+                }
+                // Crear inscripción
+                return this.http.post<{ id: string }>(
+                    `${this.apiUrl}/estudiantes/${estudianteId}/inscripciones`,
+                    { cursoId }
+                ).pipe(
+                    map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
+                    catchError((err: HttpErrorResponse) => {
+                        if (err.status === 409) {
+                            return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estás inscrito en este curso' });
+                        }
+                        return throwError(() => err);
+                    })
+                );
+            })
+        );
+    }
+
+    /**
+     * Obtiene el estudianteId para un usuario. Si no existe, lo crea.
+     */
+    private getOrCreateEstudianteId(usuarioId: string): Observable<string | null> {
+        return this.http.get<{ id: string }>(
+            `${this.apiUrl}/estudiantes/by-usuario/${usuarioId}`
         ).pipe(
-            map(response => {
-                this.loading.set(false);
-                return response;
-            }),
-            catchError(error => {
-                this.loading.set(false);
-                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo completar la matrícula');
-                this.error.set(errorInfo);
+            map(e => e.id),
+            catchError((err: HttpErrorResponse) => {
+                if (err.status === 404) {
+                    // Estudiante no existe — crearlo
+                    return this.http.post<{ id: string }>(
+                        `${this.apiUrl}/estudiantes`,
+                        { usuarioId }
+                    ).pipe(
+                        map(created => created.id),
+                        catchError(() => of(null))
+                    );
+                }
                 return of(null);
             })
         );
