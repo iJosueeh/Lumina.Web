@@ -310,12 +310,11 @@ export class CourseEnrollment implements OnInit, OnDestroy {
     const email = this.registerForm.value.correoElectronico!;
 
     // Pre-check: verificar si el email ya existe antes de intentar registrar
-    this.authService.checkEmail(email).subscribe({
-      next: (emailCheck) => {
-        if (emailCheck.existe) {
+    this.authService.verificarUsuarioPorEmail(email).subscribe({
+      next: (exists) => {
+        if (exists) {
           // El email ya existe → redirigir al tab de login con mensaje
           this.isAuthenticating.set(false);
-          this.currentStep.set(0); // Volver al tab de login
           this.selectLoginTab();
           this.errorMessage.set('Este correo ya tiene una cuenta. Inicia sesión para continuar.');
           return;
