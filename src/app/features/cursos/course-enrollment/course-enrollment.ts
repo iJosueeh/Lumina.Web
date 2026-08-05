@@ -102,6 +102,9 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   ngOnInit(): void {
     scrollToTop();
 
+    // Restaurar usuario de localStorage antes de verificar isAuthenticated
+    this.authService.loadCurrentUser();
+
     const cursoId = this.route.snapshot.paramMap.get('id');
     if (!cursoId) {
       this.cursoError.set('No se proporcionó un ID de curso válido.');

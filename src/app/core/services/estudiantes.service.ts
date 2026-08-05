@@ -50,7 +50,7 @@ export class EstudiantesService {
                         if (err.status === 409) {
                             return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estás inscrito en este curso' });
                         }
-                        // Otros errores (404, 400, 500) → no propagar, devolver error capturable
+                        // Otros errores (404, 400, 500) → devolver error capturable
                         return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo completar la inscripción. Intenta nuevamente.' });
                     })
                 );

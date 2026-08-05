@@ -30,6 +30,14 @@ export class Auth {
   private readonly COOKIE_TOKEN_KEY = 'auth_token';
   private readonly GATEWAY_DOMAIN = 'localhost';
 
+  /**
+   * Restaura el usuario desde localStorage.
+   * Llamar en ngOnInit de páginas que dependen de currentUser().
+   */
+  loadCurrentUser(): void {
+    this.loadUserFromStorage();
+  }
+
   constructor() {
     this.loadUserFromStorage();
   }
