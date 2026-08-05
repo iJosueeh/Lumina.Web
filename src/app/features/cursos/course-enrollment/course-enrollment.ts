@@ -98,13 +98,30 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   // ─── Lifecycle ───────────────────────────────────────────
   ngOnInit(): void {
     scrollToTop();
+
     const cursoId = this.route.snapshot.paramMap.get('id');
-    if (cursoId) {
-      this.loadCursoData(cursoId);
-    } else {
+    if (!cursoId) {
       this.cursoError.set('No se proporcionó un ID de curso válido.');
       this.loadingCurso.set(false);
+      return;
     }
+
+    // Si el usuario ya está autenticado, ir directo al paso de inscripción
+    if (this.authService.isAuthenticated()) {
+      const user = this.authService.currentUser();
+      this.isExistingUser.set(true);
+      this.successMessage.set(
+        user
+          ? `¡Hola ${user.fullName || user.email}! Ya tienes una cuenta. Continúa con tu matrícula.`
+          : '¡Bienvenido de vuelta! Continúa con tu matrícula.'
+      );
+      // Cargar igual el curso para tener los datos
+      this.loadCursoData(cursoId);
+      this.goToStep(1);
+      return;
+    }
+
+    this.loadCursoData(cursoId);
   }
 
   ngOnDestroy(): void {
