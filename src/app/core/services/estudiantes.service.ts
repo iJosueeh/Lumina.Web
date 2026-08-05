@@ -44,21 +44,41 @@ export class EstudiantesService {
                 if (!estudianteId) {
                     return of({ enrolled: false, alreadyEnrolled: false, message: 'No se encontró tu perfil de estudiante. Contácta soporte.' });
                 }
-                // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
-                return this.http.post<{ id: string }>(
-                    `${this.apiUrl}/inscripciones`,
-                    { estudianteId, cursoId }
-                ).pipe(
-                    map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
-                    catchError((err: HttpErrorResponse) => {
-                        if (err.status === 409) {
-                            return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estás inscrito en este curso' });
+                // Verificar si ya está inscrito antes de intentar crear
+                return this.verificarInscripcion(estudianteId, cursoId).pipe(
+                    switchMap(yaInscrito => {
+                        if (yaInscrito) {
+                            return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estás inscrito en este curso.' });
                         }
-                        // Otros errores (404, 400, 500) → devolver error capturable
-                        return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo completar la inscripción. Intenta nuevamente.' });
+                        // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
+                        return this.http.post<{ id: string }>(
+                            `${this.apiUrl}/inscripciones`,
+                            { estudianteId, cursoId }
+                        ).pipe(
+                            map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
+                            catchError((err: HttpErrorResponse) => {
+                                if (err.status === 409) {
+                                    return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estás inscrito en este curso' });
+                                }
+                                return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo completar la inscripción. Intenta nuevamente.' });
+                            })
+                        );
                     })
                 );
             })
+        );
+    }
+
+    /**
+     * Verifica si el estudiante ya está inscrito en un curso.
+     */
+    verificarInscripcion(estudianteId: string, cursoId: string): Observable<boolean> {
+        return this.http.get<{ inscrito: boolean }>(
+            `${this.apiUrl}/inscripciones/verificar`,
+            { params: { estudianteId, cursoId } }
+        ).pipe(
+            map(r => r.inscrito),
+            catchError(() => of(false))
         );
     }
 

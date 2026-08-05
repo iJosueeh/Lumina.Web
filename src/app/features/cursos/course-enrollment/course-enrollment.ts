@@ -281,8 +281,8 @@ export class CourseEnrollment implements OnInit, OnDestroy {
           this.successMessage.set('¡Inscripción completada! Ya tienes acceso al curso.');
           this.goToStep(2);
         } else if (result.alreadyEnrolled) {
-          this.successMessage.set('Ya estás inscrito en este curso.');
-          this.goToStep(2);
+          this.successMessage.set('Ya estás inscrito en este curso. Puedes acceder desde tu portal.');
+          this.goToStep(3); // Ir directo al paso final con opción de ir al portal
         } else {
           // Falló silenciosamente (estudiante no existe, etc.)
           this.errorMessage.set(result.message || 'No se pudo completar la inscripción. Intenta nuevamente.');
