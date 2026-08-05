@@ -423,6 +423,12 @@ export class CourseEnrollment implements OnInit, OnDestroy {
     }, 500); // Breve delay para mostrar feedback visual
   }
 
+  goToStudentCourses(): void {
+    const portalBase = this.portalUrl.replace('/login', '');
+    const returnUrl = encodeURIComponent('/student/courses');
+    window.location.href = `${portalBase}/login?returnUrl=${returnUrl}`;
+  }
+
   cancelEnrollment(): void {
     if (confirm('¿Estás seguro de que deseas cancelar la matrícula?')) {
       this.router.navigate(['/cursos', this.curso()?.id]);
