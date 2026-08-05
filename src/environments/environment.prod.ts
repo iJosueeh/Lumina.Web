@@ -5,5 +5,5 @@ export const environment = {
   noticiasEventosUrl: 'https://lumina-noticiaseventos.onrender.com/api/noticias',
   estudiantesUrl: 'https://lumina-estudiantes.onrender.com/api',
   carrerasUrl: 'https://lumina-carreras.onrender.com/api/carreras',
-  portalUrl: 'https://lumina-core-portal.pages.dev/login'
+  portalUrl: 'https://lumina-core-portal.vercel.app/login'
 };
