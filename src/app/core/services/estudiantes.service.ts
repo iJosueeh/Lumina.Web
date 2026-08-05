@@ -20,11 +20,13 @@ export class EstudiantesService {
     private http = inject(HttpClient);
     private errorHandler = inject(ErrorHandlerService);
     private auth = inject(Auth);
+    // estudiantesUrl ya incluye /estudiantes/api (localhost) o /api/estudiantes (vercel)
+    // Los endpoints del controller son relativos a /api/estudiantes
     private apiUrl = environment.estudiantesUrl;
 
     /**
      * Inscribe al estudiante autenticado en un curso.
-     * Flujo: obtener estudianteId por usuarioId → crear estudiante si no existe → POST /estudiantes/{id}/inscripciones
+     * Flujo: obtener estudianteId por usuarioId → crear estudiante si no existe → POST /{id}/inscripciones
      * Retorna error con status 409 si ya está inscrito.
      */
     enrollInCourse(cursoId: string): Observable<{ enrolled: boolean; alreadyEnrolled: boolean; message: string } | null> {
@@ -40,7 +42,7 @@ export class EstudiantesService {
                 }
                 // Crear inscripción
                 return this.http.post<{ id: string }>(
-                    `${this.apiUrl}/estudiantes/${estudianteId}/inscripciones`,
+                    `${this.apiUrl}/${estudianteId}/inscripciones`,
                     { cursoId }
                 ).pipe(
                     map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
@@ -60,14 +62,13 @@ export class EstudiantesService {
      */
     private getOrCreateEstudianteId(usuarioId: string): Observable<string | null> {
         return this.http.get<{ id: string }>(
-            `${this.apiUrl}/estudiantes/by-usuario/${usuarioId}`
+            `${this.apiUrl}/by-usuario/${usuarioId}`
         ).pipe(
             map(e => e.id),
             catchError((err: HttpErrorResponse) => {
                 if (err.status === 404) {
-                    // Estudiante no existe — crearlo
                     return this.http.post<{ id: string }>(
-                        `${this.apiUrl}/estudiantes`,
+                        `${this.apiUrl}`,
                         { usuarioId }
                     ).pipe(
                         map(created => created.id),
@@ -89,8 +90,8 @@ export class EstudiantesService {
     getEstudianteInfo(id: string): Observable<EstudianteInfo | null> {
         this.loading.set(true);
         this.error.set(null);
-        
-        return this.http.get<EstudianteInfo>(`${this.apiUrl}/estudiantes/${id}`).pipe(
+
+        return this.http.get<EstudianteInfo>(`${this.apiUrl}/${id}`).pipe(
             map(info => {
                 this.loading.set(false);
                 return info;
@@ -110,8 +111,8 @@ export class EstudiantesService {
     getMatriculas(estudianteId: string): Observable<Matricula[]> {
         this.loading.set(true);
         this.error.set(null);
-        
-        return this.http.get<Matricula[]>(`${this.apiUrl}/estudiantes/${estudianteId}/matriculas`).pipe(
+
+        return this.http.get<Matricula[]>(`${this.apiUrl}/${estudianteId}/matriculas`).pipe(
             map(matriculas => {
                 this.loading.set(false);
                 return matriculas;
@@ -131,9 +132,9 @@ export class EstudiantesService {
     getProgreso(estudianteId: string, cursoId: string): Observable<Progreso | null> {
         this.loading.set(true);
         this.error.set(null);
-        
+
         return this.http.get<Progreso>(
-            `${this.apiUrl}/estudiantes/${estudianteId}/progreso/${cursoId}`
+            `${this.apiUrl}/${estudianteId}/progreso/${cursoId}`
         ).pipe(
             map(progreso => {
                 this.loading.set(false);
@@ -154,8 +155,8 @@ export class EstudiantesService {
     getCursosMatriculados(estudianteId: string): Observable<EnrolledCourse[]> {
         this.loading.set(true);
         this.error.set(null);
-        
-        return this.http.get<any[]>(`${this.apiUrl}/estudiantes/${estudianteId}/cursos-matriculados`).pipe(
+
+        return this.http.get<any[]>(`${this.apiUrl}/${estudianteId}/cursos-matriculados`).pipe(
             map(cursos => {
                 this.loading.set(false);
                 return cursos;
@@ -172,9 +173,9 @@ export class EstudiantesService {
     getDashboardStats(estudianteId: string): Observable<DashboardStats> {
         this.loading.set(true);
         this.error.set(null);
-        
+
         return this.http.get<DashboardStats>(
-            `${this.apiUrl}/estudiantes/${estudianteId}/dashboard-stats`
+            `${this.apiUrl}/${estudianteId}/dashboard-stats`
         ).pipe(
             map(stats => {
                 this.loading.set(false);
@@ -206,9 +207,9 @@ export class EstudiantesService {
     ): Observable<void | null> {
         this.loading.set(true);
         this.error.set(null);
-        
+
         return this.http.post<void>(
-            `${this.apiUrl}/estudiantes/${estudianteId}/cursos/${cursoId}/lecciones/${leccionId}/completar`,
+            `${this.apiUrl}/${estudianteId}/cursos/${cursoId}/lecciones/${leccionId}/completar`,
             {}
         ).pipe(
             map(response => {
@@ -230,8 +231,8 @@ export class EstudiantesService {
     getHistorialAcademico(estudianteId: string): Observable<any> {
         this.loading.set(true);
         this.error.set(null);
-        
-        return this.http.get(`${this.apiUrl}/estudiantes/${estudianteId}/historial`).pipe(
+
+        return this.http.get(`${this.apiUrl}/${estudianteId}/historial`).pipe(
             map(historial => {
                 this.loading.set(false);
                 return historial;
@@ -251,9 +252,9 @@ export class EstudiantesService {
     actualizarPerfil(estudianteId: string, data: Partial<EstudianteInfo>): Observable<EstudianteInfo | null> {
         this.loading.set(true);
         this.error.set(null);
-        
+
         return this.http.put<EstudianteInfo>(
-            `${this.apiUrl}/estudiantes/${estudianteId}`,
+            `${this.apiUrl}/${estudianteId}`,
             data
         ).pipe(
             map(perfil => {
