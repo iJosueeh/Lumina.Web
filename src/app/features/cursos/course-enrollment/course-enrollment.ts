@@ -215,7 +215,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
           this.selectLoginTab();
         } else {
           this.isExistingUser.set(false);
-          this.selectRegisterTab();
+          // Don't auto-switch to register — let user decide
         }
       },
       error: () => {
