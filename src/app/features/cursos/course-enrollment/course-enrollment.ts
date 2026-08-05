@@ -279,10 +279,10 @@ export class CourseEnrollment implements OnInit, OnDestroy {
         this.loading.set(false);
         if (!result || result.enrolled) {
           this.successMessage.set('¡Inscripción completada! Ya tienes acceso al curso.');
-          this.goToStep(2);
+          setTimeout(() => this.goToStep(2), 1500);
         } else if (result.alreadyEnrolled) {
           this.successMessage.set('Ya estás inscrito en este curso. Puedes acceder desde tu portal.');
-          this.goToStep(3); // Ir directo al paso final con opción de ir al portal
+          setTimeout(() => this.goToStep(3), 1500);
         } else {
           // Falló silenciosamente (estudiante no existe, etc.)
           this.errorMessage.set(result.message || 'No se pudo completar la inscripción. Intenta nuevamente.');
@@ -365,7 +365,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
         );
         this.isAuthenticating.set(false);
         // El backend ya creó inscripcion + matricula → ir directo a confirmación
-        this.goToStep(2);
+        setTimeout(() => this.goToStep(2), 1500);
       },
       error: (error) => {
         this.isAuthenticating.set(false);
