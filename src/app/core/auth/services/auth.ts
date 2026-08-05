@@ -130,7 +130,7 @@ export class Auth {
     return this.http.get<VerificarUsuarioResponse>(
       `${environment.apiUrl}/usuarios/check-email?email=${encodeURIComponent(email)}`
     ).pipe(
-      map(response => response.existe),
+      map(response => response.exists?.existe ?? false),
       catchError(error => {
         console.error('Error al verificar usuario:', error);
         return of(false);

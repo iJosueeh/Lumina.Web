@@ -35,8 +35,10 @@ export interface RegisterWithEnrollmentResponse {
 
 // Response para verificación de usuario por correo
 export interface VerificarUsuarioResponse {
-    existe: boolean;
-    mensaje?: string;
+    exists: {
+        existe: boolean;
+        mensaje?: string;
+    };
 }
 
 // Request para login con matrícula
