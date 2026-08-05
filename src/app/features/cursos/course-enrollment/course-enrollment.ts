@@ -272,26 +272,22 @@ export class CourseEnrollment implements OnInit, OnDestroy {
     this.estudiantesService.enrollInCourse(cursoData.id).subscribe({
       next: (result) => {
         this.loading.set(false);
-        if (!result) {
-          this.errorMessage.set('No se pudo completar la inscripción. Intenta nuevamente.');
-          return;
-        }
-
-        if (result.alreadyEnrolled) {
-          this.successMessage.set('Ya estás inscrito en este curso.');
-        } else {
+        if (!result || result.enrolled) {
           this.successMessage.set('¡Inscripción completada! Ya tienes acceso al curso.');
-        }
-        this.goToStep(2);
-      },
-      error: (err) => {
-        this.loading.set(false);
-        if (err.status === 409) {
+          this.goToStep(2);
+        } else if (result.alreadyEnrolled) {
           this.successMessage.set('Ya estás inscrito en este curso.');
           this.goToStep(2);
         } else {
-          this.errorMessage.set('No se pudo completar la inscripción. Intenta nuevamente.');
+          // Falló silenciosamente (estudiante no existe, etc.)
+          this.errorMessage.set(result.message || 'No se pudo completar la inscripción. Intenta nuevamente.');
         }
+      },
+      error: (err) => {
+        this.loading.set(false);
+        // El servicio ya no lanza errores, devuelve {enrolled: false, ...}
+        //所以 err viene del login, no del enrollment
+        this.errorMessage.set('No se pudo completar la inscripción. Intenta nuevamente.');
       },
     });
   }

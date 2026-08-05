@@ -36,21 +36,22 @@ export class EstudiantesService {
         }
 
         return this.getOrCreateEstudianteId(user.id).pipe(
-                switchMap(estudianteId => {
-                    if (!estudianteId) {
-                        return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo obtener tu perfil de estudiante.' });
-                    }
-                    // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
-                    return this.http.post<{ id: string }>(
-                        this.apiUrl,
-                        { estudianteId, cursoId }
-                    ).pipe(
+            switchMap(estudianteId => {
+                if (!estudianteId) {
+                    return of({ enrolled: false, alreadyEnrolled: false, message: 'No se encontró tu perfil de estudiante. Contácta soporte.' });
+                }
+                // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
+                return this.http.post<{ id: string }>(
+                    this.apiUrl,
+                    { estudianteId, cursoId }
+                ).pipe(
                     map(() => ({ enrolled: true, alreadyEnrolled: false, message: 'Inscripción completada' })),
                     catchError((err: HttpErrorResponse) => {
                         if (err.status === 409) {
                             return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estás inscrito en este curso' });
                         }
-                        return throwError(() => err);
+                        // Otros errores (404, 400, 500) → no propagar, devolver error capturable
+                        return of({ enrolled: false, alreadyEnrolled: false, message: 'No se pudo completar la inscripción. Intenta nuevamente.' });
                     })
                 );
             })
@@ -67,8 +68,10 @@ export class EstudiantesService {
             map(e => e.id),
             catchError((err: HttpErrorResponse) => {
                 if (err.status === 404) {
+                    // Estudiante no existe → intentar crearlo
+                    // Silencioso: si falla, regresamos null y el enrollment fallará limpiamente
                     return this.http.post<{ id: string }>(
-                        `${this.apiUrl}`,
+                        this.apiUrl,
                         { usuarioId }
                     ).pipe(
                         map(created => created.id),
