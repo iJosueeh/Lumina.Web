@@ -183,12 +183,14 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   }
 
   selectLoginTab(): void {
+    this.enrollmentAttempted.set(false);
     this.showLoginForm.set(true);
     this.errorMessage.set(null);
     this.successMessage.set(null);
   }
 
   selectRegisterTab(): void {
+    this.enrollmentAttempted.set(false);
     this.showLoginForm.set(false);
     this.errorMessage.set(null);
     this.successMessage.set(null);
@@ -380,6 +382,9 @@ export class CourseEnrollment implements OnInit, OnDestroy {
 
   // ─── Step Navigation ─────────────────────────────────────
   private goToStep(step: number): void {
+    if (step === 0) {
+      this.enrollmentAttempted.set(false);
+    }
     this.currentStep.set(step);
     scrollToTop();
   }
