@@ -12,5 +12,4 @@ export * from './login-request';
 export * from './register-request';
 export * from './nav-item';
 export * from './contact-info';
-export * from './carrera';
 export * from './user';
