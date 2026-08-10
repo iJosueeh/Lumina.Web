@@ -126,15 +126,15 @@
                 <div class="sticky top-24">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text">Próximos Eventos</h2>
-                        <a href="#" class="text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm">
-                            Ver calendario
+                        <a routerLink="/noticias-eventos" class="text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm">
+                            Ver todos
                         </a>
                     </div>
 
                     <div class="space-y-4 mb-6">
                         @for (evento of eventos; track evento.id) {
-                        <div
-                            class="bg-white dark:bg-dark-card rounded-lg p-4 border border-gray-200 dark:border-dark-border hover:shadow-md transition-shadow">
+                        <a [routerLink]="['/eventos', evento.id]"
+                            class="block bg-white dark:bg-dark-card rounded-lg p-4 border border-gray-200 dark:border-dark-border hover:shadow-md transition-shadow cursor-pointer">
                             <div class="flex gap-4">
                                 <!-- Date Badge -->
                                 <div class="flex-shrink-0">
@@ -166,20 +166,15 @@
                                         {{ evento.tipo }}
                                     </div>
 
-                                    @if (evento.botonTipo === 'primary') {
-                                    <button
-                                        class="w-full px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded hover:bg-blue-700 transition-colors">
-                                        {{ evento.botonTexto }}
-                                    </button>
-                                    } @else {
-                                    <button
-                                        class="w-full px-3 py-1.5 bg-white text-gray-700 text-xs font-semibold rounded border border-gray-300 hover:bg-gray-50 transition-colors">
-                                        {{ evento.botonTexto }}
-                                    </button>
-                                    }
+                                    <span class="inline-flex items-center text-blue-600 text-xs font-semibold">
+                                        Ver detalles
+                                        <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                        </svg>
+                                    </span>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         }
                     </div>
 

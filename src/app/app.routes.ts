@@ -44,6 +44,12 @@ export const routes: Routes = [
         title: 'Noticia - Lumina'
     },
     {
+        path: 'eventos/:id',
+        loadComponent: () =>
+            import('./features/noticias-eventos/evento-detalle/evento-detalle').then(m => m.EventoDetalleComponent),
+        title: 'Evento - Lumina'
+    },
+    {
         path: 'cursos',
         loadComponent: () =>
             import('./features/cursos/course-list/course-list').then(m => m.CourseList),

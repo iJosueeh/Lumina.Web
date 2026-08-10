@@ -36,6 +36,24 @@ export class EventosService {
         );
     }
 
+    getEventoById(id: string): Observable<EventoProximo | null> {
+        this.loading.set(true);
+        this.error.set(null);
+
+        return this.http.get<EventoProximo>(`${this.apiUrl}/${id}`).pipe(
+            map(evento => {
+                this.loading.set(false);
+                return evento;
+            }),
+            catchError(error => {
+                this.loading.set(false);
+                const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar el evento');
+                this.error.set(errorInfo);
+                return of(null);
+            })
+        );
+    }
+
     /**
      * Limpia el estado de error
      */
