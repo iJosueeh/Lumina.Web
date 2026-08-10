@@ -85,12 +85,14 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-4">
+                @if (evento.botonTexto && evento.botonTexto !== 'VER DETALLES') {
                 <button
                     [class]="evento.botonTipo === 'primary'
                         ? 'px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors'
                         : 'px-8 py-3 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors'">
-                    {{ evento.botonTexto || 'Más información' }}
+                    {{ evento.botonTexto }}
                 </button>
+                }
                 <button (click)="compartir()" class="px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
