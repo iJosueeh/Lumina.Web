@@ -10,7 +10,7 @@ export const environment = {
   // Relative URLs - proxied via vercel.json rewrites
   apiUrl: '/api/usuarios',
   coursesUrl: '/api/cursos',
-  noticiasEventosUrl: '/api/noticias',
+  noticiasEventosUrl: '/api',
   estudiantesUrl: '/api/estudiantes',
   carrerasUrl: '/api/carreras',
   portalUrl: 'https://lumina-core-portal.vercel.app/login',
