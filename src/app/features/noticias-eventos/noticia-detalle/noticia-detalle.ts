@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NoticiasService } from '../services/noticias.service';
 import { Noticia } from '../../../core/models/noticia';
@@ -7,7 +7,7 @@ import { Noticia } from '../../../core/models/noticia';
 @Component({
     selector: 'app-noticia-detalle',
     standalone: true,
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink, DatePipe],
     templateUrl: './noticia-detalle.html',
 })
 export class NoticiaDetalleComponent implements OnInit {

@@ -1,12 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventosService } from '../services/eventos.service';
 
 @Component({
     selector: 'app-evento-detalle',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, DatePipe],
     templateUrl: './evento-detalle.html',
 })
 export class EventoDetalleComponent implements OnInit {

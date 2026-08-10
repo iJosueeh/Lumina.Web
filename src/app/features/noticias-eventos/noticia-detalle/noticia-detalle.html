@@ -56,7 +56,7 @@
                     <div>
                         <p class="font-semibold text-gray-900">{{ noticia.autor }}</p>
                         <p class="text-sm text-gray-600">
-                            {{ noticia.fecha }}
+                            {{ noticia.fecha | date:'longDate' }}
                             @if (noticia.tiempoLectura) {
                             · {{ noticia.tiempoLectura }} de lectura
                             }
@@ -175,7 +175,7 @@
                         </span>
                     </div>
                     <div class="p-5">
-                        <p class="text-sm text-gray-500 mb-2">{{ noticiaRel.fecha }}</p>
+                        <p class="text-sm text-gray-500 mb-2">{{ noticiaRel.fecha | date:'longDate' }}</p>
                         <h3 class="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
                             {{ noticiaRel.titulo }}
                         </h3>

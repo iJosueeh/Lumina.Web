@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Noticia } from '../../core/models/noticia';
@@ -11,7 +11,7 @@ import { EventosService } from './services/eventos.service';
 @Component({
     selector: 'app-noticias-eventos',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterLink],
+    imports: [CommonModule, FormsModule, RouterLink, DatePipe],
     templateUrl: './noticias-eventos.html',
 })
 export class NoticiasEventos implements OnInit {
