@@ -20,6 +20,7 @@ export class EstudiantesService {
     private http = inject(HttpClient);
     private errorHandler = inject(ErrorHandlerService);
     private auth = inject(Auth);
+    // estudiantesUrl ya incluye /estudiantes/api (localhost) o /api/estudiantes (vercel)
     private apiUrl = environment.estudiantesUrl;
 
     /**
@@ -42,7 +43,9 @@ export class EstudiantesService {
     }
 
     /**
+     * Inscribe al estudiante autenticado en un curso.
      * Flujo: verificar usuario existe -> obtener estudianteId -> crear si no existe -> POST /inscripciones
+     * Retorna error con status 409 si ya esta inscrito.
      */
     enrollInCourse(cursoId: string): Observable<{ enrolled: boolean; alreadyEnrolled: boolean; message: string } | null> {
         const user = this.auth.currentUser();
@@ -50,6 +53,7 @@ export class EstudiantesService {
             return of(null);
         }
 
+        // Verificar que el usuario aun existe antes de intentar inscribir
         return this.verificarUsuarioExiste(user.id).pipe(
             switchMap(existe => {
                 if (!existe) {
@@ -60,11 +64,13 @@ export class EstudiantesService {
                         if (!estudianteId) {
                             return of({ enrolled: false, alreadyEnrolled: false, message: 'No se encontro tu perfil de estudiante. Contacta soporte.' });
                         }
+                        // Verificar si ya esta inscrito antes de intentar crear
                         return this.verificarInscripcion(estudianteId, cursoId).pipe(
                             switchMap(yaInscrito => {
                                 if (yaInscrito) {
                                     return of({ enrolled: false, alreadyEnrolled: true, message: 'Ya estas inscrito en este curso.' });
                                 }
+                                // POST /api/estudiantes/inscripciones { estudianteId, cursoId }
                                 return this.http.post<{ id: string }>(
                                     `${this.apiUrl}/inscripciones`,
                                     { estudianteId, cursoId }
@@ -108,6 +114,7 @@ export class EstudiantesService {
             map(e => e.id),
             catchError((err: HttpErrorResponse) => {
                 if (err.status === 404) {
+                    // Estudiante no existe -> intentar crearlo
                     return this.http.post<{ id: string }>(
                         this.apiUrl,
                         { usuarioId }
@@ -121,9 +128,13 @@ export class EstudiantesService {
         );
     }
 
+    // Estados de carga y error
     loading = signal(false);
     error = signal<{ isError: boolean; message: string } | null>(null);
 
+    /**
+     * Obtiene la informacion del estudiante actual
+     */
     getEstudianteInfo(id: string): Observable<EstudianteInfo | null> {
         this.loading.set(true);
         this.error.set(null);
@@ -142,6 +153,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Obtiene todas las matriculas del estudiante
+     */
     getMatriculas(estudianteId: string): Observable<Matricula[]> {
         this.loading.set(true);
         this.error.set(null);
@@ -160,6 +174,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Obtiene el progreso del estudiante en un curso especifico
+     */
     getProgreso(estudianteId: string, cursoId: string): Observable<Progreso | null> {
         this.loading.set(true);
         this.error.set(null);
@@ -180,6 +197,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Obtiene los cursos matriculados con informacion completa
+     */
     getCursosMatriculados(estudianteId: string): Observable<EnrolledCourse[]> {
         this.loading.set(true);
         this.error.set(null);
@@ -198,6 +218,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Obtiene estadisticas del dashboard del estudiante
+     */
     getDashboardStats(estudianteId: string): Observable<DashboardStats> {
         this.loading.set(true);
         this.error.set(null);
@@ -225,6 +248,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Marca una leccion como completada
+     */
     marcarLeccionCompletada(
         estudianteId: string,
         cursoId: string,
@@ -250,6 +276,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Obtiene el historial academico completo
+     */
     getHistorialAcademico(estudianteId: string): Observable<any> {
         this.loading.set(true);
         this.error.set(null);
@@ -268,6 +297,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Actualiza el perfil del estudiante
+     */
     actualizarPerfil(estudianteId: string, data: Partial<EstudianteInfo>): Observable<EstudianteInfo | null> {
         this.loading.set(true);
         this.error.set(null);
@@ -289,6 +321,9 @@ export class EstudiantesService {
         );
     }
 
+    /**
+     * Limpia el estado de error
+     */
     clearError(): void {
         this.error.set(null);
     }
