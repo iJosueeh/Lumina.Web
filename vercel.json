@@ -23,11 +23,23 @@
     },
     {
       "source": "/api/usuarios/:path*",
-      "destination": "https://lumina-usuarios.onrender.com/api/:path*"
+      "destination": "https://lumina-usuarios.onrender.com/api/usuarios/:path*"
+    },
+    {
+      "source": "/api/system-settings/:path*",
+      "destination": "https://lumina-usuarios.onrender.com/api/system-settings/:path*"
     },
     {
       "source": "/api/estudiantes/:path*",
       "destination": "https://lumina-estudiantes.onrender.com/api/estudiantes/:path*"
+    },
+    {
+      "source": "/api/matricula/:path*",
+      "destination": "https://lumina-estudiantes.onrender.com/api/matricula/:path*"
+    },
+    {
+      "source": "/api/programaciones/:path*",
+      "destination": "https://lumina-estudiantes.onrender.com/api/programaciones/:path*"
     },
     {
       "source": "/api/docentes/:path*",
