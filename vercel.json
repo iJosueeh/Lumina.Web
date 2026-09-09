@@ -22,6 +22,14 @@
       "destination": "https://lumina-usuarios.onrender.com/api/auth/:path*"
     },
     {
+      "source": "/api/usuarios/auth/:path*",
+      "destination": "https://lumina-usuarios.onrender.com/api/auth/:path*"
+    },
+    {
+      "source": "/api/usuarios/usuarios/:path*",
+      "destination": "https://lumina-usuarios.onrender.com/api/usuarios/:path*"
+    },
+    {
       "source": "/api/usuarios/:path*",
       "destination": "https://lumina-usuarios.onrender.com/api/usuarios/:path*"
     },

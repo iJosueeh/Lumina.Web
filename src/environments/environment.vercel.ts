@@ -8,7 +8,7 @@ export const environment = {
   production: true,
 
   // Relative URLs - proxied via vercel.json rewrites
-  apiUrl: '/api/usuarios',
+  apiUrl: '/api',
   coursesUrl: '/api/cursos',
   noticiasEventosUrl: '/api',
   estudiantesUrl: '/api/estudiantes',
