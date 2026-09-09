@@ -34,6 +34,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             errorMessage = error.error?.message || 'Solicitud inválida';
             break;
           case 401:
+            // Si el error 401 proviene de un intento de login/autenticación, NO redirigir a /login ni limpiar tokens
+            // Permitir que el componente capture el error y muestre la notificación de credenciales incorrectas
+            if (
+              req.url.includes('/auth/login') ||
+              req.url.includes('/auth/register') ||
+              req.url.includes('/auth/register-with-enrollment') ||
+              req.url.includes('/login') ||
+              req.url.includes('/usuarios/check-email') ||
+              req.url.includes('/check-email')
+            ) {
+              errorMessage = error.error?.message || error.error?.detail || 'Credenciales incorrectas. Verifica tu email y contraseña.';
+              break;
+            }
             errorMessage = 'Sesión expirada. Por favor, inicia sesión nuevamente.';
             localStorage.removeItem('token');
             localStorage.removeItem('refreshToken');

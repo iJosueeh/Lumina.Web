@@ -191,7 +191,19 @@
           <!-- Panel de Login -->
           @if (showLoginForm()) {
           <div id="panel-login" role="tabpanel" [attr.aria-labelledby]="'tab-login'" class="pt-6 animate-fadeIn" tabindex="0">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text mb-6">Inicia Sesión</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text mb-4">Inicia Sesión</h2>
+
+            @if (errorMessage()) {
+            <div class="mb-5 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-4 shadow-sm" role="alert">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <p class="text-sm font-medium text-red-800 dark:text-red-300 leading-snug">{{ errorMessage() }}</p>
+              </div>
+            </div>
+            }
+
             <form [formGroup]="loginForm" (ngSubmit)="processLogin()" class="space-y-6" novalidate>
               <div>
                 <label for="loginEmail" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -270,7 +282,19 @@
           <!-- Panel de Registro -->
           @if (!showLoginForm()) {
           <div id="panel-register" role="tabpanel" [attr.aria-labelledby]="'tab-register'" class="pt-6 animate-fadeIn" tabindex="0">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text mb-6">Crea tu Cuenta</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-dark-text mb-4">Crea tu Cuenta</h2>
+
+            @if (errorMessage()) {
+            <div class="mb-5 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 p-4 shadow-sm" role="alert">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 flex items-center justify-center shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                </div>
+                <p class="text-sm font-medium text-red-800 dark:text-red-300 leading-snug">{{ errorMessage() }}</p>
+              </div>
+            </div>
+            }
+
             <form [formGroup]="registerForm" (ngSubmit)="processRegister()" class="space-y-6" novalidate>
               <!-- Nombres -->
               <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

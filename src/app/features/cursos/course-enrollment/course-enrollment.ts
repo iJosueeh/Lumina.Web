@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Auth } from '@app/core/auth/services/auth';
@@ -8,6 +8,7 @@ import { CourseDetails } from '@app/core/models/course.model';
 import { scrollToTop, markFormGroupTouched } from '@shared/utils/form.utils';
 import { generateSecurePassword } from '@core/utils/password.utils';
 import { environment } from '@environments/environment';
+import { ErrorHandlerService } from '@app/core/services/error-handler.service';
 
 interface EnrollmentStep {
   id: number;
@@ -32,6 +33,8 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   private authService = inject(Auth);
   private estudiantesService = inject(EstudiantesService);
   private cursosService = inject(CursosService);
+  private errorHandler = inject(ErrorHandlerService);
+  private cdr = inject(ChangeDetectorRef);
 
   // ─── State ───────────────────────────────────────────────
   readonly currentStep = signal(0);
@@ -215,12 +218,13 @@ export class CourseEnrollment implements OnInit, OnDestroy {
           this.selectLoginTab();
         } else {
           this.isExistingUser.set(false);
-          // Don't auto-switch to register — let user decide
         }
+        this.cdr.markForCheck();
       },
       error: () => {
         this.emailCheckLoading.set(false);
         this.emailCheckDone.set(true);
+        this.cdr.markForCheck();
       },
     });
   }
@@ -229,7 +233,10 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   processLogin(): void {
     if (!this.loginForm.valid) {
       markFormGroupTouched(this.loginForm);
-      this.errorMessage.set('Por favor completa todos los campos.');
+      const msg = 'Por favor completa tu correo y contraseña.';
+      this.errorMessage.set(msg);
+      this.errorHandler.showWarningNotification(msg);
+      this.cdr.markForCheck();
       return;
     }
 
@@ -242,17 +249,24 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       next: () => {
         this.isExistingUser.set(true);
         this.isAuthenticating.set(false);
+        this.cdr.markForCheck();
         this.attemptEnrollmentForExistingUser();
       },
       error: (error) => {
         this.isAuthenticating.set(false);
+        let msg = 'Error al iniciar sesión. Por favor intenta nuevamente.';
         if (error.status === 401) {
-          this.errorMessage.set('Credenciales incorrectas. Verifica tu email y contraseña.');
+          msg = 'Credenciales incorrectas. Verifica tu correo y contraseña.';
         } else if (error.status === 404) {
-          this.errorMessage.set('No existe una cuenta con este correo. ¿Deseas crear una?');
-        } else {
-          this.errorMessage.set('Error al iniciar sesión. Por favor intenta nuevamente.');
+          msg = 'No existe una cuenta con este correo. Puedes crear una nueva en la pestaña "Crear Cuenta".';
+        } else if (error.error?.message) {
+          msg = error.error.message;
+        } else if (error.error?.detail) {
+          msg = error.error.detail;
         }
+        this.errorMessage.set(msg);
+        this.errorHandler.showErrorNotification(msg, 6000);
+        this.cdr.markForCheck();
       },
     });
   }
@@ -268,6 +282,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
     const cursoData = this.curso();
     if (!cursoData?.id) {
       this.errorMessage.set('No se encontró información del curso.');
+      this.cdr.markForCheck();
       return;
     }
 
@@ -279,20 +294,25 @@ export class CourseEnrollment implements OnInit, OnDestroy {
         this.loading.set(false);
         if (!result || result.enrolled) {
           this.successMessage.set('¡Inscripción completada! Ya tienes acceso al curso.');
+          this.errorHandler.showSuccessNotification('¡Inscripción completada exitosamente!');
           setTimeout(() => this.goToStep(2), 1500);
         } else if (result.alreadyEnrolled) {
           this.successMessage.set('Ya estás inscrito en este curso. Puedes acceder desde tu portal.');
-          setTimeout(() => this.goToStep(3), 1500);
+          this.errorHandler.showSuccessNotification('Ya estás matriculado en este curso.');
+          setTimeout(() => this.goToStep(2), 1500);
         } else {
-          // Falló silenciosamente (estudiante no existe, etc.)
-          this.errorMessage.set(result.message || 'No se pudo completar la inscripción. Intenta nuevamente.');
+          const msg = result.message || 'No se pudo completar la inscripción. Intenta nuevamente.';
+          this.errorMessage.set(msg);
+          this.errorHandler.showErrorNotification(msg);
         }
+        this.cdr.markForCheck();
       },
       error: (err) => {
         this.loading.set(false);
-        // El servicio ya no lanza errores, devuelve {enrolled: false, ...}
-        //所以 err viene del login, no del enrollment
-        this.errorMessage.set('No se pudo completar la inscripción. Intenta nuevamente.');
+        const msg = 'No se pudo completar la inscripción. Intenta nuevamente.';
+        this.errorMessage.set(msg);
+        this.errorHandler.showErrorNotification(msg);
+        this.cdr.markForCheck();
       },
     });
   }
@@ -301,7 +321,10 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   processRegister(): void {
     if (!this.registerForm.valid) {
       markFormGroupTouched(this.registerForm);
-      this.errorMessage.set('Por favor completa todos los campos requeridos.');
+      const msg = 'Por favor completa todos los campos requeridos.';
+      this.errorMessage.set(msg);
+      this.errorHandler.showWarningNotification(msg);
+      this.cdr.markForCheck();
       return;
     }
 
@@ -314,17 +337,17 @@ export class CourseEnrollment implements OnInit, OnDestroy {
     this.authService.verificarUsuarioPorEmail(email).subscribe({
       next: (exists) => {
         if (exists) {
-          // El email ya existe → redirigir al tab de login con mensaje
           this.isAuthenticating.set(false);
           this.selectLoginTab();
-          this.errorMessage.set('Este correo ya tiene una cuenta. Inicia sesión para continuar.');
+          const msg = 'Este correo ya tiene una cuenta registrada. Por favor inicia sesión con tu contraseña.';
+          this.errorMessage.set(msg);
+          this.errorHandler.showWarningNotification(msg, 6000);
+          this.cdr.markForCheck();
           return;
         }
-        // Email disponible → proseguir con registro
         this.doRegister();
       },
       error: () => {
-        // Si falla el check, proseguir con registro (el backend validará)
         this.doRegister();
       }
     });
@@ -358,24 +381,28 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       next: (response) => {
         this.isExistingUser.set(false);
         this.generatedPassword.set(password);
-        this.successMessage.set(
-          response?.message
-            ? `¡Cuenta creada! ${response.message}`
-            : '¡Cuenta creada exitosamente! Revisa tu correo para tus datos de acceso.'
-        );
+        const successMsg = response?.message
+          ? `¡Cuenta creada! ${response.message}`
+          : '¡Cuenta creada exitosamente! Revisa tu correo para tus datos de acceso.';
+        this.successMessage.set(successMsg);
+        this.errorHandler.showSuccessNotification(successMsg, 5000);
         this.isAuthenticating.set(false);
-        // El backend ya creó inscripcion + matricula → ir directo a confirmación
+        this.cdr.markForCheck();
         setTimeout(() => this.goToStep(2), 1500);
       },
       error: (error) => {
         this.isAuthenticating.set(false);
+        let msg = 'Error al crear la cuenta. Por favor intenta nuevamente.';
         if (error.status === 400 || error.status === 409) {
-          this.errorMessage.set(error.error?.message || 'El correo ya está registrado. Intenta iniciar sesión.');
+          msg = error.error?.detail || error.error?.message || 'El correo ya está registrado. Intenta iniciar sesión.';
           this.currentStep.set(0);
           this.selectLoginTab();
-        } else {
-          this.errorMessage.set('Error al crear la cuenta. Por favor intenta nuevamente.');
+        } else if (error.error?.detail) {
+          msg = error.error.detail;
         }
+        this.errorMessage.set(msg);
+        this.errorHandler.showErrorNotification(msg, 6000);
+        this.cdr.markForCheck();
       },
     });
   }
