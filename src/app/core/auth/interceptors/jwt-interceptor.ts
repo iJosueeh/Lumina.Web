@@ -10,8 +10,15 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   const token = authService.getToken();
 
+  const isAuthRequest =
+    req.url.includes('/auth/login') ||
+    req.url.includes('/auth/register') ||
+    req.url.includes('/auth/register-with-enrollment') ||
+    req.url.includes('/login') ||
+    req.url.includes('/check-email');
+
   let authReq = req;
-  if (token) {
+  if (token && !isAuthRequest) {
     authReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`
@@ -21,7 +28,7 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401) {
+      if (error.status === 401 && !isAuthRequest && token) {
         authService.logout();
         router.navigate(['/login'], {
           queryParams: { sessionExpired: 'true' }
