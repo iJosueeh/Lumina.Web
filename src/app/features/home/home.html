@@ -1,8 +1,8 @@
 <!-- Hero Section -->
-<section class="py-24 bg-slate-50 dark:bg-dark-bg">
+<section class="py-12 md:py-20 bg-slate-50 dark:bg-dark-bg">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div
-      class="relative min-h-[500px] overflow-hidden bg-gradient-to-br from-slate-700 via-blue-900 to-purple-900 rounded-3xl"
+      class="relative min-h-[440px] md:min-h-[500px] overflow-hidden bg-gradient-to-br from-slate-700 via-blue-900 to-purple-900 rounded-3xl"
     >
       <!-- Fondo con patrón sutil -->
       <div class="absolute inset-0 opacity-10">
@@ -16,31 +16,31 @@
       </div>
 
       <!-- Contenido centrado -->
-      <div class="relative h-full flex items-center justify-center py-24 md:py-32 px-4">
+      <div class="relative h-full flex items-center justify-center py-16 md:py-28 px-4">
         <div class="text-center text-white space-y-6 w-full max-w-3xl">
           <!-- Título principal -->
-          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight">
             Lumina.Core
           </h1>
 
           <!-- Subtítulo -->
-          <p class="text-xs md:text-sm text-gray-200 tracking-[0.4em] uppercase font-light">
+          <p class="text-xs sm:text-sm text-gray-200 tracking-[0.3em] sm:tracking-[0.4em] uppercase font-light">
             UNLEASH YOUR CODE
           </p>
 
           <!-- Botones de acción -->
-          <div class="flex flex-wrap gap-3 justify-center pt-8">
+          <div class="flex flex-wrap gap-3 justify-center pt-6 sm:pt-8">
             <button
-              routerLink="/carreras"
+              routerLink="/cursos"
               class="px-6 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              Explora Carreras
+              Explora Cursos
             </button>
             <button
-              routerLink="/admision"
+              routerLink="/registro"
               class="px-6 py-2.5 bg-white text-gray-900 text-sm font-medium rounded-md hover:bg-gray-50 transition-all duration-200 shadow-md hover:shadow-lg"
             >
-              Proceso de Admisión
+              Regístrate Ahora
             </button>
           </div>
         </div>
@@ -50,7 +50,7 @@
 </section>
 
 <!-- Sección de Misión -->
-<section class="py-24 bg-slate-50 dark:bg-dark-bg">
+<section class="py-16 md:py-20 bg-slate-50 dark:bg-dark-bg">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <p class="text-center text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
       En Lumina.Core, estamos dedicados a forjar la próxima generación de líderes en tecnología.
@@ -62,11 +62,11 @@
 </section>
 
 <!-- Sección de Programas Destacados -->
-<section class="py-24 bg-slate-50 dark:bg-dark-bg">
+<section class="py-16 md:py-20 bg-slate-50 dark:bg-dark-bg">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Título -->
     <div class="text-center mb-12">
-      <h2 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-dark-text">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-dark-text">
         Programas Destacados
       </h2>
     </div>
@@ -132,7 +132,7 @@
             {{ curso.descripcion }}
           </p>
           <button
-            class="mt-4 w-full py-2.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-200 transition-colors duration-200"
+            class="mt-4 w-full py-2.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors duration-200"
           >
             Aprende Más
           </button>
@@ -144,22 +144,22 @@
 </section>
 
 <!-- Sección de Beneficios -->
-<section class="py-32 bg-slate-50">
+<section class="py-16 md:py-24 bg-slate-50 dark:bg-dark-bg">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Título -->
     <div class="text-center mb-16">
-      <h2 class="text-4xl md:text-5xl font-bold text-gray-900">¿Por qué Lumina.Core?</h2>
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-dark-text">¿Por qué Lumina.Core?</h2>
     </div>
 
     <!-- Grid de beneficios -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
       <!-- Beneficio 1: Docentes Expertos -->
-      <div class="text-center">
+      <div class="text-center p-6 bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm hover:shadow-md transition-shadow">
         <div
-          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100"
+          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
         >
           <svg
-            class="w-10 h-10 text-blue-600"
+            class="w-10 h-10"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -184,19 +184,19 @@
             />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-3">Docentes Expertos</h3>
-        <p class="text-gray-600 text-sm leading-relaxed">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-3">Docentes Expertos</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
           Aprende de profesionales líderes en la industria con experiencia real y comprobada.
         </p>
       </div>
 
       <!-- Beneficio 2: Proyectos Prácticos -->
-      <div class="text-center">
+      <div class="text-center p-6 bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm hover:shadow-md transition-shadow">
         <div
-          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100"
+          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
         >
           <svg
-            class="w-10 h-10 text-blue-600"
+            class="w-10 h-10"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -209,20 +209,20 @@
             />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-3">Proyectos Prácticos</h3>
-        <p class="text-gray-600 text-sm leading-relaxed">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-3">Proyectos Prácticos</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
           Construye un portafolio sólido trabajando en proyectos que resuelven problemas del mundo
           real.
         </p>
       </div>
 
       <!-- Beneficio 3: Soporte de Carrera -->
-      <div class="text-center">
+      <div class="text-center p-6 bg-white dark:bg-dark-card rounded-2xl border border-gray-100 dark:border-dark-border shadow-sm hover:shadow-md transition-shadow">
         <div
-          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100"
+          class="mb-6 inline-flex items-center justify-center w-20 h-20 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
         >
           <svg
-            class="w-10 h-10 text-blue-600"
+            class="w-10 h-10"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -235,8 +235,8 @@
             />
           </svg>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-3">Soporte de Carrera</h3>
-        <p class="text-gray-600 text-sm leading-relaxed">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-dark-text mb-3">Soporte de Carrera</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
           Te conectamos con oportunidades laborales y te preparamos para el éxito profesional.
         </p>
       </div>

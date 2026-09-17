@@ -1,9 +1,9 @@
 <div class="min-h-screen flex">
-  <div class="w-full lg:w-1/2 flex items-center justify-center p-8 bg-gray-50">
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 bg-gray-50 dark:bg-dark-bg">
     <div class="max-w-lg w-full space-y-8">
       <div>
-        <h1 class="text-3xl font-bold text-gray-900">Crea tu cuenta</h1>
-        <p class="mt-2 text-gray-600">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-dark-text">Crea tu cuenta</h1>
+        <p class="mt-2 text-gray-600 dark:text-gray-400">
           Únete a nuestra plataforma académica y comienza tu aprendizaje.
         </p>
       </div>
@@ -11,13 +11,13 @@
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mt-8 space-y-5">
         <!-- Nombres -->
         <div>
-          <label for="nombres" class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="nombres" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Nombres
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
-                class="h-5 w-5 text-gray-400"
+                class="h-5 w-5 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -36,11 +36,11 @@
               formControlName="nombres"
               placeholder="Introduce tus nombres"
               [class.border-red-500]="nombres?.invalid && nombres?.touched"
-              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150"
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text"
             />
           </div>
           @if (nombres?.invalid && nombres?.touched) {
-            <p class="mt-1 text-sm text-red-600">
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">
               @if (nombres?.errors?.['required']) {
                 <span>Los nombres son requeridos</span>
               }
@@ -55,13 +55,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Apellido Paterno -->
           <div>
-            <label for="apellidoPaterno" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="apellidoPaterno" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Apellido Paterno
             </label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
-                  class="h-5 w-5 text-gray-400"
+                  class="h-5 w-5 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -80,11 +80,11 @@
                 formControlName="apellidoPaterno"
                 placeholder="Apellido paterno"
                 [class.border-red-500]="apellidoPaterno?.invalid && apellidoPaterno?.touched"
-                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150"
+                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text"
               />
             </div>
             @if (apellidoPaterno?.invalid && apellidoPaterno?.touched) {
-              <p class="mt-1 text-sm text-red-600">
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                 @if (apellidoPaterno?.errors?.['required']) {
                   <span>Requerido</span>
                 }
@@ -94,13 +94,13 @@
 
           <!-- Apellido Materno -->
           <div>
-            <label for="apellidoMaterno" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="apellidoMaterno" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Apellido Materno
             </label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
-                  class="h-5 w-5 text-gray-400"
+                  class="h-5 w-5 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -119,11 +119,11 @@
                 formControlName="apellidoMaterno"
                 placeholder="Apellido materno"
                 [class.border-red-500]="apellidoMaterno?.invalid && apellidoMaterno?.touched"
-                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150"
+                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text"
               />
             </div>
             @if (apellidoMaterno?.invalid && apellidoMaterno?.touched) {
-              <p class="mt-1 text-sm text-red-600">
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                 @if (apellidoMaterno?.errors?.['required']) {
                   <span>Requerido</span>
                 }
@@ -134,13 +134,13 @@
 
         <!-- Correo -->
         <div>
-          <label for="correo" class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="correo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Correo Electrónico
           </label>
           <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
-                class="h-5 w-5 text-gray-400"
+                class="h-5 w-5 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -159,11 +159,11 @@
               formControlName="correo"
               placeholder="tu@email.com"
               [class.border-red-500]="correo?.invalid && correo?.touched"
-              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150"
+              class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text"
             />
           </div>
           @if (correo?.invalid && correo?.touched) {
-            <p class="mt-1 text-sm text-red-600">
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">
               @if (correo?.errors?.['required']) {
                 <span>El correo es requerido</span>
               }
@@ -178,13 +178,13 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Contraseña -->
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Contraseña
             </label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
-                  class="h-5 w-5 text-gray-400"
+                  class="h-5 w-5 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -203,12 +203,12 @@
                 formControlName="password"
                 placeholder="Mínimo 6 caracteres"
                 [class.border-red-500]="password?.invalid && password?.touched"
-                class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150"
+                class="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text"
               />
               <button
                 type="button"
                 (click)="togglePasswordVisibility()"
-                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-gray-500 hover:text-primary transition"
                 tabindex="-1"
               >
                 @if (hidePassword()) {
@@ -239,7 +239,7 @@
               </button>
             </div>
             @if (password?.invalid && password?.touched) {
-              <p class="mt-1 text-sm text-red-600">
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                 @if (password?.errors?.['required']) {
                   <span>Requerida</span>
                 }
@@ -252,13 +252,13 @@
 
           <!-- Confirmar Contraseña -->
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Confirmar Contraseña
             </label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <svg
-                  class="h-5 w-5 text-gray-400"
+                  class="h-5 w-5 text-gray-400 dark:text-gray-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -280,12 +280,12 @@
                   (confirmPassword?.invalid && confirmPassword?.touched) ||
                   (registerForm.hasError('passwordMismatch') && confirmPassword?.touched)
                 "
-                class="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150"
+                class="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-dark-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition duration-150 bg-white dark:bg-dark-card dark:text-dark-text"
               />
               <button
                 type="button"
                 (click)="toggleConfirmPasswordVisibility()"
-                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition"
+                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 dark:text-gray-500 hover:text-primary transition"
                 tabindex="-1"
               >
                 @if (hideConfirmPassword()) {
@@ -316,14 +316,14 @@
               </button>
             </div>
             @if (confirmPassword?.invalid && confirmPassword?.touched) {
-              <p class="mt-1 text-sm text-red-600">
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                 @if (confirmPassword?.errors?.['required']) {
                   <span>Debes confirmar</span>
                 }
               </p>
             }
             @if (registerForm.hasError('passwordMismatch') && confirmPassword?.touched) {
-              <p class="mt-1 text-sm text-red-600">
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                 <span>Las contraseñas no coinciden</span>
               </p>
             }
@@ -331,7 +331,7 @@
         </div>
 
         @if (errorMessage()) {
-          <div class="rounded-lg bg-red-50 border border-red-200 p-4 animate-fadeIn">
+          <div class="rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 animate-fadeIn">
             <div class="flex">
               <svg
                 class="h-5 w-5 text-red-400 mr-2 flex-shrink-0"
@@ -344,7 +344,7 @@
                   clip-rule="evenodd"
                 />
               </svg>
-              <p class="text-sm text-red-600">{{ errorMessage() }}</p>
+              <p class="text-sm text-red-600 dark:text-red-400">{{ errorMessage() }}</p>
             </div>
           </div>
         }
@@ -380,7 +380,7 @@
         </button>
 
         <div class="text-center">
-          <p class="text-sm text-gray-600">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
             ¿Ya tienes una cuenta?
             <a
               href="{{ portalUrl }}"

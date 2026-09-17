@@ -5,7 +5,7 @@
             <!-- Logo -->
             <div class="flex items-center">
                 <a routerLink="/home" class="flex items-center space-x-2">
-                    <img src="logo.png" alt="Lumina Logo" class="h-16 w-auto dark:invert">
+                    <img src="logo.png" alt="Lumina Logo" class="h-12 md:h-14 w-auto dark:invert transition-all">
                 </a>
             </div>
 
@@ -21,8 +21,8 @@
                         </svg>
                     </button>
 
-                        @if (cursosDropdownOpen()) {
-                    <div class="absolute left-0 mt-2 w-64 bg-white dark:bg-dark-card rounded-lg shadow-xl border border-gray-200 dark:border-dark-border py-2">
+                    @if (cursosDropdownOpen()) {
+                    <div class="absolute left-0 mt-2 w-64 bg-white dark:bg-dark-card rounded-lg shadow-xl border border-gray-200 dark:border-dark-border py-2 z-50">
                         <div class="px-4 py-2 border-b border-gray-100 dark:border-dark-border">
                             <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Categorías de Cursos</p>
                         </div>
@@ -69,7 +69,7 @@
                 <!-- Portal User Dropdown -->
                 <div class="relative accesos-dropdown">
                     <button (click)="toggleDropdown()" type="button"
-                        class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-1">
+                        class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center space-x-1 shadow-sm">
                         <span>Mi Portal</span>
                         <svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="dropdownOpen()"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,7 +78,7 @@
                     </button>
 
                     @if (dropdownOpen()) {
-                    <div class="absolute right-0 mt-2 w-64 bg-white dark:bg-dark-card rounded-md shadow-lg py-1 border border-gray-200 dark:border-dark-border">
+                    <div class="absolute right-0 mt-2 w-64 bg-white dark:bg-dark-card rounded-md shadow-lg py-1 border border-gray-200 dark:border-dark-border z-50">
                         @for (item of portalNavItems; track item.route) {
                         <a [href]="item.route" target="_blank" rel="noopener noreferrer" (click)="closeDropdown()"
                             class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-dark-border hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">
@@ -96,31 +96,40 @@
                 } @else {
                 <!-- Login Button -->
                 <button (click)="onLogin()" type="button"
-                    class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200">
+                    class="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors duration-200 shadow-sm">
                     Iniciar Sesión
                 </button>
                 }
             </div>
 
-            <!-- Mobile Menu Button -->
-            <button (click)="toggleMobileMenu()"
-                class="md:hidden p-2 rounded-md hover:bg-gray-100 transition-colors duration-200">
-                @if (!mobileMenuOpen()) {
-                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-                } @else {
-                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                }
-            </button>
+            <!-- Mobile Bar Actions -->
+            <div class="flex items-center space-x-2 md:hidden">
+                <app-theme-toggle />
+                <button (click)="toggleMobileMenu()"
+                    aria-label="Toggle navigation menu"
+                    class="p-2 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-border transition-colors duration-200">
+                    @if (!mobileMenuOpen()) {
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    } @else {
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    }
+                </button>
+            </div>
         </div>
 
         <!-- Mobile Menu -->
         @if (mobileMenuOpen()) {
-        <div class="md:hidden py-4 border-t border-gray-200 dark:border-dark-border">
+        <div class="md:hidden py-4 border-t border-gray-200 dark:border-dark-border animate-fadeIn">
             <div class="space-y-1 mb-4">
+                <a routerLink="/cursos" routerLinkActive="bg-blue-50 dark:bg-dark-border text-blue-600 dark:text-blue-400"
+                    class="block px-4 py-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-border transition-colors duration-200 font-medium"
+                    (click)="closeMobileMenu()">
+                    Cursos
+                </a>
                 @for (item of navItems; track item.route) {
                 <a [routerLink]="item.route" routerLinkActive="bg-blue-50 dark:bg-dark-border text-blue-600 dark:text-blue-400"
                     class="block px-4 py-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-dark-border transition-colors duration-200 font-medium"
@@ -147,13 +156,13 @@
             </div>
             } @else {
             <div class="pt-4 border-t border-gray-200 dark:border-dark-border space-y-2">
-                <a [href]="portalUrl" target="_blank" rel="noopener noreferrer" (click)="closeMobileMenu()"
-                    class="block w-full px-4 py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition-colors duration-200 text-center">
+                <button (click)="onLogin(); closeMobileMenu()" type="button"
+                    class="block w-full px-4 py-3 bg-blue-600 text-white rounded-md font-semibold hover:bg-blue-700 transition-colors duration-200 text-center shadow-sm">
                     Iniciar Sesión
-                </a>
+                </button>
                 <a routerLink="/cursos" (click)="closeMobileMenu()"
-                    class="block w-full px-4 py-3 bg-gray-100 dark:bg-dark-border text-gray-900 dark:text-gray-100 rounded-md font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 text-center">
-                    Matricularse en Cursos
+                    class="block w-full px-4 py-3 bg-gray-100 dark:bg-dark-card border border-transparent dark:border-dark-border text-gray-900 dark:text-gray-100 rounded-md font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 text-center">
+                    Ver Catálogo de Cursos
                 </a>
             </div>
             }
