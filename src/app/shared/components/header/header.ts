@@ -9,10 +9,14 @@ import { ThemeToggle } from '../theme-toggle/theme-toggle';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, RouterLink, RouterLinkActive, ThemeToggle],
   templateUrl: './header.html',
   styleUrl: './header.css',
+  host: {
+    'class': 'sticky top-0 z-50 block',
+  },
 })
 export class Header {
   authService = inject(Auth);
