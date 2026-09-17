@@ -53,7 +53,26 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   readonly emailCheckLoading = signal(false);
   readonly emailCheckDone = signal(false);
   readonly enrollmentAttempted = signal(false);
+  readonly hideLoginPassword = signal(true);
+  readonly hideRegPassword = signal(true);
+  readonly copiedPassword = signal(false);
   portalUrl = environment.portalUrl;
+
+  toggleLoginPassword(): void {
+    this.hideLoginPassword.update(v => !v);
+  }
+
+  toggleRegPassword(): void {
+    this.hideRegPassword.update(v => !v);
+  }
+
+  copyCredentials(text: string): void {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      this.copiedPassword.set(true);
+      setTimeout(() => this.copiedPassword.set(false), 2500);
+    });
+  }
 
   // ─── Constants ───────────────────────────────────────────
   readonly steps: EnrollmentStep[] = [
