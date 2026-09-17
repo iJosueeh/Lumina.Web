@@ -5,6 +5,7 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { Noticia } from '../../../core/models/noticia';
 import { ErrorHandlerService } from '../../../core/services/error-handler.service';
+import { getSafeImageUrl } from '../../../core/utils/image.utils';
 
 @Injectable({
     providedIn: 'root'
@@ -38,7 +39,11 @@ export class NoticiasService {
         return this.http.get<Noticia[]>(this.apiUrl, { params: httpParams }).pipe(
             map(noticias => {
                 this.loading.set(false);
-                return noticias;
+                return (noticias || []).map(n => ({
+                    ...n,
+                    imagenUrl: getSafeImageUrl(n.imagenUrl, 'news', `${n.categoria || ''} ${n.titulo || ''}`),
+                    autorAvatar: n.autorAvatar ? getSafeImageUrl(n.autorAvatar, 'avatar', n.autor) : n.autorAvatar
+                }));
             }),
             catchError(error => {
                 this.loading.set(false);
@@ -56,7 +61,12 @@ export class NoticiasService {
         return this.http.get<Noticia>(`${this.apiUrl}/${id}`).pipe(
             map(noticia => {
                 this.loading.set(false);
-                return noticia;
+                if (!noticia) return null;
+                return {
+                    ...noticia,
+                    imagenUrl: getSafeImageUrl(noticia.imagenUrl, 'news', `${noticia.categoria || ''} ${noticia.titulo || ''}`),
+                    autorAvatar: noticia.autorAvatar ? getSafeImageUrl(noticia.autorAvatar, 'avatar', noticia.autor) : noticia.autorAvatar
+                };
             }),
             catchError(error => {
                 this.loading.set(false);

@@ -1,9 +1,10 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, catchError, of, finalize, tap } from 'rxjs';
+import { Observable, catchError, of, finalize, tap, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Course, CourseDetails } from '../models/course.model';
 import { ErrorHandlerService } from './error-handler.service';
+import { getSafeImageUrl } from '../utils/image.utils';
 
 @Injectable({
     providedIn: 'root'
@@ -49,6 +50,10 @@ export class CursosService {
         }
         return this.trackRequest(
             this.http.get<Course[]>(this.apiUrl).pipe(
+                map(courses => (courses || []).map(c => ({
+                    ...c,
+                    imagen: getSafeImageUrl(c.imagen, 'course', `${c.categoria || ''} ${c.titulo || ''}`)
+                }))),
                 tap(courses => this.coursesCache.set(courses)),
                 catchError(error => {
                     const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudieron cargar los cursos');
@@ -62,6 +67,17 @@ export class CursosService {
     getCourseById(id: string): Observable<CourseDetails | null> {
         return this.trackRequest(
             this.http.get<CourseDetails>(`${this.apiUrl}/${id}`).pipe(
+                map(course => {
+                    if (!course) return null;
+                    return {
+                        ...course,
+                        imagen: getSafeImageUrl(course.imagen, 'course', `${course.categoria || ''} ${course.titulo || ''}`),
+                        instructor: course.instructor ? {
+                            ...course.instructor,
+                            avatar: getSafeImageUrl(course.instructor.avatar, 'avatar', course.instructor.nombre)
+                        } : course.instructor
+                    };
+                }),
                 catchError(error => {
                     const errorInfo = this.errorHandler.handleHttpError(error, 'No se pudo cargar el detalle del curso');
                     this.error.set(errorInfo);

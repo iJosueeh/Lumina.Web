@@ -127,7 +127,7 @@
           } @else if (curso()) {
           <div class="border border-blue-200 dark:border-blue-900/50 rounded-xl overflow-hidden bg-gradient-to-r from-blue-50/80 via-indigo-50/50 to-blue-50/80 dark:from-blue-950/30 dark:via-dark-card dark:to-indigo-950/30 mb-6 p-4">
             <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-              <img [src]="curso()!.imagen" [alt]="curso()!.titulo" class="w-full sm:w-28 h-32 sm:h-24 rounded-lg object-cover shrink-0 shadow-sm border border-blue-100 dark:border-dark-border">
+              <img [src]="curso()!.imagen" [alt]="curso()!.titulo" (error)="$event.target.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80'" class="w-full sm:w-28 h-32 sm:h-24 rounded-lg object-cover shrink-0 shadow-sm border border-blue-100 dark:border-dark-border">
               <div class="flex-1 text-center sm:text-left">
                 <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 mb-1">
                   {{ curso()!.nivel }}
@@ -585,7 +585,7 @@
         <div class="border border-gray-200 dark:border-dark-border rounded-xl overflow-hidden bg-white dark:bg-dark-card shadow-sm">
           <div class="flex flex-col md:flex-row">
             <div class="md:w-1/3">
-              <img [src]="curso()!.imagen" [alt]="curso()!.titulo" class="w-full h-48 md:h-full object-cover">
+              <img [src]="curso()!.imagen" [alt]="curso()!.titulo" (error)="$event.target.src='https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80'" class="w-full h-48 md:h-full object-cover">
             </div>
             <div class="md:w-2/3 p-6 flex flex-col justify-between">
               <div>
