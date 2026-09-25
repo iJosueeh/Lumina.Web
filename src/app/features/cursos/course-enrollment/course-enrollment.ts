@@ -58,6 +58,9 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   readonly copiedPassword = signal(false);
   portalUrl = environment.portalUrl;
 
+  readonly currentUser = this.authService.currentUser;
+  readonly isAuthenticated = this.authService.isAuthenticated;
+
   toggleLoginPassword(): void {
     this.hideLoginPassword.update(v => !v);
   }
@@ -72,6 +75,20 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       this.copiedPassword.set(true);
       setTimeout(() => this.copiedPassword.set(false), 2500);
     });
+  }
+
+  logoutAndSwitchAccount(): void {
+    this.authService.logout();
+    this.isExistingUser.set(false);
+    this.enrollmentAttempted.set(false);
+    this.successMessage.set(null);
+    this.errorMessage.set(null);
+    this.emailCheckDone.set(false);
+    this.emailCheckLoading.set(false);
+    this.showLoginForm.set(false); // Abrir directamente en la pestaña Crear Cuenta
+    this.loginForm.reset();
+    this.registerForm.reset();
+    this.cdr.markForCheck();
   }
 
   // ─── Constants ───────────────────────────────────────────
@@ -134,29 +151,8 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       return;
     }
 
-    // Si el usuario ya está autenticado, procesar inscripción automática y mostrar paso 2 (éxito)
-    if (this.authService.isAuthenticated()) {
-      const user = this.authService.currentUser();
-      this.isExistingUser.set(true);
-      this.successMessage.set(
-        user
-          ? `¡Hola ${user.nombre} ${user.apellido}! Procesando tu inscripción...`
-          : '¡Bienvenido de vuelta! Procesando tu inscripción...'
-      );
-      this.loadCursoData(cursoId);
-      // loadCursoData → onCursoLoaded → attemptEnrollment → goToStep(2)
-      return;
-    }
-
-    // Si volvió del portal (sessionStorage tiene returnUrl ya consumido)
-    const justReturned = sessionStorage.getItem('justReturnedFromPortal');
-    if (justReturned) {
-      sessionStorage.removeItem('justReturnedFromPortal');
-      this.isExistingUser.set(true);
-      this.successMessage.set('¡Bienvenido de vuelta! Procesando tu inscripción...');
-      this.loadCursoData(cursoId);
-      return;
-    }
+    // Limpiar flag temporal si existía
+    sessionStorage.removeItem('justReturnedFromPortal');
 
     this.loadCursoData(cursoId);
   }
@@ -174,27 +170,14 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       next: (data) => {
         this.curso.set(data);
         this.loadingCurso.set(false);
-        // Si el usuario ya estaba autenticado O volvió del portal, iniciar inscripción automáticamente
-        const isAuth = this.authService.isAuthenticated();
-        const justReturned = !!sessionStorage.getItem('justReturnedFromPortal');
-        if (isAuth || justReturned) {
-          this.onCursoLoadedForAuthenticatedUser();
-        }
+        this.cdr.markForCheck();
       },
       error: () => {
         this.cursoError.set('No se pudo cargar la información del curso.');
         this.loadingCurso.set(false);
+        this.cdr.markForCheck();
       },
     });
-  }
-
-  /**
-   * Se llama desde loadCursoData cuando el usuario ya está autenticado.
-   * Solo se ejecuta una vez (enrollmentAttempted actúa como guard).
-   */
-  onCursoLoadedForAuthenticatedUser(): void {
-    if (this.enrollmentAttempted()) return;
-    this.attemptEnrollmentForExistingUser();
   }
 
   // ─── Tab Toggle ──────────────────────────────────────────
@@ -291,16 +274,17 @@ export class CourseEnrollment implements OnInit, OnDestroy {
   }
 
   /**
-   * Para usuarios ya existentes que hicieron login.
+   * Para usuarios ya existentes que confirman la inscripción con su cuenta activa.
    * Obtiene el estudianteId y crea la inscripcion + matricula automáticamente.
    */
-  private attemptEnrollmentForExistingUser(): void {
+  attemptEnrollmentForExistingUser(): void {
     if (this.enrollmentAttempted()) return;
     this.enrollmentAttempted.set(true);
 
     const cursoData = this.curso();
     if (!cursoData?.id) {
       this.errorMessage.set('No se encontró información del curso.');
+      this.enrollmentAttempted.set(false);
       this.cdr.markForCheck();
       return;
     }
@@ -320,6 +304,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
           this.errorHandler.showSuccessNotification('Ya estás matriculado en este curso.');
           setTimeout(() => this.goToStep(2), 1500);
         } else {
+          this.enrollmentAttempted.set(false);
           const msg = result.message || 'No se pudo completar la inscripción. Intenta nuevamente.';
           this.errorMessage.set(msg);
           this.errorHandler.showErrorNotification(msg);
@@ -328,6 +313,7 @@ export class CourseEnrollment implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.loading.set(false);
+        this.enrollmentAttempted.set(false);
         const msg = 'No se pudo completar la inscripción. Intenta nuevamente.';
         this.errorMessage.set(msg);
         this.errorHandler.showErrorNotification(msg);

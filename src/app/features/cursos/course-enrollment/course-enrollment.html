@@ -157,31 +157,56 @@
           </div>
           }
 
+          <!-- Si el usuario ya tiene sesión iniciada -->
+          @if (isAuthenticated() && currentUser()) {
+          <div class="bg-gradient-to-r from-blue-50/90 via-indigo-50/70 to-blue-50/90 dark:from-blue-950/40 dark:via-dark-card dark:to-indigo-950/40 border border-blue-200 dark:border-blue-900/60 rounded-2xl p-5 sm:p-7 shadow-sm animate-fadeIn">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-5">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl shadow-md shrink-0">
+                  {{ (currentUser()?.nombre || 'U').charAt(0) }}
+                </div>
+                <div>
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300 mb-1">
+                    ✓ Sesión Activa Detectada
+                  </span>
+                  <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-dark-text leading-snug">
+                    {{ currentUser()?.nombre }} {{ currentUser()?.apellido }}
+                  </h3>
+                  <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                    {{ currentUser()?.email }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <button 
+                  type="button" 
+                  (click)="attemptEnrollmentForExistingUser()" 
+                  [disabled]="loading()"
+                  class="px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm sm:text-base">
+                  @if (loading()) {
+                    <svg class="animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Procesando matrícula...
+                  } @else {
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    Inscribirme con esta cuenta
+                  }
+                </button>
+                <button 
+                  type="button" 
+                  (click)="logoutAndSwitchAccount()"
+                  class="px-4 py-3 bg-white dark:bg-dark-bg hover:bg-gray-100 dark:hover:bg-dark-border text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-dark-border font-semibold rounded-xl transition text-sm flex items-center justify-center gap-1.5 shadow-sm">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                  Usar otra cuenta o registrarse
+                </button>
+              </div>
+            </div>
+          </div>
+          } @else {
+
           <!-- Tabs de Login / Registro -->
           <div class="border-b border-gray-200 dark:border-dark-border" role="tablist" aria-label="Método de verificación">
             <div class="flex space-x-2 sm:space-x-4">
-              <button 
-                type="button" 
-                role="tab"
-                [id]="'tab-login'"
-                [attr.aria-selected]="showLoginForm()"
-                [attr.aria-controls]="showLoginForm() ? 'panel-login' : null"
-                [class.border-blue-600]="showLoginForm()"
-                [class.text-blue-600]="showLoginForm()"
-                [class.dark:border-blue-500]="showLoginForm()"
-                [class.dark:text-blue-400]="showLoginForm()"
-                [class.border-transparent]="!showLoginForm()"
-                [class.text-gray-500]="!showLoginForm()"
-                [class.dark:text-gray-400]="!showLoginForm()"
-                [tabindex]="showLoginForm() ? 0 : -1"
-                (click)="selectLoginTab()"
-                (keydown.arrowRight)="selectRegisterTab()"
-                class="pb-3.5 px-4 sm:px-6 font-bold text-sm sm:text-base border-b-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-t flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
-                Iniciar Sesión
-              </button>
               <button 
                 type="button" 
                 role="tab"
@@ -197,15 +222,38 @@
                 [class.dark:text-gray-400]="showLoginForm()"
                 [tabindex]="!showLoginForm() ? 0 : -1"
                 (click)="selectRegisterTab()"
-                (keydown.arrowLeft)="selectLoginTab()"
+                (keydown.arrowRight)="selectLoginTab()"
                 class="pb-3.5 px-4 sm:px-6 font-bold text-sm sm:text-base border-b-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-t flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                 </svg>
                 Crear Cuenta
               </button>
+              <button 
+                type="button" 
+                role="tab"
+                [id]="'tab-login'"
+                [attr.aria-selected]="showLoginForm()"
+                [attr.aria-controls]="showLoginForm() ? 'panel-login' : null"
+                [class.border-blue-600]="showLoginForm()"
+                [class.text-blue-600]="showLoginForm()"
+                [class.dark:border-blue-500]="showLoginForm()"
+                [class.dark:text-blue-400]="showLoginForm()"
+                [class.border-transparent]="!showLoginForm()"
+                [class.text-gray-500]="!showLoginForm()"
+                [class.dark:text-gray-400]="!showLoginForm()"
+                [tabindex]="showLoginForm() ? 0 : -1"
+                (click)="selectLoginTab()"
+                (keydown.arrowLeft)="selectRegisterTab()"
+                class="pb-3.5 px-4 sm:px-6 font-bold text-sm sm:text-base border-b-2 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-t flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                Iniciar Sesión
+              </button>
             </div>
           </div>
+          }
 
           <!-- Panel de Login -->
           @if (showLoginForm()) {
