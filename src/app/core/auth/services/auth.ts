@@ -147,8 +147,7 @@ export class Auth {
     document.cookie = `${this.COOKIE_TOKEN_KEY}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=${this.GATEWAY_DOMAIN}`;
 
     this._currentUser.set(null);
-
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   checkIsAuthenticated(): boolean {

@@ -2,17 +2,24 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/guards/auth-guard';
 import { roleGuard } from './core/auth/guards/role-guard';
 
+import { environment } from '@environments/environment';
+
 export const routes: Routes = [
     {
         path: 'login',
-        loadComponent: () =>
-            import('./features/auth/login/login').then(m => m.Login),
-        title: 'Iniciar Sesión - Lumina'
+        canActivate: [() => {
+            window.location.href = environment.portalUrl;
+            return false;
+        }],
+        children: []
     },
     {
         path: 'register',
-        loadComponent: () =>
-            import('./features/auth/register/register').then(m => m.Register)
+        canActivate: [() => {
+            window.location.href = environment.portalUrl;
+            return false;
+        }],
+        children: []
     },
     {
         path: 'registro',
